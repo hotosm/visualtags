@@ -16,6 +16,7 @@ GEM
     bond (0.4.3)
     builder (3.0.4)
     i18n (0.6.1)
+    libxml-ruby (2.6.0)
     multi_json (1.7.7)
     pg (0.15.1)
     rack (1.5.2)
@@ -53,7 +54,9 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  libxml-ruby
   pg
+  rack-test
   shotgun
   sinatra (= 1.3.2)
   sinatra-activerecord

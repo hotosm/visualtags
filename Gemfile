@@ -4,9 +4,11 @@ gem 'sinatra', '1.3.2'
 gem "pg"
 gem "activerecord"
 gem "sinatra-activerecord"
+gem 'libxml-ruby'
 
 group :development do
   gem "shotgun"
   gem "tux"
+  gem "rack-test"
 end
 
