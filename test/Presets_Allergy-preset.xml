@@ -1,0 +1,98 @@
+<presets xmlns="http://josm.openstreetmap.de/tagging-preset-1.0"
+	author="Karsten Hinz"
+	version="0.3_2012-03-25"
+	shortdescription="Allergy"
+	description="Preset to easily add allergy and organic tags on bakeries, restaurants, ...">
+
+	<group name="Allergy" >
+		<item name="Baker" icon="presets/baker.png" type="node,closedway">
+
+			<label text="Edit Baker" />
+			<key key="shop" value="bakery" />
+			<text key="name" text="Name" default="" delete_if_empty="true" />
+			<combo key="opening_hours" text="Opening Hours" values="24/7,Mo-Fr 08:30-20:00,Tu-Su 08:00-15:00;Sa 08:00-12:00" default="" delete_if_empty="true" />
+			<optional>
+				<text key="operator" text="who is the operating company" delete_if_empty="true"/>
+
+				<combo key="organic" text="whether organic products exists" values="only,yes,no" delete_if_empty="true" />
+				<combo key="pastry_shop" text="Whether you can buy there torten." values="only,yes,no" delete_if_empty="true" />
+
+				<!-- allergy tags -->
+				<check key="gluten_free" text="gluten free products exsits" value_on="yes" value_off="no" default="off" />
+				<check key="lactose_free" text="lactose free products exsits" value_on="yes" value_off="no"  default="off" />
+
+			</optional>
+		</item>
+
+		<item name="Restaurant" icon="presets/restaurant.png" type="node,closedway">
+
+			<label text="Edit Restaurant" />
+			<key key="amenity" value="restaurant" />
+			<text key="name" text="Name" default="" delete_if_empty="true" />
+			<text key="operator" text="Operator" default="" delete_if_empty="true" />
+			<multiselect key="cuisine" text="Cuisine" values="italian;chinese;pizza;burger;greek;german;indian;regional;kebab;turkish;asian;thai;mexican;japanese;french;sandwich;sushi" default=""/>
+			<check key="microbrewery" text="Microbrewery" default="off" delete_if_empty="true" />
+			<combo key="opening_hours" text="Opening Hours" values="24/7,Mo-Fr 08:30-20:00,Tu-Su 08:00-15:00;Sa 08:00-12:00" default="" delete_if_empty="true" />
+			<combo key="stars" text="Stars" values="1,2,3,4,5,6,7" default="" delete_if_empty="true" />
+			<space />
+			<combo key="internet_access" text="Internet access" values="yes,wlan,wired,terminal,no" default="" delete_if_empty="true" />
+			<combo key="internet_access:fee" text="Internet access fee" values="yes,no" default="" delete_if_empty="true" />
+			<combo key="smoking" text="Smoking" values="yes,dedicated,separated,isolated,no" default="" delete_if_empty="true" />
+			<combo key="wheelchair" text="Wheelchairs" values="yes,no" default="" delete_if_empty="true" />
+			<combo key="organic" text="whether organic products exists" values="only,yes,no" default="" delete_if_empty="true" />
+			<check key="gluten_free" text="gluten free products exsits" value_on="yes" value_off="no" default="off" />
+			<check key="lactose_free" text="lactose free products exsits" value_on="yes" value_off="no"  default="off" />
+			<space />
+			<text key="phone" text="Phone Number" default="" delete_if_empty="true" />
+			<text key="fax" text="Fax Number" default="" delete_if_empty="true" />
+			<text key="website" text="Website" default="" delete_if_empty="true" />
+			<text key="email" text="Email Address" default="" delete_if_empty="true" />
+		</item>
+
+		<item name="Fast Food" icon="presets/fastfood.png" type="node,closedway">
+
+			<label text="Edit Fast Food Restaurant" />
+			<key key="amenity" value="fast_food" />
+			<text key="name" text="Name" default="" delete_if_empty="true" />
+			<text key="operator" text="Operator" default="" delete_if_empty="true" />
+			<combo key="cuisine" text="Cuisine" values="italian,chinese,pizza,burger,greek,german,indian,regional,kebab,turkish,asian,thai,mexican,japanese,french,sandwich,sushi,fish_and_chips,chicken" default="" delete_if_empty="true" />
+			<combo key="opening_hours" text="Opening Hours" values="24/7,Mo-Fr 08:30-20:00,Tu-Su 08:00-15:00;Sa 08:00-12:00" default="" delete_if_empty="true" />
+			<space />
+			<combo key="internet_access" text="Internet access" values="yes,wlan,wired,terminal,no" default="" delete_if_empty="true" />
+			<combo key="internet_access:fee" text="Internet access fee" values="yes,no" default="" delete_if_empty="true" />
+			<combo key="smoking" text="Smoking" values="yes,dedicated,separated,isolated,no" default="" delete_if_empty="true" />
+			<combo key="wheelchair" text="Wheelchairs" values="yes,no" default="" delete_if_empty="true" />
+			<combo key="organic" text="whether organic products exists" values="only,yes,no" default="" delete_if_empty="true" />
+			<check key="gluten_free" text="gluten free products exsits" value_on="yes" value_off="no" default="off" />
+			<check key="lactose_free" text="lactose free products exsits" value_on="yes" value_off="no"  default="off" />
+			<space />
+			<text key="phone" text="Phone Number" default="" delete_if_empty="true" />
+			<text key="fax" text="Fax Number" default="" delete_if_empty="true" />
+			<text key="website" text="Website" default="" delete_if_empty="true" />
+			<text key="email" text="Email Address" default="" delete_if_empty="true" />
+		</item>
+
+		<item name="Cafe" icon="presets/cafe.png" type="node,closedway">
+
+			<label text="Edit Cafe" />
+			<key key="amenity" value="cafe" />
+			<text key="name" text="Name" default="" delete_if_empty="true" />
+			<text key="operator" text="Operator" default="" delete_if_empty="true" />
+			<combo key="cuisine" text="Cuisine" values="ice_cream" default="" delete_if_empty="true" />
+			<combo key="opening_hours" text="Opening Hours" values="24/7,Mo-Fr 08:30-20:00,Tu-Su 08:00-15:00;Sa 08:00-12:00" default="" delete_if_empty="true" />
+			<space />
+			<combo key="internet_access" text="Internet access" values="yes,wlan,wired,terminal,no" default="" delete_if_empty="true" />
+			<combo key="internet_access:fee" text="Internet access fee" values="yes,no" default="" delete_if_empty="true" />
+			<combo key="smoking" text="Smoking" values="yes,dedicated,separated,isolated,no" default="" delete_if_empty="true" />
+			<combo key="wheelchair" text="Wheelchairs" values="yes,no" default="" delete_if_empty="true" />
+			<combo key="organic" text="whether organic products exists" values="only,yes,no" default="" delete_if_empty="true" />
+			<check key="gluten_free" text="gluten free products exsits" value_on="yes" value_off="no" default="off" />
+			<check key="lactose_free" text="lactose free products exsits" value_on="yes" value_off="no"  default="off" />
+			<space />
+			<text key="phone" text="Phone Number" default="" delete_if_empty="true" />
+			<text key="fax" text="Fax Number" default="" delete_if_empty="true" />
+			<text key="website" text="Website" default="" delete_if_empty="true" />
+			<text key="email" text="Email Address" default="" delete_if_empty="true" />
+		</item>
+	</group> <!-- Organic and Allergies -->
+</presets>

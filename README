@@ -1,0 +1,15 @@
+Visual Tags Chooser
+
+Requirements
+
+Ruby 1.9.2
+Postgres
+
+gem install nokogiri -v '1.6.0'
+gem install sinatra-activerecord -v '1.2.2'
+bundle install
+
+I had to run
+gem pristine --all
+
+to recompile the native binaries properly....
