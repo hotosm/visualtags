@@ -21,6 +21,9 @@ An application that will create and edit a JOSM preset visually using a more use
 Current Version
 alpha v0.1
 
+Demo
+https://visualtags.herokuapp.com
+
 * Preset Upload
 * preset parse and show as collection of tags
 * list collections
