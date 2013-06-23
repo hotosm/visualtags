@@ -1,0 +1,18 @@
+body {
+  background-color: wheat;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  
+}
+div#wrapper {
+ margin: 0 auto;
+ width: 922px;
+}
+div#content{
+   padding: 1.5em;
+}
+
+#footer .tiny {font-size:xx-small; color:gray}
+
+.delete_tag_form {
+  display: inline;
+}

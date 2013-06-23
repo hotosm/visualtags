@@ -8,7 +8,8 @@ gem 'libxml-ruby'
 gem 'nokogiri'
 
 group :development do
-  gem "shotgun"
+  gem "heroku"
+  gem "rerun"
   gem "tux"
   gem "rack-test"
 end

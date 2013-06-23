@@ -1,0 +1,11 @@
+<h2>Viewing Collection <%=  @collection.id %> </h2>
+
+<h3>Name: <%= @collection.name%></h3>
+
+<h4><%= @collection.tags.count %> Tags</h4>
+
+<% @collection.tags.each do | tag | %>
+
+  <%="<a href='/collection/#{@collection.id}/tag/#{tag.id}'>#{tag.key}</a>" %><br />
+
+<% end  %>

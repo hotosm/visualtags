@@ -1,0 +1,16 @@
+<h2>Showing Tag <%=  @tag.id %> </h2>
+
+<a href='<%="/collection/#{@collection.id}/tag/#{@tag.id}/edit"%>' >Edit Tag</a>
+
+<form action='<%="/collection/#{@collection.id}/tag/#{@tag.id}"%>' method="post"
+      onsubmit="return confirm('Are you sure you want to delete the tag?')" class="delete_tag_form" >
+  <input type="hidden" name="_method" value="delete" />
+  <input type="submit" value="Delete Tag" />
+</form>
+
+<p>
+  Key: <%= @tag.key %> <br />
+  Text: <%= @tag.text %> <br />
+  Values: <%= @tag.values %> <br />
+  OSM_type: <%= @tag.osm_type %> <br />
+</p>

@@ -2,48 +2,51 @@ require 'sinatra'
 require 'sinatra/activerecord'
 require 'xml/libxml'
 
+#name, filename, orginal_filename
 class Collection < ActiveRecord::Base
   has_many :tags
-end
-
-class Tag < ActiveRecord::Base
-  belongs_to :collection
-
-  def self.from_xml(xml)
+  
+  #code adapted from
+  #https://github.com/hotosm/hot-exports/tree/master/webinterface/app/models/tag.rb
+  def self.tags_from_xml(xml)
     tags = Hash.new
     p = XML::Parser.string(xml)
     doc = p.parse
-    doc.root.namespaces.default_prefix='fuzz'
-    items = doc.find('//fuzz:item')
-
+    doc.root.namespaces.default_prefix='osm'
+    items = doc.find('//osm:item')
+    tags_array = []
     items.each do |item|
-      item_geometrytype = Tag.type2geometrytype(item['type'])
+      item_geometrytype = self.type2geometrytype(item['type'])
 
-      #iterates each child with key attribute not nil
       item.children.each do |child|
         if(!child['key'].nil?)
-
+          tag = Tag.new()
           key = child['key']
+          
           if !tags.has_key?(key)
+            tag.key = key
             tags[key] = Hash.new
           end
 
           if child['type'].nil?
             geomlist = item_geometrytype
           else
-            geomlist = Tag.type2geometrytype(child['type'])
+            geomlist = self.type2geometrytype(child['type'])
           end
+          tag.osm_type = geomlist.join(",")
 
           geomlist.each do |type|
             tags[key][type] = false
           end
-
+          tags_array << tag if tag.key
         end
       end
     end
-    return tags
+    return tags_array
   end
 
+  #code adapted from
+  #https://github.com/hotosm/hot-exports/tree/master/webinterface/app/models/tag.rb
   def self.type2geometrytype(type)
     geometrytype = Array.new
 
@@ -68,7 +71,15 @@ class Tag < ActiveRecord::Base
 
     return geometrytype
   end
+end
 
+#key, text, values, osm_type
+class Tag < ActiveRecord::Base
+  belongs_to :collection
+
+  def to_s
+    "#<Tag id:#{self.id}, key:#{self.key}, text:#{self.text}, osm_type:#{self.osm_type}>"
+  end
 end
 
 get '/' do
@@ -76,7 +87,7 @@ get '/' do
 end
 
 get '/upload' do
-  erb :form
+  erb :upload
 end
 
 post '/upload' do
@@ -87,33 +98,45 @@ post '/upload' do
   File.open(filename, "wb") { |f| f.write(tmpfile.read) }
   FileUtils.chmod(0644, filename)
 
-  @collection = Collection.new(:name => params[:name].to_s, :original_filename => orig_name, :filename => filename)
-  @collection.save
+  collection = Collection.new(:name => params[:name].to_s, :original_filename => orig_name, :filename => filename)
+  collection.save
 
-  @tags = Tag.from_xml(File.read(filename))
-  puts @tags.inspect
+  new_tags = Collection.tags_from_xml(File.read(filename))
+  new_tags.each do | tag |
+    collection.tags << tag
+  end
 
-  'success'
+  redirect  "/collection/#{collection.id}"
 end
 
-enable :inline_templates
+get '/collections' do
+  @collections = Collection.find(:all, :order => "created_at desc")
+  erb :collections
+end
 
-__END__
- 
-@@ form
-<form action="" method="post" enctype="multipart/form-data">
-  <p><label for="name">Name:</label>
-     <input type="text" name="name" />
-  </p>
-  <p>
-    <label for="file">File:</label>
-    <input type="file" name="file">
-  </p>
- 
-  <p>
-    <input name="commit" type="submit" value="Upload" />
-  </p>
-</form>
+get '/collection/:id' do
+  @collection = Collection.find(params[:id])
+  erb :collection
+end
 
-@@ home
-<a href="/upload">Upload new preset </a>
+get '/collection/:id/tag/:tag_id' do
+  @collection = Collection.find(params[:id])
+  @tag = Tag.find(params[:tag_id])
+  erb :tag
+end
+
+delete '/collection/:id/tag/:tag_id' do
+  @collection = Collection.find(params[:id])
+  @tag = Tag.find(params[:tag_id])
+
+  @tag.destroy
+  redirect  "/collection/#{@collection.id}"
+end
+
+get '/collection/:id/tag/:tag_id/edit' do
+  @collection = Collection.find(params[:id])
+  @tag = Tag.find(params[:tag_id])
+  erb :tag_form
+end
+
+
