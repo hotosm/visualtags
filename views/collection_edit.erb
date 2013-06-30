@@ -1,11 +1,11 @@
-<h2>Viewing Collection <%=  @collection.id %> </h2>
+<h2>Editing Collection <%=  @collection.id %> </h2>
 
 <h3>Name: <%= @collection.name%></h3>
 
-<h4><%= @collection.tags.count %> Tags</h4>
-
-<% @collection.tags.each do | tag | %>
-
-  <%="<a href='/collection/#{@collection.id}/tag/#{tag.id}'>#{tag.key}</a>" %><br />
-
-<% end  %>
+<form action='<%="/collection/#{@collection.id}" %>' method="post">
+  <input type="hidden" name="_method" value="put" />
+  <p><label for="name">Name:</label>
+     <input type="text" name="collection[name]" value="<%= @collection.name %>" />
+  </p>
+  <input type="submit" value="Edit Collection" />
+</form>

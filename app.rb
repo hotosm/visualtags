@@ -90,6 +90,7 @@ get '/upload' do
   erb :upload
 end
 
+#new collection
 post '/upload' do
   unless params[:name] && params[:file] && (tmpfile = params[:file][:tempfile]) && (orig_name = params[:file][:filename]) && File.extname(orig_name) == ".xml"
     redirect  '/upload'
@@ -117,6 +118,18 @@ end
 get '/collection/:id' do
   @collection = Collection.find(params[:id])
   erb :collection
+end
+
+put '/collection/:id' do
+  p 111
+  @collection = Collection.find(params[:id])
+  if @collection.update_attributes(params[:collection])
+    redirect "/collection/#{@collection.id}"
+    puts 1
+  else
+    puts 2
+    erb :collection_edit
+  end
 end
 
 get '/collection/:id/edit' do
