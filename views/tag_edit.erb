@@ -6,3 +6,20 @@
   Values: <%= @tag.values %> <br />
   OSM_type: <%= @tag.osm_type %> <br />
 </p>
+
+<form action='<%="/collection/#{@collection.id}/tag/#{@tag.id}" %>' method="post">
+  <input type="hidden" name="_method" value="put" />
+  <p><label for="tag[key]">Key:</label>
+    <input type="text" name="tag[key]" value="<%= @tag.key %>" />
+  </p>
+  <p><label for="tag[text]">Text:</label>
+    <input type="text" name="tag[text]" value="<%= @tag.text %>" />
+  </p>
+  <p><label for="tag[values]">Values:</label>
+    <input type="text" name="tag[values]" value="<%= @tag.values %>" />
+  </p>
+  <p><label for="tag[osm_type]">OSM Type:</label>
+    <input type="text" name="tag[osm_type]" value="<%= @tag.osm_type %>" />
+  </p>
+  <input type="submit" value="Edit Tag" />
+</form>

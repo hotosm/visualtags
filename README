@@ -50,12 +50,20 @@ bundle install
 I then had to run
 gem pristine --all
 
+
+Develop
+
+Shell
+
+>tux
+
 Run
 
 in development mode:
 rvm use 1.9.2
 rvm gemset use visualtag
 rerun app.rb
+
 
 Test
 

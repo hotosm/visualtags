@@ -121,13 +121,10 @@ get '/collection/:id' do
 end
 
 put '/collection/:id' do
-  p 111
   @collection = Collection.find(params[:id])
   if @collection.update_attributes(params[:collection])
     redirect "/collection/#{@collection.id}"
-    puts 1
   else
-    puts 2
     erb :collection_edit
   end
 end
@@ -161,6 +158,16 @@ get '/collection/:id/tag/:tag_id/edit' do
   @collection = Collection.find(params[:id])
   @tag = Tag.find(params[:tag_id])
   erb :tag_edit
+end
+
+put '/collection/:id/tag/:tag_id' do
+  @collection = Collection.find(params[:id])
+  @tag = Tag.find(params[:tag_id])
+  if @tag.update_attributes(params[:tag])
+    redirect "/collection/#{@collection.id}/tag/#{@tag.id}"
+  else
+    erb :tag_id
+  end
 end
 
 
