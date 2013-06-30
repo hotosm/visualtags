@@ -10,7 +10,14 @@
   <input type="submit" value="Delete Collection" />
 </form>
 
+<p>
+  <a href='<%= "/collection/#{@collection.id}.xml" %>' target="_new">Download as simple XML preset</a> suitable for use in the <a href="http://hot-export.geofabrik.de/">HOT Exports Application.</a>
+</p>
 <h4><%= @collection.tags.count %> Tags</h4>
+
+<p>
+  <a href="<%= "/collection/#{@collection.id}/tag" %>">Add New Tag</a>
+</p>
 
 <% @collection.tags.each do | tag | %>
 

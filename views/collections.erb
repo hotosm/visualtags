@@ -1,7 +1,12 @@
 <h2>Viewing All <%=@collections.count %> Collections of Tags </h2>
 
+<p>
+  <a href="/upload">Upload preset to create a new collection</a>
+</p>
+
 <% @collections.each do | coll | %>
 
   <%= coll.created_at.strftime("%d-%m-%y %I:%M") %>  <%="<a href='/collection/#{coll.id}'>#{coll.name}</a>" %><br />
 
 <% end  %>
+

@@ -1,0 +1,26 @@
+<presets xmlns="http://josm.openstreetmap.de/tagging-preset-1.0"
+	author="Tim Waters"
+	version="0.0.1"
+	shortdescription="TimTest"
+	description="Testing">
+
+	<group name="Testing">
+
+		<item name="Baker" icon="presets/baker.png" type="node,closedway">
+			<label text="Baker Label" />
+			<key key="shop" value="bakery" />
+			<text key="name" text="Name" default="" delete_if_empty="true" />
+		</item>
+
+		<item name="Restaurant" icon="presets/restaurant.png" type="node,closedway">
+      <label text="Restaurant Label" />
+			<key key="amenity" value="restaurant" />
+			<text key="phone" text="Phone Number" default="" delete_if_empty="true" />
+			<text key="fax" text="Fax Number" default="" delete_if_empty="true" />
+			<text key="website" text="Website" default="" delete_if_empty="true" />
+			<text key="email" text="Email Address" default="" delete_if_empty="true" />
+		</item>
+
+	</group>
+
+</presets>

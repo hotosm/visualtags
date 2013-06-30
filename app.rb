@@ -45,6 +45,8 @@ class Collection < ActiveRecord::Base
     return tags_array
   end
 
+
+  private
   #code adapted from
   #https://github.com/hotosm/hot-exports/tree/master/webinterface/app/models/tag.rb
   def self.type2geometrytype(type)
@@ -115,6 +117,13 @@ get '/collections' do
   erb :collections
 end
 
+get '/collection/:id.xml' do
+  @collection = Collection.find(params[:id])
+
+  attachment  #<-- comment for inline render
+  builder :simple_preset
+end
+
 get '/collection/:id' do
   @collection = Collection.find(params[:id])
   erb :collection
@@ -140,6 +149,21 @@ delete '/collection/:id' do
   redirect "/collections"
 end
 
+get '/collection/:id/tag' do
+  @collection = Collection.find(params[:id])
+  @tag = Tag.new
+
+  erb :tag_new
+end
+
+post '/collection/:id/tag' do
+  @collection = Collection.find(params[:id])
+  @tag = Tag.new(params[:tag])
+  @collection.tags << @tag
+  
+  redirect "/collection/#{@collection.id}/tag/#{@tag.id}"
+end
+
 get '/collection/:id/tag/:tag_id' do
   @collection = Collection.find(params[:id])
   @tag = Tag.find(params[:tag_id])
@@ -157,6 +181,7 @@ end
 get '/collection/:id/tag/:tag_id/edit' do
   @collection = Collection.find(params[:id])
   @tag = Tag.find(params[:tag_id])
+  @action = "edit"
   erb :tag_edit
 end
 
