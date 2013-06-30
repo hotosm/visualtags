@@ -121,7 +121,7 @@ end
 
 get '/collection/:id/edit' do
   @collection = Collection.find(params[:id])
-  erb :collection_form
+  erb :collection_edit
 end
 
 delete '/collection/:id' do
@@ -147,7 +147,7 @@ end
 get '/collection/:id/tag/:tag_id/edit' do
   @collection = Collection.find(params[:id])
   @tag = Tag.find(params[:tag_id])
-  erb :tag_form
+  erb :tag_edit
 end
 
 
