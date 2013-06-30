@@ -2,6 +2,13 @@
 
 <h3>Name: <%= @collection.name%></h3>
 
+<a href='<%="/collection/#{@collection.id}/edit"%>' >Edit Collection</a>
+<form action='<%="/collection/#{@collection.id}"%>' method="post"
+      onsubmit="return confirm('Are you sure you want to delete this collection?')" class="delete_form" >
+  <input type="hidden" name="_method" value="delete" />
+  <input type="submit" value="Delete Collection" />
+</form>
+
 <h4><%= @collection.tags.count %> Tags</h4>
 
 <% @collection.tags.each do | tag | %>

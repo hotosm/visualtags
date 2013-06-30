@@ -4,7 +4,7 @@ require 'xml/libxml'
 
 #name, filename, orginal_filename
 class Collection < ActiveRecord::Base
-  has_many :tags
+  has_many :tags, :dependent => :destroy
   
   #code adapted from
   #https://github.com/hotosm/hot-exports/tree/master/webinterface/app/models/tag.rb
@@ -117,6 +117,17 @@ end
 get '/collection/:id' do
   @collection = Collection.find(params[:id])
   erb :collection
+end
+
+get '/collection/:id/edit' do
+  @collection = Collection.find(params[:id])
+  erb :collection_form
+end
+
+delete '/collection/:id' do
+  @collection = Collection.find(params[:id])
+  @collection.destroy
+  redirect "/collections"
 end
 
 get '/collection/:id/tag/:tag_id' do

@@ -49,3 +49,15 @@ bundle install
 
 I then had to run
 gem pristine --all
+
+Run
+
+in development mode:
+rvm use 1.9.2
+rvm gemset use visualtag
+rerun app.rb
+
+Test
+
+cd test
+ruby test.rb
