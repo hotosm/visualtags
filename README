@@ -19,7 +19,7 @@ Solution
 An application that will create and edit a JOSM preset visually using a more user friendly interface.
 
 Current Version
-alpha v0.2
+alpha v0.2.1
 
 Demo
 https://visualtags.herokuapp.com
@@ -35,9 +35,8 @@ https://visualtags.herokuapp.com
 * Edit tag
 * Delete tag
 * Output as a simplified XML preset which will work with the HOT Exports application.
-
-TODO:
-Items for separate geometry types
+* Tags grouped according to the geometry types. 
+* Output groups into preset Items
 
 
 Install
