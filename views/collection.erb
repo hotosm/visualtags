@@ -19,8 +19,9 @@
   <a href="<%= "/collection/#{@collection.id}/tag" %>">Add New Tag</a>
 </p>
 
-<% @collection.tags.each do | tag | %>
-
-  <%="<a href='/collection/#{@collection.id}/tag/#{tag.id}'>#{tag.key}</a>" %><br />
-
+<% @collection.tags.group_by(&:osm_type).each do | osm_type, tags | %>
+    <b><%= osm_type %></b> <br />
+    <% tags.each do | tag | %>
+      <%="<a href='/collection/#{@collection.id}/tag/#{tag.id}'>#{tag.key}</a>" %><br />
+    <% end  %>
 <% end  %>

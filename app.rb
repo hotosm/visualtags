@@ -6,73 +6,58 @@ require 'xml/libxml'
 class Collection < ActiveRecord::Base
   has_many :tags, :dependent => :destroy
   
+  def item_types
+    types_array = []
+    types = self.tags.select(:osm_type).uniq
+    types.each do | type |
+        types_array << type.osm_type if type.osm_type
+    end
+    
+    types_array
+  end
+  
   #code adapted from
   #https://github.com/hotosm/hot-exports/tree/master/webinterface/app/models/tag.rb
   def self.tags_from_xml(xml)
     tags = Hash.new
-    p = XML::Parser.string(xml)
-    doc = p.parse
+    parser = XML::Parser.string(xml)
+    doc = parser.parse
     doc.root.namespaces.default_prefix='osm'
     items = doc.find('//osm:item')
     tags_array = []
     items.each do |item|
-      item_geometrytype = self.type2geometrytype(item['type'])
+      item_geometrytype = item["type"].split(',')
 
       item.children.each do |child|
         if(!child['key'].nil?)
-          tag = Tag.new()
           key = child['key']
           
           if !tags.has_key?(key)
-            tag.key = key
             tags[key] = Hash.new
           end
 
           if child['type'].nil?
             geomlist = item_geometrytype
           else
-            geomlist = self.type2geometrytype(child['type'])
+            #this is rare, I think, and may not be allowed by the xsd
+            geomlist = item["type"].split(',')
           end
-          tag.osm_type = geomlist.join(",")
 
           geomlist.each do |type|
             tags[key][type] = false
           end
-          tags_array << tag if tag.key
+         
         end
       end
     end
+    tags.each do | tag |
+        tags_array << Tag.new(:key => tag[0], :osm_type => tag[1].keys.sort().join(","))
+    end
+
     return tags_array
   end
 
 
-  private
-  #code adapted from
-  #https://github.com/hotosm/hot-exports/tree/master/webinterface/app/models/tag.rb
-  def self.type2geometrytype(type)
-    geometrytype = Array.new
-
-    if(type.nil?)
-      geometrytype.push('point')
-      geometrytype.push('line')
-      geometrytype.push('polygon')
-    else
-      types = type.split(',')
-      types.each do |type|
-        if type == 'node'
-          geometrytype.push('point')
-        elsif type == 'way'
-          geometrytype.push('line')
-        elsif type == 'closedway'
-          geometrytype.push('polygon')
-        elsif type == 'relation'
-          geometrytype.push('polygon')
-        end
-      end
-    end
-
-    return geometrytype
-  end
 end
 
 #key, text, values, osm_type
@@ -82,6 +67,8 @@ class Tag < ActiveRecord::Base
   def to_s
     "#<Tag id:#{self.id}, key:#{self.key}, text:#{self.text}, osm_type:#{self.osm_type}>"
   end
+  
+  
 end
 
 get '/' do
