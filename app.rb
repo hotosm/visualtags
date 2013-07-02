@@ -26,7 +26,8 @@ class Collection < ActiveRecord::Base
     items = doc.find('//osm:item')
     tags_array = []
     items.each do |item|
-      item_geometrytype = item["type"].split(',')
+      itype = item["type"] || ""
+      item_geometrytype = itype.split(',') 
 
       item.children.each do |child|
         if(!child['key'].nil?)
