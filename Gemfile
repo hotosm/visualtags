@@ -7,6 +7,10 @@ gem "sinatra-activerecord"
 gem 'libxml-ruby'
 gem 'nokogiri'
 
+group :production do
+    gem 'puma'
+end
+
 group :development do
   gem "heroku"
   gem "rerun"
