@@ -16,6 +16,22 @@ class Collection < ActiveRecord::Base
     types_array
   end
 
+  def to_preset_array()
+    parser = XML::Parser.string(self.preset)
+    doc = parser.parse
+    doc.root.namespaces.default_prefix='osm'
+    #items = doc.find('//osm:preset')
+    a = []
+    doc.root.children.each do | child |
+      if child.name == "group" || child.name == "item"
+        a << child
+      end unless child.empty?
+    end
+
+    return a
+  end
+
+
   def validate_preset()
     return Collection.validate_preset(self.preset)
   end
@@ -88,6 +104,8 @@ class Tag < ActiveRecord::Base
   end
   
 end
+
+set :erb, :trim => '-'
 
 get '/' do
   erb :home

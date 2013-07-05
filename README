@@ -19,7 +19,7 @@ Solution
 An application that will create and edit a JOSM preset visually using a more user friendly interface.
 
 Current Version
-alpha v0.2.1
+alpha v0.2.2
 
 Demo
 https://visualtags.herokuapp.com
@@ -37,11 +37,13 @@ https://visualtags.herokuapp.com
 * Output as a simplified XML preset which will work with the HOT Exports application.
 * Tags grouped according to the geometry types. 
 * Output groups into preset Items
+* Drag and Drop nested tree using groups and icons from presers
 
 TODO
 * validate preset on upload
 * validate on download
 Presets can be invalid JOSM presets, but work fine in the HOT Export tool
+* Look at http://www.sjjb.co.uk/mapicons/  for cc0 icons
 
 
 Install
@@ -76,3 +78,7 @@ Test
 
 cd test
 ruby test.rb
+
+
+LICENSE -
+Undecided..WIP.. But the JOSM preset icons may be GPL2+
