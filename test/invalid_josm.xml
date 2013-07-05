@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<presets xmlns='http://josm.openstreetmap.de/tagging-preset-1.0'>
+  <groups type='node,closedway'>
+    <group>
+      <item>
+        <text key='building'></text>
+        <optional>
+          <green key='tree' type='node'/>
+        </optional>
+      </item>
+    </group>
+  </groups>
+</presets>

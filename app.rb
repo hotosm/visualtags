@@ -10,23 +10,27 @@ class Collection < ActiveRecord::Base
     types_array = []
     types = self.tags.select(:osm_type).uniq
     types.each do | type |
-        types_array << type.osm_type if type.osm_type
+      types_array << type.osm_type if type.osm_type
     end
     
     types_array
   end
-  
+
   def validate_preset()
-    parser = XML::Parser.string(self.preset)
+    return Collection.validate_preset(self.preset)
+  end
+
+  def self.validate_preset(preset)
+    parser = XML::Parser.string(preset)
     document = parser.parse
     
     schema_document = XML::Document.file("lib/tagging-preset.xsd")
     schema = XML::Schema.document(schema_document)
     begin
-         return document.validate_schema(schema)  #true if validates, otherwise exceptions raised
+      return document.validate_schema(schema)  #true if validates, otherwise exceptions raised
     rescue LibXML::XML::Error => e
-        error = e.to_s
-        return error
+      error = e.to_s
+      return error
     end
   end
   
@@ -82,7 +86,6 @@ class Tag < ActiveRecord::Base
   def to_s
     "#<Tag id:#{self.id}, key:#{self.key}, text:#{self.text}, osm_type:#{self.osm_type}>"
   end
-  
   
 end
 
@@ -150,6 +153,12 @@ delete '/collection/:id' do
   @collection = Collection.find(params[:id])
   @collection.destroy
   redirect "/collections"
+end
+
+get '/collection/:id/validate' do
+  @collection = Collection.find(params[:id])
+  @valid = @collection.validate_preset
+  erb :collection_validate
 end
 
 get '/collection/:id/tag' do

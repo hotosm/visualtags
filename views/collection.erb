@@ -1,7 +1,7 @@
 <h2>Viewing Collection <%=  @collection.id %> </h2>
 
 <h3>Name: <%= @collection.name%></h3>
-<p>Preset filename: <%= @collection.original_filename %></p>
+<p>Preset filename: <%= @collection.original_filename %> (<a href="<%= "/collection/#{@collection.id}/validate" %>">Validate this</a>) </p>
 
 <a href='<%="/collection/#{@collection.id}/edit"%>' >Edit Collection</a>
 <form action='<%="/collection/#{@collection.id}"%>' method="post"

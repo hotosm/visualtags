@@ -1,0 +1,20 @@
+<h2>Validating Uploaded Preset <%=  @collection.id %></h2>
+
+<h3>Name: <%= @collection.name%>. File: <%= @collection.original_filename %></h3>
+<p>This validates the uploaded preset filename: <%= @collection.original_filename %> <br />
+  with the <a href="/tagging-preset.xsd">JOSM presets schema</a>. This is stricter than the format required for the HOT Export tool, and so even if a preset fails validation it could still be used</p>
+
+<h2>Validation Results</h2>
+
+<% if @valid == true %>
+  <p>
+    The preset is valid, and can be used in JOSM as a preset file.
+  </p>
+<% else %>
+  <p>
+    There were errors with the validation. The error from the validator is:
+  </p>
+  <div class="validation_errors">
+    <%= @valid %>
+  </div>
+<% end %>

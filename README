@@ -38,6 +38,11 @@ https://visualtags.herokuapp.com
 * Tags grouped according to the geometry types. 
 * Output groups into preset Items
 
+TODO
+* validate preset on upload
+* validate on download
+Presets can be invalid JOSM presets, but work fine in the HOT Export tool
+
 
 Install
 
