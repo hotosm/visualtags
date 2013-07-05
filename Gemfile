@@ -5,7 +5,6 @@ gem "pg"
 gem "activerecord"
 gem "sinatra-activerecord"
 gem 'libxml-ruby'
-gem 'nokogiri'
 
 group :production do
     gem 'puma'
