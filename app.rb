@@ -16,6 +16,20 @@ class Collection < ActiveRecord::Base
     types_array
   end
   
+  def validate_preset()
+    parser = XML::Parser.string(self.preset)
+    document = parser.parse
+    
+    schema_document = XML::Document.file("lib/tagging-preset.xsd")
+    schema = XML::Schema.document(schema_document)
+    begin
+         return document.validate_schema(schema)  #true if validates, otherwise exceptions raised
+    rescue LibXML::XML::Error => e
+        error = e.to_s
+        return error
+    end
+  end
+  
   #code adapted from
   #https://github.com/hotosm/hot-exports/tree/master/webinterface/app/models/tag.rb
   def self.tags_from_xml(xml)
@@ -86,10 +100,11 @@ post '/upload' do
     redirect  '/upload'
   end
   filename  = File.join(Dir.pwd,"public/uploads", orig_name)
-  File.open(filename, "wb") { |f| f.write(tmpfile.read) }
+  preset = tmpfile.read
+  File.open(filename, "wb") { |f| f.write(preset) }
   FileUtils.chmod(0644, filename)
 
-  collection = Collection.new(:name => params[:name].to_s, :original_filename => orig_name, :filename => filename)
+  collection = Collection.new(:name => params[:name].to_s, :original_filename => orig_name, :filename => filename, :preset => preset)
   collection.save
 
   new_tags = Collection.tags_from_xml(File.read(filename))
