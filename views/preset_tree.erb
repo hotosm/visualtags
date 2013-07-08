@@ -1,7 +1,7 @@
 <%
 def group_child_to_json(child)
   if child.name == "item" || child.name == "group"
-  json = {"name" => child.name + ": "+child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
+  json = {"name" => child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
   json["item"] = get_item(child) if child.name == "item"
   end
   if child.name == "group" && child.children?
@@ -17,7 +17,7 @@ end
 
 def child_to_json(child)
   if child.name == "item" || child.name == "group"
-    json = {"name" => child.name + ": "+child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
+    json = {"name" => child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
     json["item"] = get_item(child) if child.name == "item"
   end
   if child.name == "group" && child.children?
@@ -48,6 +48,7 @@ else
   xml_array = @collection.to_preset_array
   json_array = []
   xml_array.each do | child |
+    #p child
     json_array << child_to_json(child)
   end
   json_array.join(",")
@@ -98,14 +99,18 @@ end
               $("#tag_info").empty()
               return false;
             }
+            //console.log(node)
             var item_elements =  node["item"]
             $("#tag_info").empty()
-            $("#tag_info").append("<ul id='ele_list'><li class='tag_header'>Tags ("+node['geo_type'] +")</li></ul>")
+            $("#tag_info").append("<table id='item_table'>")
+            $("#item_table").append("<tr id='ele_r'><th colspan=3 class='tag_header'>"+node['name']+"  ("+node['geo_type'] +")</th></tr>")
+            $("#item_table").append("<tr id='ele_r'><th class='tag_header'>Type</th><th>Text</th><th>Key</th></tr>")
             $.each(item_elements, function(index, ele){
-                if (ele.key){
-                  $("#ele_list").append("<li>"+ ele.key+"</li>");
-                }
+                //console.log(ele)
+                  $("#item_table").append("<tr><td>"+ele.name+"</td><td>"+ ele.text +"</td><td>"+ ele.key+"</td></tr>");
+              
           });
+           $("#tag_info").append("</table>")
             
         }
         else {
