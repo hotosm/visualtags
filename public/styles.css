@@ -26,3 +26,6 @@ div.validation_errors {
 li.jqtree-folder {
 
 }
+
+div#flash .info {color:green}
+ 

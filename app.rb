@@ -1,6 +1,9 @@
 require 'sinatra'
 require 'sinatra/activerecord'
+require 'sinatra/flash'
 require 'xml/libxml'
+enable :sessions
+set :erb, :trim => '-'
 
 #name, filename, orginal_filename, preset(xml), custom_preset(json)
 class Collection < ActiveRecord::Base
@@ -83,8 +86,6 @@ class Tag < ActiveRecord::Base
   
 end
 
-set :erb, :trim => '-'
-
 get '/' do
   erb :home
 end
@@ -108,7 +109,7 @@ post '/upload' do
 
   new_tags = Collection.tags_from_xml(File.read(filename))
   collection.tags = new_tags  #saved to the collection
-
+  flash[:info] = "Collection uploaded!"
   redirect  "/collection/#{collection.id}"
 end
 
@@ -132,6 +133,7 @@ end
 put '/collection/:id' do
   @collection = Collection.find(params[:id])
   if @collection.update_attributes(params[:collection])
+    flash[:info] = "Collection updated!"
     redirect "/collection/#{@collection.id}"
   else
     erb :collection_edit
@@ -146,6 +148,7 @@ end
 delete '/collection/:id' do
   @collection = Collection.find(params[:id])
   @collection.destroy
+  flash[:info] = "Collection deleted!"
   redirect "/collections"
 end
 
@@ -166,7 +169,8 @@ post '/collection/:id/tag' do
   @collection = Collection.find(params[:id])
   @tag = Tag.new(params[:tag])
   @collection.tags << @tag
-  
+  flash[:info] = "New tag reated!"
+
   redirect "/collection/#{@collection.id}/tag/#{@tag.id}"
 end
 
@@ -181,6 +185,7 @@ delete '/collection/:id/tag/:tag_id' do
   @tag = Tag.find(params[:tag_id])
 
   @tag.destroy
+  flash[:info] = "Tag deleted!"
   redirect  "/collection/#{@collection.id}"
 end
 
@@ -195,6 +200,7 @@ put '/collection/:id/tag/:tag_id' do
   @collection = Collection.find(params[:id])
   @tag = Tag.find(params[:tag_id])
   if @tag.update_attributes(params[:tag])
+    flash[:info] = "Tag updated!"
     redirect "/collection/#{@collection.id}/tag/#{@tag.id}"
   else
     erb :tag_id

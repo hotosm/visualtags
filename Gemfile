@@ -5,6 +5,7 @@ gem "pg"
 gem "activerecord"
 gem "sinatra-activerecord"
 gem 'libxml-ruby'
+gem 'sinatra-flash'
 
 group :production do
     gem 'puma'
