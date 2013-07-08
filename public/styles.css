@@ -3,6 +3,16 @@ body {
   font-family: Verdana, Arial, Helvetica, sans-serif;
   
 }
+
+div#flash .info {color:green}
+
+div.validation_errors {
+  margin: 1.5em;
+  font-style: italic;
+}
+
+#footer .tiny {font-size:xx-small; color:gray}
+
 div#wrapper {
  margin: 0 auto;
  width: 922px;
@@ -11,24 +21,39 @@ div#content{
    padding: 1.5em;
 }
 
-#footer .tiny {font-size:xx-small; color:gray}
-
 .delete_form {
   display: inline;
 }
 
-div.validation_errors {
-  margin: 1.5em;
-  font-style: italic;
+
+div#tree_container {
+  position: relative
+}
+div#tag_tree {
+  width: 400px;
+}
+div#tag_info {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border-style:solid;
+  border-width:1px;
+  font-size: smaller;
+  padding-right: 0.5em;
+  background-color: rgb(253, 206, 119);
+}
+
+
+ul#ele_list {
+  list-style-type: none;
+}
+
+ul#ele_list li.tag_header {
+  font-weight: bold;
 }
 
 
 li.jqtree-folder {
 
 }
-div#tag_tree {
-  width: 400px;
-}
-
-div#flash .info {color:green}
  

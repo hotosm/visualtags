@@ -1,7 +1,8 @@
 <%
 def group_child_to_json(child)
   if child.name == "item" || child.name == "group"
-    json = {"name" => child.name + ": "+child["name"], "type" => child.name, "icon" => child["icon"] }
+  json = {"name" => child.name + ": "+child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
+  json["item"] = get_item(child) if child.name == "item"
   end
   if child.name == "group" && child.children?
     json["children"] = []
@@ -16,7 +17,8 @@ end
 
 def child_to_json(child)
   if child.name == "item" || child.name == "group"
-    json = {"name" => child.name + ": "+child["name"], "type" => child.name, "icon" => child["icon"] }
+    json = {"name" => child.name + ": "+child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
+    json["item"] = get_item(child) if child.name == "item"
   end
   if child.name == "group" && child.children?
     json["children"] = []
@@ -28,6 +30,16 @@ def child_to_json(child)
   end
 
   json
+end
+
+#parses an item and extracts the children from it
+def get_item(child)
+  items = []
+  child.each_element do | ce |
+    items << {"name"=> ce.name, "key"=> ce["key"] || "", "text" => ce["text"] || ""}
+  end
+
+  items
 end
 
 if @collection.custom_preset
@@ -51,6 +63,7 @@ end
       data: data,
       autoOpen: 0,
       dragAndDrop: <%= editable %>,
+      selectable: true,
       useContextMenu: false,
       onCreateLi: function(node, $li) {
         // Add 'icon' span before title
@@ -72,8 +85,37 @@ end
       }
 
 
-    });
-    //console.log($('#tag_tree').tree('toJson'));
-  });
+    }); //tree
+
+
+  $('#tag_tree').bind(
+    'tree.select',
+    function(event) {
+        if (event.node) {
+            // node was selected
+            var node = event.node;
+            if (node.type != "item"){
+              $("#tag_info").empty()
+              return false;
+            }
+            var item_elements =  node["item"]
+            $("#tag_info").empty()
+            $("#tag_info").append("<ul id='ele_list'><li class='tag_header'>Tags ("+node['geo_type'] +")</li></ul>")
+            $.each(item_elements, function(index, ele){
+                if (ele.key){
+                  $("#ele_list").append("<li>"+ ele.key+"</li>");
+                }
+          });
+            
+        }
+        else {
+            // event.node is null
+            // a node was deselected
+        }
+    }
+);
+
+  }); //jq function
 
 </script>
+ 
