@@ -19,15 +19,14 @@ $(function() {
   <input type="submit" value="Delete Collection" />
 </form>
 
-<p>
-  <a href='<%= "/collection/#{@collection.id}.xml" %>' target="_new">Download as simple XML preset</a> suitable for use in the <a href="http://hot-export.geofabrik.de/">HOT Exports Application.</a>
-</p>
-
 <h4>JOSM Preset </h4>
 <div id="tag_tree"></div>
 
 <h4><a href="#" id="tags_toggle"><%= @collection.tags.count %> Tags Detail</a></h4>
-<div id="tags_detail" style="display:none">
+<p>
+  <a href='<%= "/collection/#{@collection.id}.xml" %>' target="_new">Download as simple XML preset</a> suitable for use in the <a href="http://hot-export.geofabrik.de/">HOT Exports Application.</a>
+</p>
+<div id="tags_detail" style="">
   <p>
     <a href="<%= "/collection/#{@collection.id}/tag" %>">Add New Tag</a>
   </p>
