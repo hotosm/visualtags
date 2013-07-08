@@ -1,11 +1,29 @@
+<%= erb(:preset_tree, :layout => false, :locals=>{:editable => "true"}) %>
+<script type="text/javascript">
+$(function() {
+  $('#collection_form').submit(function(){
+    var custom_preset = $('#tag_tree').tree('toJson');
+
+    $('input#custom_preset').val(custom_preset)
+    //return false
+  });
+
+});
+</script>
 <h2>Editing Collection <%=  @collection.id %> </h2>
 
 <h3>Name: <%= @collection.name%></h3>
 
-<form action='<%="/collection/#{@collection.id}" %>' method="post">
+<form action='<%="/collection/#{@collection.id}" %>' id="collection_form" method="post">
   <input type="hidden" name="_method" value="put" />
+  <input type="hidden" name="collection[custom_preset]" id="custom_preset" value="asc" />
+  <!--
   <p><label for="name">Name:</label>
      <input type="text" name="collection[name]" value="<%= @collection.name %>" />
   </p>
-  <input type="submit" value="Edit Collection" />
+  -->
+  <input type="submit" value="Save changes" />
 </form>
+
+<h4>Preset</h4>
+<div id="tag_tree"></div>

@@ -1,79 +1,14 @@
 <h2>Viewing Collection <%=  @collection.id %> </h2>
-<%
-def group_child_to_json(child)
-  if child.name == "item" || child.name == "group"
-    json = {"name" => child.name + ": "+child["name"], "type" => child.name, "icon" => child["icon"] }
-  end
-  if child.name == "group" && child.children?
-    json["children"] = []
-    child.children.each do | c |
-      if c.name == "item" || c.name == "group"
-        json["children"] << group_child_to_json(c)
-      end
-    end
-  end
-  json
-end
+<%= erb(:preset_tree, :layout => false, :locals=>{:editable => "false"}) %>
 
-def child_to_json(child)
-  if child.name == "item" || child.name == "group"
-    json = {"name" => child.name + ": "+child["name"], "type" => child.name, "icon" => child["icon"] }
-  end
-  if child.name == "group" && child.children?
-    json["children"] = []
-    child.children.each do | c |
-      if c.name == "item" || c.name == "group"
-        json["children"] << group_child_to_json(c)
-      end
-    end
-  end
-
-  json
-end
-
-xml_array = @collection.to_preset_array
-json_array = []
-xml_array.each do | child |  
-  json_array << child_to_json(child)
-end
-json_array.join(",")
--%>
 <script type="text/javascript">
-
-  var data = <%= json_array.to_json %>;
-
-  $(function() {
-    $('#tree1').tree({
-      data: data,
-      autoOpen: 0,
-      dragAndDrop: true,
-      useContextMenu: false,
-      onCreateLi: function(node, $li) {
-        // Add 'icon' span before title
-        var icon="";
-        if (node.icon){
-         icon = "<img src='/icons/"+node.icon+"' width='32px' height='32px'  />";
-        }else{
-          icon = "<img src='/icons/styles/standard/empty.png' width='32px' height='32px' />";
-        }
-        $li.find('.jqtree-title').before('<span class="icon">'+icon+'</span>');
-       
-      },
-      onCanMoveTo: function(moved_node, target_node, position) {
-        if (position == "inside" && target_node.type =="item") {
-          return false;
-        } else {
-          return true;
-        }
-      }
-
-
-    });
-    //console.log($('#tree1').tree('toJson'));
+$(function() {
+  $('#tags_toggle').click(function(){
+    $('#tags_detail').toggle();
   });
-  
-</script>
 
+});
+</script>
 <h3>Name: <%= @collection.name%></h3>
 <p>Preset filename: <%= @collection.original_filename %> (<a href="<%= "/collection/#{@collection.id}/validate" %>">Validate this</a>) </p>
 
@@ -89,17 +24,18 @@ json_array.join(",")
 </p>
 
 <h4>JOSM Preset </h4>
-<div id="tree1"></div>
+<div id="tag_tree"></div>
 
-<h4>Separating <%= @collection.tags.count %> Tags</h4>
+<h4><a href="#" id="tags_toggle"><%= @collection.tags.count %> Tags Detail</a></h4>
+<div id="tags_detail" style="display:none">
+  <p>
+    <a href="<%= "/collection/#{@collection.id}/tag" %>">Add New Tag</a>
+  </p>
 
-<p>
-  <a href="<%= "/collection/#{@collection.id}/tag" %>">Add New Tag</a>
-</p>
-
-<% @collection.tags.group_by(&:osm_type).each do | osm_type, tags | %>
-    <b><%= osm_type %></b> <br />
-    <% tags.each do | tag | %>
-      <%="<a href='/collection/#{@collection.id}/tag/#{tag.id}'>#{tag.key}</a>" %><br />
-    <% end  %>
-<% end  %>
+  <% @collection.tags.group_by(&:osm_type).each do | osm_type, tags | %>
+      <b><%= osm_type %></b> <br />
+      <% tags.each do | tag | %>
+        <%="<a href='/collection/#{@collection.id}/tag/#{tag.id}'>#{tag.key}</a>" %><br />
+      <% end  %>
+  <% end  %>
+</div>

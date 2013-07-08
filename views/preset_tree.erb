@@ -1,0 +1,79 @@
+<%
+def group_child_to_json(child)
+  if child.name == "item" || child.name == "group"
+    json = {"name" => child.name + ": "+child["name"], "type" => child.name, "icon" => child["icon"] }
+  end
+  if child.name == "group" && child.children?
+    json["children"] = []
+    child.children.each do | c |
+      if c.name == "item" || c.name == "group"
+        json["children"] << group_child_to_json(c)
+      end
+    end
+  end
+  json
+end
+
+def child_to_json(child)
+  if child.name == "item" || child.name == "group"
+    json = {"name" => child.name + ": "+child["name"], "type" => child.name, "icon" => child["icon"] }
+  end
+  if child.name == "group" && child.children?
+    json["children"] = []
+    child.children.each do | c |
+      if c.name == "item" || c.name == "group"
+        json["children"] << group_child_to_json(c)
+      end
+    end
+  end
+
+  json
+end
+
+if @collection.custom_preset
+  tree_data = @collection.custom_preset
+else
+  xml_array = @collection.to_preset_array
+  json_array = []
+  xml_array.each do | child |
+    json_array << child_to_json(child)
+  end
+  json_array.join(",")
+  tree_data = json_array.to_json
+end
+
+-%>
+<script type="text/javascript">
+  var data = <%= tree_data %>;
+
+  $(function() {
+    $('#tag_tree').tree({
+      data: data,
+      autoOpen: 0,
+      dragAndDrop: <%= editable %>,
+      useContextMenu: false,
+      onCreateLi: function(node, $li) {
+        // Add 'icon' span before title
+        var icon="";
+        if (node.icon){
+         icon = "<img src='/icons/"+node.icon+"' width='32px' height='32px'  />";
+        }else{
+          icon = "<img src='/icons/styles/standard/empty.png' width='32px' height='32px' />";
+        }
+        $li.find('.jqtree-title').before('<span class="icon">'+icon+'</span>');
+
+      },
+      onCanMoveTo: function(moved_node, target_node, position) {
+        if (position == "inside" && target_node.type =="item") {
+          return false;
+        } else {
+          return true;
+        }
+      }
+
+
+    });
+    //console.log($('#tag_tree').tree('toJson'));
+  });
+
+</script>

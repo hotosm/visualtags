@@ -22,14 +22,13 @@ class Collection < ActiveRecord::Base
   end
 
 
-  def validate_preset()
-    return Collection.validate_preset(self.preset)
+  def validate_xml_preset()
+    return Collection.validate_xml_preset(self.preset)
   end
 
-  def self.validate_preset(preset)
+  def self.validate_xml_preset(preset)
     parser = XML::Parser.string(preset)
     document = parser.parse
-    
     schema_document = XML::Document.file("lib/tagging-preset.xsd")
     schema = XML::Schema.document(schema_document)
     begin
@@ -52,26 +51,15 @@ class Collection < ActiveRecord::Base
     items.each do |item|
       itype = item["type"] || ""
       item_geometrytype = itype.split(',') 
-
       item.children.each do |child|
         if(!child['key'].nil?)
           key = child['key']
-          
           if !tags.has_key?(key)
             tags[key] = Hash.new
           end
-
-          if child['type'].nil?
-            geomlist = item_geometrytype
-          else
-            #this is rare, I think, and may not be allowed by the xsd
-            geomlist = item["type"].split(',')
-          end
-
-          geomlist.each do |type|
+          item_geometrytype.each do |type|
             tags[key][type] = false
-          end
-         
+          end      
         end
       end
     end
@@ -163,7 +151,7 @@ end
 
 get '/collection/:id/validate' do
   @collection = Collection.find(params[:id])
-  @valid = @collection.validate_preset
+  @valid = @collection.validate_xml_preset
   erb :collection_validate
 end
 
