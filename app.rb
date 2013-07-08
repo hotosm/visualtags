@@ -2,20 +2,10 @@ require 'sinatra'
 require 'sinatra/activerecord'
 require 'xml/libxml'
 
-#name, filename, orginal_filename
+#name, filename, orginal_filename, preset(xml), custom_preset(json)
 class Collection < ActiveRecord::Base
   has_many :tags, :dependent => :destroy
   
-  def item_types
-    types_array = []
-    types = self.tags.select(:osm_type).uniq
-    types.each do | type |
-      types_array << type.osm_type if type.osm_type
-    end
-    
-    types_array
-  end
-
   def to_preset_array()
     parser = XML::Parser.string(self.preset)
     doc = parser.parse
@@ -129,9 +119,7 @@ post '/upload' do
   collection.save
 
   new_tags = Collection.tags_from_xml(File.read(filename))
-  new_tags.each do | tag |
-    collection.tags << tag
-  end
+  collection.tags = new_tags  #saved to the collection
 
   redirect  "/collection/#{collection.id}"
 end
