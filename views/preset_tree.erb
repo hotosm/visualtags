@@ -143,7 +143,7 @@ end
             linky = ele
           }
           if (ele.name == "optional"){
-            $("#item_table").append("<tr colspan='2'><td>Optional Attributes: </td></tr>")
+            $("#item_table").append("<tr><td colspan='2'>Optional Attributes: </td></tr>")
             $.each(ele.items, function(i, opt_ele){
               $("#item_table").append(render_ele(opt_ele));
             });
@@ -170,10 +170,10 @@ end
       html = "<tr class='ele "+ ele.name + "' >"
       ele_html = ""
       if (ele.name == "label") {
-        ele_html = "<td>"+ele.text+"</td>"
+        ele_html = "<td colspan='2'>"+ele.text+"</td>"
       }
       if (ele.name == "space"){
-        ele_html = "<td>--</td>"
+        ele_html = "<td></td>"
       }
       if (ele.name == "key"){
         ele_html = "<td>"+ele.key + "</td><td>"+ele.value+"</td>"
