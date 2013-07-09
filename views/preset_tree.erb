@@ -36,7 +36,18 @@ end
 def get_item(child)
   items = []
   child.each_element do | ce |
-    items << {"name"=> ce.name, "key"=> ce["key"] || "", "text" => ce["text"] || ""}
+    item = {}
+    item = {"name"=> ce.name, "key"=> ce["key"] || "", "text" => ce["text"] || "", 
+              "value"=>ce["value"]||"", "values" => ce["values"] || "", "default"=> ce["default"]|| "", "link"=> ce["href"] || ""}
+    if ce.name == "optional"
+      optional_items = []
+      ce.each_element do | opt |
+        optional_items << {"name"=> opt.name, "key"=> opt["key"] || "", "text" => opt["text"] || "",
+              "value"=>opt["value"]||"", "values" => opt["values"] || "", "default"=> opt["default"]|| "", "link" => opt["href"] || ""}
+      end
+      item["items"] = optional_items 
+    end
+    items << item 
   end
 
   items
@@ -103,13 +114,25 @@ end
             var item_elements =  node["item"]
             $("#tag_info").empty()
             $("#tag_info").append("<table id='item_table'>")
-            $("#item_table").append("<tr id='ele_r'><th colspan=3 class='tag_header'>"+node['name']+"  ("+node['geo_type'] +")</th></tr>")
-            $("#item_table").append("<tr id='ele_r'><th class='tag_header'>Type</th><th>Text</th><th>Key</th></tr>")
+            $("#item_table").append("<tr id='ele_r'><th colspan=2 class='tag_header'>"+node['name']+"  ("+node['geo_type'] +")</th></tr>")
+            var linky = null;
             $.each(item_elements, function(index, ele){
-                //console.log(ele)
-                  $("#item_table").append("<tr><td>"+ele.name+"</td><td>"+ ele.text +"</td><td>"+ ele.key+"</td></tr>");
-              
-          });
+              if (ele.name == "link"){
+                linky = ele
+                }
+              if (ele.name == "optional"){
+                $("#item_table").append("Optional Attributes: <br />")
+                $.each(ele.items, function(i, opt_ele){
+                  $("#item_table").append(render_ele(opt_ele));
+                });
+              }else{
+                $("#item_table").append(render_ele(ele));
+              }
+            });
+           //ADD Item link at end
+           if (linky){
+            $("#item_table").append("<a href='"+linky.link+"'>More information link</a><br />")
+            }
            $("#tag_info").append("</table>")
             
         }
@@ -117,8 +140,52 @@ end
             // event.node is null
             // a node was deselected
         }
+    }//function(event)
+);  //select tree
+
+
+function render_ele(ele){
+  html = "<tr class='ele "+ ele.name + "' >"
+  ele_html = ""
+  if (ele.name == "label") {
+    ele_html = "<td>"+ele.text+"</td>"
+  }
+  if (ele.name == "space"){
+    ele_html = "<td>--</td>"
+  } 
+  if (ele.name == "key"){
+    ele_html = "<td>"+ele.key + "</td><td>"+ele.value+"</td>"
+  }
+  if (ele.name == "text"){
+    ele_html = "<td>"+ele.text+"</td><td><input type='text' /></td>" //|| ele.key
+  }
+  
+  //TODO display_values
+  //TODO list_entries
+  if (ele.name == "combo"){
+    ele_html = "<td>"+ele.text+"</td>" //|| ele.key
+    ele_html += "<td><select>"
+    $.each(ele.values.split(","), function(index, option){
+        ele_html +=  "<option value='"+ option +"'>"+ option +"</option>"
+    });
+    ele_html += "</select></td>"
+  }
+  if (ele.name == "check"){
+    ele_html = "<td><input type='checkbox' "
+    if (ele.default == "on"){
+      ele_html += "checked"
     }
-);
+    ele_html += " >" + ele.text +"</td>"  //|| ele.key
+  }
+  
+  //TODO multiselect
+  //TODO role?
+  
+  html += ele_html + "</tr>"
+  console.log(html)
+  return html
+}
+
 
   }); //jq function
 
