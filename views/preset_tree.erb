@@ -1,70 +1,75 @@
 <%
-def build_ele(child)
-  values = child["values"] || ""
-  if child.name == "combo" && child.children.length > 0
+def parse_element(element)
+  values = element["values"] || ""
+  if element.name == "combo" && element.children.length > 0
     values = []
-    child.each_element do |list_item |
+    element.each_element do |list_item |
       values << list_item["value"]
     end
     values = values.join(",")
   end
-  
-  ele = {"name"=> child.name, "key"=> child["key"] || "", "text" => child["text"] || "", 
-              "value"=>child["value"]||"", "values" => values, 
-              "default_value"=> child["default"]|| "", "link"=> child["href"] || ""}
-  return ele
+
+  ele = {"name"=> element.name, "key"=> element["key"] || "", "text" => element["text"] || "",
+    "value"=>element["value"]||"", "values" => values,
+    "default_value"=> element["default"]|| "", "link"=> element["href"] || ""}
+
+  ele
 end
 
-#parses an item and extracts the children from it
-def get_item(child)
-  items = []
-  child.each_element do | ce |
-    item = {}
-    item = build_ele(ce)
+#parses an item and extracts the tag / form elements from it
+def parse_item(item)
+  elements = []
+  item.each_element do | ce |
+    element = {}
+    element = parse_element(ce)
     if ce.name == "optional"
       optional_items = []
       ce.each_element do | opt |
-        optional_items << build_ele(opt)
+        optional_items << parse_element(opt)
       end
-      item["items"] = optional_items 
+      element["items"] = optional_items
     end
-    items << item 
+    elements << element
   end
 
-  items
+  elements
 end
 
-def group_child_to_json(child)
+#parses a child of an Item or Group.
+#if it's a group, the child has children of its own
+def parse_child(child)
   if child.name == "item" || child.name == "group"
-  json = {"name" => child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
-  json["item"] = get_item(child) if child.name == "item"
+    child_hash = {"name" => child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
+    child_hash["item"] = parse_item(child) if child.name == "item"
   end
   if child.name == "group" && child.children?
-    json["children"] = []
+    child_hash["children"] = []
     child.children.each do | c |
       if c.name == "item" || c.name == "group"
-        json["children"] << group_child_to_json(c)
+        child_hash["children"] << parse_child(c)
       end
     end
   end
-  json
+
+  child_hash
 end
 
-def child_to_json(child)
-  if child.name == "item" || child.name == "group"
-    json = {"name" => child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
-    json["item"] = get_item(child) if child.name == "item"
+# Parses an XML element of either Item or Group
+def parse_leaf(xml_leaf)
+  if xml_leaf.name == "item" || xml_leaf.name == "group"
+    leaf = {"name" => xml_leaf["name"], "type" => xml_leaf.name, "icon" => xml_leaf["icon"], "geo_type" => xml_leaf["type"] }
+    leaf["item"] = parse_item(xml_leaf) if xml_leaf.name == "item"
   end
-  if child.name == "group" && child.children?
-    json["children"] = []
-    child.children.each do | c |
+  if xml_leaf.name == "group" && xml_leaf.children?
+    leaf["children"] = []
+    xml_leaf.children.each do | c |
       if c.name == "item" || c.name == "group"
-        json["children"] << group_child_to_json(c)
+        leaf["children"] << parse_child(c)
       end
     end
   end
 
-  json
+  leaf
 end
 
 
@@ -73,11 +78,13 @@ if @collection.custom_preset
 else
   xml_array = @collection.to_preset_array
   json_array = []
-  xml_array.each do | child |
+  xml_array.each do | xml_leaf |
     #p child
-    json_array << child_to_json(child)
+    #xml_leaf is a Group or an Item
+    json_array << parse_leaf(xml_leaf)
   end
   json_array.join(",")
+  
   tree_data = Oj.dump(json_array)
 end
 
@@ -96,7 +103,7 @@ end
         // Add 'icon' span before title
         var icon="";
         if (node.icon){
-         icon = "<img src='/icons/"+node.icon+"' width='32px' height='32px'  />";
+          icon = "<img src='/icons/"+node.icon+"' width='32px' height='32px'  />";
         }else{
           icon = "<img src='/icons/styles/standard/empty.png' width='32px' height='32px' />";
         }
@@ -115,98 +122,98 @@ end
     }); //tree
 
 
-  $('#tag_tree').bind(
+    $('#tag_tree').bind(
     'tree.select',
     function(event) {
-        if (event.node) {
-            // node was selected
-            var node = event.node;
-            if (node.type != "item"){
-              $("#tag_info").empty()
-              return false;
-            }
-            //console.log(node)
-            var item_elements =  node["item"]
-            $("#tag_info").empty()
-            $("#tag_info").append("<table id='item_table'>")
-            $("#item_table").append("<tr id='ele_r'><th colspan=2 class='tag_header'>"+node['name']+"  ("+node['geo_type'] +")</th></tr>")
-            var linky = null;
-            $.each(item_elements, function(index, ele){
-              if (ele.name == "link"){
-                linky = ele
-                }
-              if (ele.name == "optional"){
-                $("#item_table").append("Optional Attributes: <br />")
-                $.each(ele.items, function(i, opt_ele){
-                  $("#item_table").append(render_ele(opt_ele));
-                });
-              }else{
-                $("#item_table").append(render_ele(ele));
-              }
+      if (event.node) {
+        // node was selected
+        var node = event.node;
+        if (node.type != "item"){
+          $("#tag_info").empty()
+          return false;
+        }
+        //console.log(node)
+        var item_elements =  node["item"]
+        $("#tag_info").empty()
+        $("#tag_info").append("<table id='item_table'>")
+        $("#item_table").append("<tr id='ele_r'><th colspan=2 class='tag_header'>"+node['name']+"  ("+node['geo_type'] +")</th></tr>")
+        var linky = null;
+        $.each(item_elements, function(index, ele){
+          if (ele.name == "link"){
+            linky = ele
+          }
+          if (ele.name == "optional"){
+            $("#item_table").append("<tr colspan='2'><td>Optional Attributes: </td></tr>")
+            $.each(ele.items, function(i, opt_ele){
+              $("#item_table").append(render_ele(opt_ele));
             });
-           //ADD Item link at end
-           if (linky){
-            $("#item_table").append("<a href='"+linky.link+"'>More information link</a><br />")
-            }
-           $("#tag_info").append("</table>")
+          }else{
+            $("#item_table").append(render_ele(ele));
+          }
+        });
+        //ADD Item link at end
+        if (linky){
+          $("#item_table").append("<br /><a href='"+linky.link+"'>More information link</a><br />")
+        }
+        $("#tag_info").append("</table>")
             
-        }
-        else {
-            // event.node is null
-            // a node was deselected
-        }
+      }
+      else {
+        // event.node is null
+        // a node was deselected
+      }
     }//function(event)
-);  //select tree
+  );  //select tree
 
 
-function render_ele(ele){
-  html = "<tr class='ele "+ ele.name + "' >"
-  ele_html = ""
-  if (ele.name == "label") {
-    ele_html = "<td>"+ele.text+"</td>"
-  }
-  if (ele.name == "space"){
-    ele_html = "<td>--</td>"
-  } 
-  if (ele.name == "key"){
-    ele_html = "<td>"+ele.key + "</td><td>"+ele.value+"</td>"
-  }
-  if (ele.name == "text"){
-    ele_html = "<td>"+ele.text+"</td><td><input type='text' /></td>" //|| ele.key
-  }
+    function render_ele(ele){
+      html = "<tr class='ele "+ ele.name + "' >"
+      ele_html = ""
+      if (ele.name == "label") {
+        ele_html = "<td>"+ele.text+"</td>"
+      }
+      if (ele.name == "space"){
+        ele_html = "<td>--</td>"
+      }
+      if (ele.name == "key"){
+        ele_html = "<td>"+ele.key + "</td><td>"+ele.value+"</td>"
+      }
+      if (ele.name == "text"){
+        ele_html = "<td>"+ele.text+"</td><td><input type='text' /></td>" //|| ele.key
+      }
   
-  //TODO display_values
-  //TODO list_entries
+      //TODO display_values
+      //TODO list_entries
   
-  if (ele.name == "combo"){
-    ele_html = "<td>"+ele.text+"</td>" //|| ele.key
-    ele_html += "<td><select>"
-    if (ele.values){
-      //console.log(ele.values)
-      $.each(ele.values.split(","), function(index, option){
-        ele_html +=  "<option value='"+ option +"'>"+ option +"</option>"
-      });
+      if (ele.name == "combo"){
+        ele_html = "<td>"+ele.text+"</td>" //|| ele.key
+        ele_html += "<td><select>"
+        if (ele.values){
+          //console.log(ele.values)
+          $.each(ele.values.split(","), function(index, option){
+            ele_html +=  "<option value='"+ option +"'>"+ option +"</option>"
+          });
+        }
+        ele_html += "</select></td>"
+      }
+      if (ele.name == "check"){
+        ele_html = "<td><input type='checkbox' "
+        if (ele.default_value == "on"){
+          ele_html += "checked"
+        }
+        ele_html += " >" + ele.text +"</td>"  //|| ele.key
+      }
+  
+      //TODO multiselect
+      //TODO role?
+  
+      html += ele_html + "</tr>"
+      //console.log(html)
+      return html
     }
-    ele_html += "</select></td>"
-  }
-  if (ele.name == "check"){
-    ele_html = "<td><input type='checkbox' "
-    if (ele.default_value == "on"){
-      ele_html += "checked"
-    }
-    ele_html += " >" + ele.text +"</td>"  //|| ele.key
-  }
-  
-  //TODO multiselect
-  //TODO role?
-  
-  html += ele_html + "</tr>"
-  //console.log(html)
-  return html
-}
 
 
   }); //jq function
 
 </script>
- 
+
