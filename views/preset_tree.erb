@@ -32,18 +32,32 @@ def child_to_json(child)
   json
 end
 
+def build_ele(child)
+  values = child["values"] || ""
+  if child.name == "combo" && child.children.length > 0
+    values = []
+    child.each_element do |list_item |
+      values << list_item["value"]
+    end
+    values = values.join(",")
+  end
+  
+  ele = {"name"=> child.name, "key"=> child["key"] || "", "text" => child["text"] || "", 
+              "value"=>child["value"]||"", "values" => values, 
+              "default"=> child["default"]|| "", "link"=> child["href"] || ""}
+  return ele
+end
+
 #parses an item and extracts the children from it
 def get_item(child)
   items = []
   child.each_element do | ce |
     item = {}
-    item = {"name"=> ce.name, "key"=> ce["key"] || "", "text" => ce["text"] || "", 
-              "value"=>ce["value"]||"", "values" => ce["values"] || "", "default"=> ce["default"]|| "", "link"=> ce["href"] || ""}
+    item = build_ele(ce)
     if ce.name == "optional"
       optional_items = []
       ce.each_element do | opt |
-        optional_items << {"name"=> opt.name, "key"=> opt["key"] || "", "text" => opt["text"] || "",
-              "value"=>opt["value"]||"", "values" => opt["values"] || "", "default"=> opt["default"]|| "", "link" => opt["href"] || ""}
+        optional_items << build_ele(opt)
       end
       item["items"] = optional_items 
     end
@@ -162,12 +176,16 @@ function render_ele(ele){
   
   //TODO display_values
   //TODO list_entries
+  
   if (ele.name == "combo"){
     ele_html = "<td>"+ele.text+"</td>" //|| ele.key
     ele_html += "<td><select>"
-    $.each(ele.values.split(","), function(index, option){
+    if (ele.values){
+      //console.log(ele.values)
+      $.each(ele.values.split(","), function(index, option){
         ele_html +=  "<option value='"+ option +"'>"+ option +"</option>"
-    });
+      });
+    }
     ele_html += "</select></td>"
   }
   if (ele.name == "check"){
@@ -182,7 +200,7 @@ function render_ele(ele){
   //TODO role?
   
   html += ele_html + "</tr>"
-  console.log(html)
+  //console.log(html)
   return html
 }
 
