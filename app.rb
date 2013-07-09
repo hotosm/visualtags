@@ -124,6 +124,86 @@ get '/collection/:id.xml' do
   attachment  #<-- comment for inline render
   builder :simple_preset
 end
+def group_child_to_json(child)
+  if child.name == "item" || child.name == "group"
+  json = {"name" => child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
+  json["item"] = get_item(child) if child.name == "item"
+  end
+  if child.name == "group" && child.children?
+    json["children"] = []
+    child.children.each do | c |
+      if c.name == "item" || c.name == "group"
+        json["children"] << group_child_to_json(c)
+      end
+    end
+  end
+  json
+end
+
+def child_to_json(child)
+  if child.name == "item" || child.name == "group"
+    json = {"name" => child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
+    json["item"] = get_item(child) if child.name == "item"
+  end
+  if child.name == "group" && child.children?
+    json["children"] = []
+    child.children.each do | c |
+      if c.name == "item" || c.name == "group"
+        json["children"] << group_child_to_json(c)
+      end
+    end
+  end
+
+  json
+end
+
+def build_ele(child)
+  values = child["values"] || ""
+  if child.name == "combo" && child.children.length > 0
+    values = []
+    child.each_element do |list_item |
+      values << list_item["value"]
+    end
+    values = values.join(",")
+  end
+
+  ele = {"name"=> child.name, "key"=> child["key"] || "", "text" => child["text"] || "",
+              "value"=>child["value"]||"", "values" => values,
+              "default"=> child["default"]|| "", "link"=> child["href"] || ""}
+  return ele
+end
+
+#parses an item and extracts the children from it
+def get_item(child)
+  items = []
+  child.each_element do | ce |
+    item = {}
+    item = build_ele(ce)
+    if ce.name == "optional"
+      optional_items = []
+      ce.each_element do | opt |
+        optional_items << build_ele(opt)
+      end
+      item["items"] = optional_items
+    end
+    items << item
+  end
+
+  items
+end
+get '/collection/:id.json' do
+  @collection = Collection.find(params[:id])
+
+  #attachment  #<-- comment for inline render
+  xml_array = @collection.to_preset_array
+  json_array = []
+  xml_array.each do | child |
+    #p child
+    json_array << child_to_json(child)
+  end
+  json_array.join(",")
+  tree_data = json_array.to_json
+end
 
 get '/collection/:id' do
   @collection = Collection.find(params[:id])
