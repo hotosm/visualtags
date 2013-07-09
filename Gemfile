@@ -9,7 +9,7 @@ gem 'sinatra-flash'
 gem 'oj'
 
 group :production do
-    gem 'puma'
+    #gem 'puma'
 end
 
 group :development do
