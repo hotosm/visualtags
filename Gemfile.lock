@@ -84,7 +84,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord
+  activerecord (= 3.2.13)
   heroku
   libxml-ruby
   pg
