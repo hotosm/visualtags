@@ -2,6 +2,8 @@ require 'sinatra'
 require 'sinatra/activerecord'
 require 'sinatra/flash'
 require 'xml/libxml'
+require 'oj'
+
 enable :sessions
 set :erb, :trim => '-'
 
@@ -209,7 +211,7 @@ get '/collection/:id.json' do
     json_array << child_to_json(child)
   end
   json_array.join(",")
-  tree_data = json_array.to_json
+  tree_data = Oj.dump(json_array) #.to_json
 end
 
 get '/collection/:id' do
