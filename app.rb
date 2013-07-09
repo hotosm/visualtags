@@ -117,13 +117,20 @@ get '/collections' do
   @collections = Collection.find(:all, :order => "created_at desc")
   erb :collections
 end
+get '/collection/:id.xml2' do
+  @collection = Collection.find(params[:id])
 
+   @collection.preset
+end
 get '/collection/:id.xml' do
   @collection = Collection.find(params[:id])
 
   attachment  #<-- comment for inline render
   builder :simple_preset
 end
+
+
+
 def group_child_to_json(child)
   if child.name == "item" || child.name == "group"
   json = {"name" => child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
