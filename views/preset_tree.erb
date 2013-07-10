@@ -1,7 +1,7 @@
 <%
 def parse_element(element)
-  values = element["values"] || ""
-  if element.name == "combo" && element.children.length > 0
+  values = element["values"] || nil
+  if element.name == "combo" && element.children.length > 0 && values.nil?
     values = []
     element.each_element do |list_item |
       values << list_item["value"]
@@ -9,10 +9,13 @@ def parse_element(element)
     values = values.join(",")
   end
 
-  ele = {"name"=> element.name, "key"=> element["key"] || "", "text" => element["text"] || "",
-    "value"=>element["value"]||"", "values" => values,
-    "default_value"=> element["default"]|| "", "link"=> element["href"] || ""}
-
+  ele = {"name"=> element.name, 
+         "key"=> element["key"], "text" => element["text"],
+        "value"=> element["value"], "values" => values,
+        "default_value"=> element["default"], "link"=> element["href"]}
+      
+  ele.delete_if {|k,v| v == nil}  #remove any empty key values, it reduces JSON size
+  
   ele
 end
 
@@ -143,7 +146,7 @@ end
             linky = ele
           }
           if (ele.name == "optional"){
-            $("#item_table").append("<tr><td colspan='2'>Optional Attributes: </td></tr>")
+            $("#item_table").append("<tr class='ele optional'><td colspan='2'>Optional Attributes: </td></tr>")
             $.each(ele.items, function(i, opt_ele){
               $("#item_table").append(render_ele(opt_ele));
             });
@@ -167,26 +170,33 @@ end
 
 
     function render_ele(ele){
-      html = "<tr class='ele "+ ele.name + "' >"
-      ele_html = ""
+      var html = "<tr class='ele "+ ele.name + "' >"
+      var ele_html = ""
+
+      //defaults
+      var value = typeof ele.value !== 'undefined' ? ele.value : ""
+      var text = typeof ele.text !== 'undefined' ? ele.text : ""
+
+
       if (ele.name == "label") {
-        ele_html = "<td colspan='2'>"+ele.text+"</td>"
+        ele_html = "<td colspan='2'>"+text+"</td>"
       }
       if (ele.name == "space"){
         ele_html = "<td></td>"
       }
       if (ele.name == "key"){
-        ele_html = "<td>"+ele.key + "</td><td>"+ele.value+"</td>"
+        
+        ele_html = "<td>"+ele.key + "</td><td>"+value+"</td>"
       }
       if (ele.name == "text"){
-        ele_html = "<td>"+ele.text+"</td><td><input type='text' /></td>" //|| ele.key
+        ele_html = "<td>"+text+"</td><td><input type='text' /></td>" 
       }
   
       //TODO display_values
       //TODO list_entries
   
       if (ele.name == "combo"){
-        ele_html = "<td>"+ele.text+"</td>" //|| ele.key
+        ele_html = "<td>"+text+"</td>" 
         ele_html += "<td><select>"
         if (ele.values){
           //console.log(ele.values)
@@ -201,7 +211,7 @@ end
         if (ele.default_value == "on"){
           ele_html += "checked"
         }
-        ele_html += " >" + ele.text +"</td>"  //|| ele.key
+        ele_html += " >" + text +"</td>"  //|| ele.key
       }
   
       //TODO multiselect
