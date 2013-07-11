@@ -154,7 +154,9 @@ limitations under the License.
 
     MouseWidget.prototype._mouseDown = function(e) {
       var $document;
-
+      if (e.target.nodeName == "SELECT"){)
+        return;
+      }
       if (MouseWidget.is_mouse_handled) {
         return;
       }
