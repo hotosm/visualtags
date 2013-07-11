@@ -30,7 +30,7 @@ def parse_item(item)
       ce.each_element do | opt |
         optional_items << parse_element(opt)
       end
-      element["items"] = optional_items
+      element["children"] = optional_items
     end
     elements << element
   end
@@ -136,8 +136,6 @@ end
             return false;
           }
           //console.log(node)
-          render_item_table(node);
-
           render_item_tree(node);
 
         }
@@ -148,37 +146,15 @@ end
       }//function(event)
   );  //select tree
 
-  //renders the item form elements in the table
-  function render_item_table(node){
-    var item_elements =  node["item"]
-    $("#tag_info").empty()
-    $("#tag_info").append("<table id='item_table'>")
-    $("#item_table").append("<tr id='ele_r'><th></th><th colspan=2 class='tag_header'>"+node['name']+"  ("+node['geo_type'] +")</th></tr>")
-    var linky = null;
-    $.each(item_elements, function(index, ele){
-      if (ele.name == "link"){
-        linky = ele
-      }
-      if (ele.name == "optional"){
-        $("#item_table").append("<tr class='ele optional'><td colspan='3'>Optional Attributes: </td></tr>")
-        $.each(ele.items, function(i, opt_ele){
-          $("#item_table").append(render_ele(opt_ele));
-        });
-      }else{
-        $("#item_table").append(render_ele(ele));
-      }
-    });
-    //ADD Item link at end
-    if (linky){
-      $("#item_table").append("<br /><a href='"+linky.link+"'>More information link</a><br />")
-    }
-    $("#tag_info").append("</table>")
-  }
+
 
   //renders the item form elements in a new tree
   function render_item_tree(node){
+    $('#item_tree_title').empty();
+    $('#item_tree_title').append("<span class='item_title'>"+ node['name']+"  ("+node['geo_type'] +")</span>");
+    
     var item_elements =  node["item"]
-
+  
     $('#item_tree').tree({
       data: item_elements,
       autoOpen: 0,
@@ -186,11 +162,16 @@ end
       dragAndDrop: true,
       selectable: true,
       useContextMenu: false,
+      onCanSelectNode: function(node) {
+        if (node.name == "optional") {
+          return false;
+        }
+        else {
+          return true;
+        }
+      },
       onCreateLi: function(node, $li) {
-        //$li.find('.jqtree-title').before('<span class="type">'+node.name+'</span>');
-       
           $li.find('.jqtree-title').after(render_ele(node));
-       
       },
       onCanMoveTo: function(moved_node, target_node, position) {
         if (position == "inside" && target_node.name !="optional") {
@@ -204,58 +185,57 @@ end
     }); //tree
   }
 
-
-    function render_ele(ele){
-      var html = "<tr class='ele "+ ele.name + "' ><td class='type'>"+ele.name+"</td>"
-      var ele_html = ""
+function render_ele(ele){
+      var html = "";
+      var ele_html = "";
 
       //defaults
-      var value = typeof ele.value !== 'undefined' ? ele.value : ""
-      var text = typeof ele.text !== 'undefined' ? ele.text : ""
-
-
+      var value = typeof ele.value !== 'undefined' ? ele.value : "";
+      var text = typeof ele.text !== 'undefined' ? ele.text : "";
+      if (ele.name == "link"){
+        ele_html = "<span class='left'>"+ ele.link + "</span>"
+      }
       if (ele.name == "label") {
-        ele_html = "<td colspan='3'>"+text+"</td>"
+        ele_html = "<span class='left'>"+text+"</span>";
       }
       if (ele.name == "space"){
-        ele_html = "<td></td>"
+        ele_html = "<span class='full'>&nbsp</span>";
       }
       if (ele.name == "key"){
-        
-        ele_html = "<td>"+ele.key + "</td><td>"+value+"</td>"
+        ele_html = "<span class='left'>"+ele.key + "</span><span class='right'>"+value+"</span>";
       }
       if (ele.name == "text"){
-        ele_html = "<td>"+text+"</td><td><input type='text' /></td>" 
+        ele_html = "<span class='left'>"+text+"</span><span class='right'><input type='text' /></span>" ;
       }
   
       //TODO display_values
       //TODO list_entries
   
       if (ele.name == "combo"){
-        ele_html = "<td>"+text+"</td>" 
-        ele_html += "<td><select>"
+        ele_html = "<span class='left'>"+text+"</span>" ;
+        ele_html += "<span class='right'><select>";
         if (ele.values){
           //console.log(ele.values)
           $.each(ele.values.split(","), function(index, option){
-            ele_html +=  "<option value='"+ option +"'>"+ option +"</option>"
+            ele_html +=  "<option value='"+ option +"'>"+ option +"</option>";
           });
         }
-        ele_html += "</select></td>"
+        ele_html += "</select></span>";
       }
       if (ele.name == "check"){
-        ele_html = "<td><input type='checkbox' "
+        ele_html = "<span class='left'><input type='checkbox' ";
         if (ele.default_value == "on"){
-          ele_html += "checked"
+          ele_html += "checked";
         }
-        ele_html += " >" + text +"</td>"  //|| ele.key
+        ele_html += " >" + text +"</span>";
       }
   
       //TODO multiselect
       //TODO role?
   
-      html += ele_html + "</tr>"
+      html += ele_html;
       //console.log(html)
-      return html
+      return html;
     }
 
 

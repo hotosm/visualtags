@@ -22,11 +22,13 @@ $(function() {
 <h4>JOSM Preset </h4>
 <div id="tree_container">
   <div id="tag_tree"></div>
-  <div id="tag_info"></div>
+  <div id="item_tree_container">
+    <div id="item_tree_title"></div>
+    <div id="item_tree"></div>
+</div>
 </div>
 
-<div id="item_tree">
-</div>
+
 
 <h4><a href="#" id="tags_toggle"><%= @collection.tags.count %> Tags Detail</a></h4>
 <p>
