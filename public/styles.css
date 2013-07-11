@@ -25,6 +25,20 @@ div#content{
   display: inline;
 }
 
+form#collection_form {
+  width: 500px
+}
+form#collection_form p{
+  margin:1px
+}
+
+form#collection_form label{
+  float: left;
+  width: 115px;
+}
+form#collection_form input{
+  width: 300px;
+}
 
 div#tree_container {
   position: relative
@@ -73,10 +87,11 @@ div#item_tree span.jqtree-title {
   font-style: italic;
   float: left;
   display: block;
-  width: 55px;
+  width: 70px;
+  font-size: smaller;
 }
 
-div#item_tree input {width:80px}
+div#item_tree input {width:100px}
 div#item_tree div.jqtree_common{
   padding-bottom: 0.1em;
 }

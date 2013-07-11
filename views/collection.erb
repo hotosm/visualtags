@@ -10,7 +10,12 @@ $(function() {
 });
 </script>
 <h3>Name: <%= @collection.name%></h3>
-<p>Preset filename: <%= @collection.original_filename %> (<a href="<%= "/collection/#{@collection.id}/validate" %>">Validate this</a>) </p>
+<p>Preset filename: <%= @collection.original_filename %> (<a href="<%= "/collection/#{@collection.id}/validate" %>">Validate this</a>) <br />
+Author: <%= @collection.author %> <br />
+Description: <%= @collection.description %><br />
+Short Desc: <%= @collection.shortdescription %><br />
+Version: <%= @collection.version %> </p>
+
 
 <a href='<%="/collection/#{@collection.id}/edit"%>' >Edit Collection</a>
 <form action='<%="/collection/#{@collection.id}"%>' method="post"
@@ -23,9 +28,9 @@ $(function() {
 <div id="tree_container">
   <div id="tag_tree"></div>
   <div id="item_tree_container">
-    <div id="item_tree_title"></div>
+    <div id="item_tree_title">Preset Form Details<br />&nbsp;</div>
     <div id="item_tree"></div>
-</div>
+  </div>
 </div>
 
 

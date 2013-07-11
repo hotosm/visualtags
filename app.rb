@@ -11,6 +11,18 @@ set :erb, :trim => '-'
 class Collection < ActiveRecord::Base
   has_many :tags, :dependent => :destroy
   
+  #parses the xml file for author, description, version etc
+  def parse_metadata
+    parser = XML::Parser.string(self.preset)
+    doc = parser.parse
+    self.author = doc.root["author"]
+    self.description = doc.root["description"]
+    self.shortdescription = doc.root["shortdescription"]
+    self.version = doc.root["version"]
+
+    return true
+  end
+
   def to_preset_array()
     parser = XML::Parser.string(self.preset)
     doc = parser.parse
@@ -107,6 +119,7 @@ post '/upload' do
   FileUtils.chmod(0644, filename)
 
   collection = Collection.new(:name => params[:name].to_s, :original_filename => orig_name, :filename => filename, :preset => preset)
+  collection.parse_metadata
   collection.save
 
   new_tags = Collection.tags_from_xml(File.read(filename))
@@ -118,6 +131,10 @@ end
 get '/collections' do
   @collections = Collection.find(:all, :order => "created_at desc")
   erb :collections
+end
+
+get '/collection' do
+  redirect '/collections'
 end
 
 get '/collection/:id.xml' do

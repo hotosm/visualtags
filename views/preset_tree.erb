@@ -42,7 +42,8 @@ end
 #if it's a group, the child has children of its own
 def parse_child(child)
   if child.name == "item" || child.name == "group"
-    child_hash = {"name" => child["name"], "type" => child.name, "icon" => child["icon"], "geo_type" => child["type"] }
+    child_hash = {"name" => child["name"], "type" => child.name, "icon" => child["icon"], 
+                  "geo_type" => child["type"], "id" => rand(32**8).to_s(32) }
     child_hash["item"] = parse_item(child) if child.name == "item"
   end
   if child.name == "group" && child.children?
@@ -60,7 +61,8 @@ end
 # Parses an XML element of either Item or Group
 def parse_leaf(xml_leaf)
   if xml_leaf.name == "item" || xml_leaf.name == "group"
-    leaf = {"name" => xml_leaf["name"], "type" => xml_leaf.name, "icon" => xml_leaf["icon"], "geo_type" => xml_leaf["type"] }
+    leaf = {"name" => xml_leaf["name"], "type" => xml_leaf.name, "icon" => xml_leaf["icon"], 
+            "geo_type" => xml_leaf["type"], "id" => rand(32**8).to_s(32) }
     leaf["item"] = parse_item(xml_leaf) if xml_leaf.name == "item"
   end
   if xml_leaf.name == "group" && xml_leaf.children?
@@ -135,7 +137,6 @@ end
             $("#tag_info").empty()
             return false;
           }
-          //console.log(node)
           render_item_tree(node);
 
         }
@@ -151,16 +152,36 @@ end
   //renders the item form elements in a new tree
   function render_item_tree(node){
     $('#item_tree_title').empty();
+    $('#item_tree').tree('destroy')
+
     $('#item_tree_title').append("<span class='item_title'>"+ node['name']+"  ("+node['geo_type'] +")</span>");
+    <% if editable == "true"  -%>
+      $('#item_tree_title').append("<a id='save_item_tree' href='#'>Save Changes</a>");
+      $('#save_item_tree').click(function(e){
+        $('#item_tree').tree('selectNode', null);
+        var data = $('#item_tree').tree('toJson');
+       
+        var json_data = JSON.parse(data)
+
+        $('#tag_tree').tree('updateNode', node,
+        {
+          item: json_data
+        }
+      );
+        var data = null;
+        var json_data = null;
+        var parent_item = null;
+        return false;
+      });
+    <% end -%>
     
     var item_elements =  node["item"]
-  
+
     $('#item_tree').tree({
       data: item_elements,
       autoOpen: 0,
       dragAndDrop: <%= editable %>,
-      dragAndDrop: true,
-      selectable: true,
+      selectable: <%= editable %>,
       useContextMenu: false,
       onCanSelectNode: function(node) {
         if (node.name == "optional") {
@@ -171,7 +192,7 @@ end
         }
       },
       onCreateLi: function(node, $li) {
-          $li.find('.jqtree-title').after(render_ele(node));
+        $li.find('.jqtree-title').after(render_ele(node));
       },
       onCanMoveTo: function(moved_node, target_node, position) {
         if (position == "inside" && target_node.name !="optional") {
@@ -185,61 +206,64 @@ end
     }); //tree
   }
 
-function render_ele(ele){
-      var html = "";
-      var ele_html = "";
+  function render_ele(ele){
+    var html = "";
+    var ele_html = "";
 
-      //defaults
-      var value = typeof ele.value !== 'undefined' ? ele.value : "";
-      var text = typeof ele.text !== 'undefined' ? ele.text : "";
-      if (ele.name == "link"){
-        ele_html = "<span class='left'>"+ ele.link + "</span>"
-      }
-      if (ele.name == "label") {
-        ele_html = "<span class='left'>"+text+"</span>";
-      }
-      if (ele.name == "space"){
-        ele_html = "<span class='full'>&nbsp</span>";
-      }
-      if (ele.name == "key"){
-        ele_html = "<span class='left'>"+ele.key + "</span><span class='right'>"+value+"</span>";
-      }
-      if (ele.name == "text"){
-        ele_html = "<span class='left'>"+text+"</span><span class='right'><input type='text' /></span>" ;
-      }
-  
-      //TODO display_values
-      //TODO list_entries
-  
-      if (ele.name == "combo"){
-        ele_html = "<span class='left'>"+text+"</span>" ;
-        ele_html += "<span class='right'><select>";
-        if (ele.values){
-          //console.log(ele.values)
-          $.each(ele.values.split(","), function(index, option){
-            ele_html +=  "<option value='"+ option +"'>"+ option +"</option>";
-          });
-        }
-        ele_html += "</select></span>";
-      }
-      if (ele.name == "check"){
-        ele_html = "<span class='left'><input type='checkbox' ";
-        if (ele.default_value == "on"){
-          ele_html += "checked";
-        }
-        ele_html += " >" + text +"</span>";
-      }
-  
-      //TODO multiselect
-      //TODO role?
-  
-      html += ele_html;
-      //console.log(html)
-      return html;
+    //defaults
+    var value = typeof ele.value !== 'undefined' ? ele.value : "";
+    var text = typeof ele.text !== 'undefined' ? ele.text : "";
+    if (ele.name == "link"){
+      ele_html = "<span class='full'>"+ ele.link + "</span>"
+    }
+    if (ele.name == "label") {
+      ele_html = "<span class='full'>"+text+"</span>";
+    }
+    if (ele.name == "space"){
+      ele_html = "<span class='full'>&nbsp</span>";
+    }
+    if (ele.name == "key"){
+      ele_html = "<span class='left'>"+ele.key + "</span><span class='right'>"+value+"</span>";
+    }
+    if (ele.name == "text"){
+      ele_html = "<span class='left'>"+text+"</span><span class='right'><input type='text' /></span>" ;
     }
 
+    //TODO display_values
+    //TODO role?
 
-  }); //jq function
+    if (ele.name == "combo" || ele.name=="multiselect"){
+      var multiple = "";
+      var delimiter = ",";
+      if (ele.name == "multiselect"){
+        multiple = " multiple "
+        delimiter = ";"
+      };
+      ele_html = "<span class='left'>"+text+"</span>" ;
+      ele_html += "<span class='right'><select"+multiple+">";
+      if (ele.values){
+        $.each(ele.values.split(delimiter), function(index, option){
+          ele_html +=  "<option value='"+ option +"'>"+ option +"</option>";
+        });
+      }
+      ele_html += "</select></span>";
+    }
+
+    if (ele.name == "check"){
+      ele_html = "<span class='full'><input type='checkbox' ";
+      if (ele.default_value == "on"){
+        ele_html += "checked";
+      }
+      ele_html += " >" + text +"</span>";
+    }
+
+    html += ele_html;
+    //console.log(html)
+    return html;
+  }
+
+
+}); //jq function
 
 </script>
 

@@ -15,18 +15,35 @@ $(function() {
 <h3>Name: <%= @collection.name%></h3>
 
 <form action='<%="/collection/#{@collection.id}" %>' id="collection_form" method="post">
-  <input type="hidden" name="_method" value="put" />
-  <input type="hidden" name="collection[custom_preset]" id="custom_preset" value="asc" />
-  <!--
-  <p><label for="name">Name:</label>
-     <input type="text" name="collection[name]" value="<%= @collection.name %>" />
-  </p>
-  -->
-  <input type="submit" value="Save changes" />
+  <fieldset>
+    <legend>Edit Collection</legend>
+    <input type="hidden" name="_method" value="put" />
+    <input type="hidden" name="collection[custom_preset]" id="custom_preset" value="" />
+
+    <p><label for="collection[name]">Name:</label>
+      <input type="text" name="collection[name]" value="<%= @collection.name %>" />
+    </p>
+    <p><label for="collection[author]">Author:</label>
+      <input type="text" name="collection[author]" value="<%= @collection.author %>" />
+    </p>
+    <p><label for="collection[description]">Description:</label>
+      <input type="text" name="collection[description]" value="<%= @collection.description %>" />
+    </p>
+    <p><label for="collection[shortdescription]e">Name:</label>
+      <input type="text" name="collection[shortdescription]" value="<%= @collection.shortdescription %>" />
+    </p>
+    <p><label for="collection[version]">Name:</label>
+      <input type="text" name="collection[version]" value="<%= @collection.version %>" />
+    </p>
+    <input type="submit" value="Save All Changes" />
+  </fieldset>
 </form>
 
 <h4>Preset</h4>
 <div id="tree_container">
   <div id="tag_tree"></div>
-  <div id="tag_info"></div>
+  <div id="item_tree_container">
+    <div id="item_tree_title">Preset Form Details<br />&nbsp;</div>
+    <div id="item_tree"></div>
+  </div>
 </div>
