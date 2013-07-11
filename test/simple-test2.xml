@@ -8,6 +8,7 @@
   <item name="Independent Item" icon="presets/baker.png" type="node,closedway">
     <label text="Independent Label" />
     <key key="shop" value="Independent" />
+    <key key="shop2"  />
     <text key="name" text="Name" default="" delete_if_empty="true" />
   </item>
 

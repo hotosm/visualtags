@@ -54,6 +54,10 @@ ul#ele_list li.tag_header {
 
 
 li.jqtree-folder {
-
 }
- 
+
+table#item_table td.type{font-style: italic}
+table#item_table td.type{font-style: italic}
+
+div.jqtree-element span.jqtree-title {font-style: italic}
+
