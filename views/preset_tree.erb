@@ -313,7 +313,14 @@ end
 
 
     }); //tree
-  }
+   var main_tree_height = $("div#tree_container").height()
+   var item_tree_height = $("div#item_tree_container").height();
+   if (item_tree_height >  main_tree_height ){
+     $("div#tree_container").height(item_tree_height)
+   }
+   
+
+  } //render item tree
   
    //defaults
    //TODO display_values
