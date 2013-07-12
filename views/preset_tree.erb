@@ -145,6 +145,7 @@ end
             var key = $(form_name + " input[name='key']").val();
             var text = $(form_name + " input[name='text']").val(); 
             var value = $(form_name + " input[name='value']").val();
+            var link = $(form_name + " input[name='link']").val();
             var default_value = null;
             if ($(form_name + " input[name='default_value']").prop('checked')){
               default_value = $(form_name + " input[name='default_value']").val();
@@ -160,7 +161,7 @@ end
               values = values.join(",")
             }
 
-            if (ele_type != "space" && ele_type != "optional" && ele_type != "label"){
+            if (ele_type != "space" && ele_type != "optional" && ele_type != "label" && ele_type != "link"){
               if  (typeof key === "undefined" || key == ""){
                 alert("key is required");
                 return false;
@@ -173,7 +174,8 @@ end
               "text": text,
               "value": value,
               "default_value": default_value,
-              "values": values
+              "values": values,
+              "link": link
             };
             for(var k in new_preset_ele) {
               if(!new_preset_ele[k]) delete new_preset_ele[k];
@@ -321,7 +323,7 @@ end
    
 
   } //render item tree
-  
+  //label,space,key,text,combo,multiselect,check,
    //defaults
    //TODO display_values
    //TODO role?
@@ -341,7 +343,7 @@ end
       ele_html = "<span class='full'>&nbsp</span>";
     }
     if (ele.name == "key"){
-      ele_html = "<span class='left' title='"+text+"'>"+ele.key + "</span><span class='right'>"+value+"</span>";
+      ele_html = "<span class='left'>"+ele.key + "</span><span class='right'>"+value+"</span>";
     }
     if (ele.name == "text"){
       ele_html = "<span class='left' title='"+text+"'>"+ele.key+"</span><span class='right'><input type='text' /></span>" ;
