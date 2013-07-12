@@ -161,6 +161,7 @@ end
 
 get '/collection/:id/edit' do
   @collection = Collection.find(params[:id])
+  @images = Dir.glob("public/icons/presets/*.png").sort_by { |x| x.downcase }
   erb :collection_edit
 end
 

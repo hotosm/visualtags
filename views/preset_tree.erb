@@ -11,8 +11,8 @@ def parse_element(element)
 
   ele = {"name"=> element.name, 
          "key"=> element["key"], "text" => element["text"],
-        "value"=> element["value"], "values" => values,
-        "default_value"=> element["default"], "link"=> element["href"]}
+         "value"=> element["value"], "values" => values,
+         "default_value"=> element["default"], "link"=> element["href"]}
       
   ele.delete_if {|k,v| v == nil}  #remove any empty key values, it reduces JSON size
   
@@ -98,6 +98,100 @@ end
   var data = <%= tree_data %>;
 
   $(function() {
+
+    $("#add_item_dialog").dialog({
+      autoOpen: false,
+      width: 400,
+      buttons: [
+        {
+          text: "Ok",
+          click: function() {
+            //get results
+            var item_type = $('form#add_item_form select#item_type').val()
+            var name = $('form#add_item_form input#name').val()
+            var icon = "presets/"+$('form#add_item_form select#icon_select').val()
+            var geo_type = $('form#add_item_form select#geo_type').val()
+            var uuid = Math.random().toString(36).substring(7);
+            var new_item = { "name": name, "type": item_type, "icon": icon, "geo_type": geo_type, "id" :uuid }
+            if(item_type == "item"){
+             // var new_ele = {"name": "label", "key":null, "text":"Edit "+name, "value":null, "values":null, "default_value":null, "link":null}
+              new_item["item"] = []
+            }
+            //add to tree
+            $('#tag_tree').tree('prependNode', new_item);
+            //close
+            $( this ).dialog( "close" );
+          }
+        },
+        {
+          text: "Cancel",
+          click: function() {
+            $( this ).dialog( "close" );
+          }
+        }
+      ]
+    });
+
+    $("#add_preset_element_dialog").dialog({
+      autoOpen: false,
+      width: 400,
+      buttons: [
+        {
+          text: "Ok",
+          click: function() {
+            //get value from form back
+            var ele_type = $('form#add_preset_element_form select#type_choice').val()
+            var form_name = "form#eleform_"+ele_type;
+            var key = $(form_name + " input[name='key']").val();
+            var text = $(form_name + " input[name='text']").val(); 
+            var value = $(form_name + " input[name='value']").val();
+            var default_value = null;
+            if ($(form_name + " input[name='default_value']").prop('checked')){
+              default_value = $(form_name + " input[name='default_value']").val();
+            }
+            var options = $(form_name + " select[name='select'] option");
+            var values = $.map(options ,function(option) {
+              return option.value;
+             });
+            
+            if (ele_type == "multiselect"){
+              values = values.join(";")
+            } else{
+              values = values.join(",")
+            }
+
+            if (ele_type != "space" && ele_type != "optional" && ele_type != "label"){
+              if  (typeof key === "undefined" || key == ""){
+                alert("key is required");
+                return false;
+              }
+            }
+
+            var new_preset_ele = {
+              "name":ele_type,
+              "key": key,
+              "text": text,
+              "value": value,
+              "default_value": default_value,
+              "values": values
+            };
+            for(var k in new_preset_ele) {
+              if(!new_preset_ele[k]) delete new_preset_ele[k];
+            }
+
+            $('#item_tree').tree('prependNode', new_preset_ele);
+            $( this ).dialog( "close" );
+          }
+        },
+        {
+          text: "Cancel",
+          click: function() {
+            $( this ).dialog( "close" );
+          }
+        }
+      ]
+    });
+
     $('#tag_tree').tree({
       data: data,
       autoOpen: 0,
@@ -119,6 +213,14 @@ end
         if (position == "inside" && target_node.type =="item") {
           return false;
         } else {
+          return true;
+        }
+      },
+      onCanSelectNode: function(node) {
+        if (node.type == "group") {
+          return false;
+        }
+        else {
           return true;
         }
       }
@@ -156,23 +258,29 @@ end
 
     $('#item_tree_title').append("<span class='item_title'>"+ node['name']+"  ("+node['geo_type'] +")</span>");
     <% if editable == "true"  -%>
+      $('#item_tree_title').append("<br /><a id='add_preset_element' href='#'>Add new element</a>&nbsp;&nbsp;");
       $('#item_tree_title').append("<a id='save_item_tree' href='#'>Save Changes</a>");
+
+      $('#add_preset_element').click(function(e){
+        $("#add_preset_element_dialog").dialog( "open" );
+        e.preventDefault();
+      });
+
       $('#save_item_tree').click(function(e){
         $('#item_tree').tree('selectNode', null);
         var data = $('#item_tree').tree('toJson');
-       
         var json_data = JSON.parse(data)
 
         $('#tag_tree').tree('updateNode', node,
-        {
-          item: json_data
-        }
-      );
+          {
+            item: json_data
+          }
+        );
         var data = null;
         var json_data = null;
-        var parent_item = null;
         return false;
       });
+
     <% end -%>
     
     var item_elements =  node["item"]
@@ -184,6 +292,7 @@ end
       selectable: <%= editable %>,
       useContextMenu: false,
       onCanSelectNode: function(node) {
+        //console.log("item: ", node)
         if (node.name == "optional") {
           return false;
         }
@@ -205,12 +314,14 @@ end
 
     }); //tree
   }
-
+  
+   //defaults
+   //TODO display_values
+   //TODO role?
   function render_ele(ele){
     var html = "";
     var ele_html = "";
 
-    //defaults
     var value = typeof ele.value !== 'undefined' ? ele.value : "";
     var text = typeof ele.text !== 'undefined' ? ele.text : "";
     if (ele.name == "link"){
@@ -223,14 +334,11 @@ end
       ele_html = "<span class='full'>&nbsp</span>";
     }
     if (ele.name == "key"){
-      ele_html = "<span class='left'>"+ele.key + "</span><span class='right'>"+value+"</span>";
+      ele_html = "<span class='left' title='"+text+"'>"+ele.key + "</span><span class='right'>"+value+"</span>";
     }
     if (ele.name == "text"){
-      ele_html = "<span class='left'>"+text+"</span><span class='right'><input type='text' /></span>" ;
+      ele_html = "<span class='left' title='"+text+"'>"+ele.key+"</span><span class='right'><input type='text' /></span>" ;
     }
-
-    //TODO display_values
-    //TODO role?
 
     if (ele.name == "combo" || ele.name=="multiselect"){
       var multiple = "";
@@ -239,7 +347,7 @@ end
         multiple = " multiple "
         delimiter = ";"
       };
-      ele_html = "<span class='left'>"+text+"</span>" ;
+      ele_html = "<span class='left' title='"+text+"'>"+ele.key+"</span>" ;
       ele_html += "<span class='right'><select"+multiple+">";
       if (ele.values){
         $.each(ele.values.split(delimiter), function(index, option){
@@ -250,18 +358,33 @@ end
     }
 
     if (ele.name == "check"){
-      ele_html = "<span class='full'><input type='checkbox' ";
+      ele_html = "<span class='full' title='"+text+"'><input type='checkbox' ";
       if (ele.default_value == "on"){
         ele_html += "checked";
       }
-      ele_html += " >" + text +"</span>";
+      ele_html += " >" + ele.key +"</span>";
     }
 
     html += ele_html;
-    //console.log(html)
+
     return html;
   }
 
+
+  $('#add_item').click(function(e){
+    //open jquery modal form
+    $( "#add_item_dialog" ).dialog( "open" );
+    e.preventDefault();
+  });
+
+  function icon_format(icon) {
+    return "<img class='icon' width='32px' height='32px' src='/icons/presets/" + icon.id +"'/>" + icon.text;
+  }
+  $("#icon_select").select2({
+      formatResult: icon_format,
+      formatSelection: icon_format,
+      escapeMarkup: function(m) { return m; }
+  });
 
 }); //jq function
 

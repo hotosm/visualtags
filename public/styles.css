@@ -40,28 +40,14 @@ form#collection_form input{
   width: 300px;
 }
 
+/*trees*/
+
 div#tree_container {
   position: relative
 }
 div#tag_tree {
   width: 400px;
 }
-
-
-ul#ele_list {
-  list-style-type: none;
-}
-
-ul#ele_list li.tag_header {
-  font-weight: bold;
-}
-
-
-li.jqtree-folder {
-}
-
-
-div.jqtree-element span.jqtree-title {}
 
 div#item_tree_container {
   position: absolute;
@@ -107,3 +93,40 @@ div#item_tree div.jqtree_common span.right{
   margin-right: 1em;
 }
 
+/*dialogs*/
+
+input.ui-button {
+  font-size:smaller;
+}
+
+div.ui-dialog{
+  font-size: smaller;
+}
+
+form.dialog_form label{
+  float: left;
+  width: 160px;
+}
+form.dialog_form input{
+/*  width: 300px;*/
+}
+
+.select2-choice{
+  height: 39px !important;
+}
+div.select2-drop {
+  font-size:x-small;
+}
+
+form#add_preset_element_form label{
+  float:left;
+  width: 160px;
+}
+form.eleform label{
+  float: left;
+  width: 160px;
+}
+form.eleform button{
+  float: left;
+  width: 160px;
+}

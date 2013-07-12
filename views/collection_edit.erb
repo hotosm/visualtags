@@ -3,10 +3,40 @@
 $(function() {
   $('#collection_form').submit(function(){
     var custom_preset = $('#tag_tree').tree('toJson');
-
     $('input#custom_preset').val(custom_preset)
     //return false
   });
+
+  $('div#add_preset_element_dialog #type_choice').change(function(){
+    $(".eleform").hide()
+    var choice_val = $('div#add_preset_element_dialog #type_choice').val()
+    var show_form = "#eleform_"+choice_val;
+    $(show_form).show()
+  });
+  
+  $( "button#add_to_select" )
+  .button()
+  .click(function( event ) {
+    var new_val = $('#add_select').val();
+    if (new_val != ""){
+      $('#select').append("<option value='"+new_val+"'>"+new_val+"</option>")
+      $('#add_select').val("")
+    }
+    event.preventDefault();
+  });
+
+  $( "button#add_to_multi" )
+  .button()
+  .click(function( event ) {
+    var new_val = $('#add_multi').val();
+    if (new_val != ""){
+      $('#multi').append("<option value='"+new_val+"'>"+new_val+"</option>")
+      $('#add_multi').val("")
+    }
+    event.preventDefault();
+  });
+
+$( "#button" ).button();
 
 });
 </script>
@@ -35,15 +65,107 @@ $(function() {
     <p><label for="collection[version]">Name:</label>
       <input type="text" name="collection[version]" value="<%= @collection.version %>" />
     </p>
-    <input type="submit" value="Save All Changes" />
+    <input type="submit" id="button" value="Save All Changes" />
   </fieldset>
 </form>
 
 <h4>Preset</h4>
 <div id="tree_container">
+  <div id="tag_tree_head">
+    <a href="#" id="add_item">Add New Item</a>
+  </div>
   <div id="tag_tree"></div>
   <div id="item_tree_container">
     <div id="item_tree_title">Preset Form Details<br />&nbsp;</div>
     <div id="item_tree"></div>
   </div>
 </div>
+
+<!-- ui-dialogs -->
+<div id="add_item_dialog" title="Add New Item">
+  <form id="add_item_form" class="dialog_form">
+    <label for="item_type">Type</label>
+    <select name="item_type" id="item_type">
+      <option value="item">Item</option>
+      <option value="group">Group</option>
+    </select>
+    <br />
+    <label for="name">Name</label> <input type="text" id="name" name="name"></input>
+    <br />
+    <label for="icon">Icon</label>
+    <select name="icon" id="icon_select" style="width:200px">
+      <option value="empty.png" >Empty</option>
+      <% @images.each do | image| %>
+        <%= image.split('/').last %> <br />
+        <option value="<%= image.split('/').last %>" ><%= image.split('/').last %></option>
+      <% end %>
+    </select>
+    <br />
+    <label for="geo_type">Geo Type (Item only)</label>
+    <select name="geo_type" id="geo_type" multiple>
+      <option value="node">node</option>
+      <option value="way">way</option>
+      <option value="closed_way">area</option>
+      <option value="relation">relation</option>
+    </select>
+  </form>
+</div>
+
+<div id="add_preset_element_dialog" title="Add preset element">
+ 
+  <form id="add_preset_element_form">
+    <label for="type_choice">Type</label>
+    <select name="type_choice" id="type_choice">
+      <option value="label">Label</option>
+      <option value="key">Key</option>
+      <option value="text">Text</option>
+      <option value="check">Check</option>
+      <option value="combo">Combo</option>
+      <option value="multiselect">Multiselect</option>
+      <option value="space">Space</option>
+      <option value="optional">Optional Group</option>
+    </select>
+   </form>
+  <form id="eleform_label" class="eleform">
+    <label for="label">Label</label><input name="text" type="text" id="text1"></input>
+  </form>
+  <form id="eleform_key" class="eleform" style="display:none">
+    <label for="key">key</label><input name="key" type="text" id="key2"></input> <br />
+    <label for="text">Text</label><input name="text" type="text" id="text2"></input><br />
+    <label for="value">value</label><input name="value" type="text" id="value"></input>
+  </form>
+  <form id="eleform_text" class="eleform" style="display:none">
+    <label for="key">Key</label><input name="key" type="text" id="key3"></input> <br />
+    <label for="text">Text</label><input name="text" type="text" id="text3"></input>
+  </form>
+  <form id="eleform_check" class="eleform" style="display:none">
+    <label for="key">Key</label><input name="key" type="text" id="key4"></input> <br />
+    <label for="text">Text</label><input name="text" type="text" id="text4"></input> <br />
+    <label for="default_value">Default on?</label><input type='checkbox' name="default_value" id="check" value="on"></input>
+  </form>
+  <form id="eleform_combo" class="eleform" style="display:none">
+    <label for="key">Key</label><input name="key" type="text" id="key5"></input> <br />
+    <label for="text">Text</label><input name="text" type="text" id="text5"></input> <br />
+    <button name="add_to_select" id="add_to_select">Add option &rarr;</button>
+    <input type="text" id="add_select"></input> <br />
+    <br />
+    <select name="select" id="select">
+    </select>
+  </form>
+  <form id="eleform_multiselect" class="eleform" style="display:none">
+    <label for="key">Key</label><input name="key" type="text" id="key6"></input> <br />
+    <label for="text">Text</label><input name="text" type="text" id="text6"></input> <br />
+    <button name="add_to_multi" id="add_to_multi">Add option &rarr;</button>
+    <input type="text" id="add_multi"></input> <br />
+    <select name="select" id="multi" multiple>
+    </select>
+  </form>
+  <form id="eleform_space" class="eleform" style="display:none">
+    <span>Adds a space - an empty line.</span>
+  </form>
+  <form id="eleform_optional" class="eleform" style="display:none">
+    <span>Adds the optional group where you can put tags under.</span>
+  </form>
+
+</div>
+<!-- end ui-dialogs -->
