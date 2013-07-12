@@ -3,6 +3,7 @@ require 'sinatra/activerecord'
 require 'sinatra/flash'
 require 'xml/libxml'
 require 'oj'
+require 'builder'
 
 enable :sessions
 set :erb, :trim => '-'
@@ -142,6 +143,14 @@ get '/collection/:id.xml' do
 
   attachment  #<-- comment for inline render
   builder :simple_preset
+end
+
+get '/collection/:id.xml2' do
+  @collection = Collection.find(params[:id])
+  @custom_preset = Oj.load(@collection.custom_preset)
+
+  #attachment  #<-- comment for inline render
+  builder :preset
 end
 
 get '/collection/:id' do
