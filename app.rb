@@ -10,7 +10,6 @@ set :erb, :trim => '-'
 
 #name, filename, orginal_filename, preset(xml), custom_preset(json)
 class Collection < ActiveRecord::Base
-  has_many :tags, :dependent => :destroy
   
   #parses the xml file for author, description, version etc
   def parse_metadata
@@ -20,8 +19,6 @@ class Collection < ActiveRecord::Base
     self.description = doc.root["description"]
     self.shortdescription = doc.root["shortdescription"]
     self.version = doc.root["version"]
-
-    return true
   end
 
   def validate_xml_preset()
@@ -40,38 +37,7 @@ class Collection < ActiveRecord::Base
       return error
     end
   end
-  
-  #code adapted from
-  #https://github.com/hotosm/hot-exports/tree/master/webinterface/app/models/tag.rb
-  def self.tags_from_xml(xml)
-    tags = Hash.new
-    parser = XML::Parser.string(xml)
-    doc = parser.parse
-    doc.root.namespaces.default_prefix='osm'
-    items = doc.find('//osm:item')
-    tags_array = []
-    items.each do |item|
-      itype = item["type"] || ""
-      item_geometrytype = itype.split(',') 
-      item.children.each do |child|
-        if(!child['key'].nil?)
-          key = child['key']
-          if !tags.has_key?(key)
-            tags[key] = Hash.new
-          end
-          item_geometrytype.each do |type|
-            tags[key][type] = false
-          end      
-        end
-      end
-    end
-    tags.each do | tag |
-        tags_array << Tag.new(:key => tag[0], :osm_type => tag[1].keys.sort().join(","))
-    end
-
-    return tags_array
-  end
-
+ 
   def xml_preset_to_json
     xml_array = to_preset_array
     json_array = []
@@ -178,16 +144,6 @@ class Collection < ActiveRecord::Base
 
 end
 
-#key, text, values, osm_type
-class Tag < ActiveRecord::Base
-  belongs_to :collection
-
-  def to_s
-    "#<Tag id:#{self.id}, key:#{self.key}, text:#{self.text}, osm_type:#{self.osm_type}>"
-  end
-  
-end
-
 get '/' do
   erb :home
 end
@@ -211,8 +167,6 @@ post '/upload' do
   collection.custom_preset = collection.xml_preset_to_json
   collection.save
 
-  new_tags = Collection.tags_from_xml(File.read(filename))
-  collection.tags = new_tags  #saved to the collection
   flash[:info] = "Collection uploaded!"
   redirect  "/collection/#{collection.id}"
 end
@@ -227,13 +181,6 @@ get '/collection' do
 end
 
 get '/collection/:id.xml' do
-  @collection = Collection.find(params[:id])
-
-  attachment  #<-- comment for inline render
-  builder :simple_preset
-end
-
-get '/collection/:id.xml2' do
   @collection = Collection.find(params[:id])
   @custom_preset = Oj.load(@collection.custom_preset)
 
@@ -274,54 +221,4 @@ get '/collection/:id/validate' do
   @valid = @collection.validate_xml_preset
   erb :collection_validate
 end
-
-get '/collection/:id/tag' do
-  @collection = Collection.find(params[:id])
-  @tag = Tag.new
-
-  erb :tag_new
-end
-
-post '/collection/:id/tag' do
-  @collection = Collection.find(params[:id])
-  @tag = Tag.new(params[:tag])
-  @collection.tags << @tag
-  flash[:info] = "New tag reated!"
-
-  redirect "/collection/#{@collection.id}/tag/#{@tag.id}"
-end
-
-get '/collection/:id/tag/:tag_id' do
-  @collection = Collection.find(params[:id])
-  @tag = Tag.find(params[:tag_id])
-  erb :tag
-end
-
-delete '/collection/:id/tag/:tag_id' do
-  @collection = Collection.find(params[:id])
-  @tag = Tag.find(params[:tag_id])
-
-  @tag.destroy
-  flash[:info] = "Tag deleted!"
-  redirect  "/collection/#{@collection.id}"
-end
-
-get '/collection/:id/tag/:tag_id/edit' do
-  @collection = Collection.find(params[:id])
-  @tag = Tag.find(params[:tag_id])
-  @action = "edit"
-  erb :tag_edit
-end
-
-put '/collection/:id/tag/:tag_id' do
-  @collection = Collection.find(params[:id])
-  @tag = Tag.find(params[:tag_id])
-  if @tag.update_attributes(params[:tag])
-    flash[:info] = "Tag updated!"
-    redirect "/collection/#{@collection.id}/tag/#{@tag.id}"
-  else
-    erb :tag_id
-  end
-end
-
 

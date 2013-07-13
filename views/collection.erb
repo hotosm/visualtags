@@ -1,16 +1,8 @@
 <h2>Viewing Collection <%=  @collection.id %> </h2>
 <%= erb(:preset_tree, :layout => false, :locals=>{:editable => "false"}) %>
 
-<script type="text/javascript">
-$(function() {
-  $('#tags_toggle').click(function(){
-    $('#tags_detail').toggle();
-  });
-
-});
-</script>
 <h3>Name: <%= @collection.name%></h3>
-<p>Preset filename: <%= @collection.original_filename %> (<a href="<%= "/collection/#{@collection.id}/validate" %>">Validate this</a>) <br />
+<p>Original Preset filename: <%= @collection.original_filename %> (<a href="<%= "/collection/#{@collection.id}/validate" %>">Validate this</a>) <br />
 Author: <%= @collection.author %> <br />
 Description: <%= @collection.description %><br />
 Short Desc: <%= @collection.shortdescription %><br />
@@ -33,21 +25,6 @@ Version: <%= @collection.version %> </p>
   </div>
 </div>
 
-
-
-<h4><a href="#" id="tags_toggle"><%= @collection.tags.count %> Tags Detail</a></h4>
 <p>
-  <a href='<%= "/collection/#{@collection.id}.xml" %>' target="_new">Download as simple XML preset</a> suitable for use in the <a href="http://hot-export.geofabrik.de/">HOT Exports Application.</a>
+  <a href='<%= "/collection/#{@collection.id}.xml" %>' target="_new">Download as XML preset</a> suitable for use in the <a href="http://hot-export.geofabrik.de/">HOT Exports Application.</a>
 </p>
-<div id="tags_detail" style="">
-  <p>
-    <a href="<%= "/collection/#{@collection.id}/tag" %>">Add New Tag</a>
-  </p>
-
-  <% @collection.tags.group_by(&:osm_type).each do | osm_type, tags | %>
-      <b><%= osm_type %></b> <br />
-      <% tags.each do | tag | %>
-        <%="<a href='/collection/#{@collection.id}/tag/#{tag.id}'>#{tag.key}</a>" %><br />
-      <% end  %>
-  <% end  %>
-</div>
