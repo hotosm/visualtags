@@ -38,6 +38,16 @@ $(function() {
 
 $( "#button" ).button();
 
+
+  function icon_format(icon) {
+    return "<img class='icon' width='32px' height='32px' src='/icons/presets/" + icon.id +"'/>" + icon.text;
+  }
+  $("#icon_select").select2({
+      formatResult: icon_format,
+      formatSelection: icon_format,
+      escapeMarkup: function(m) { return m; }
+  });
+
 });
 </script>
 <h2>Editing Collection <%=  @collection.id %> </h2>
@@ -61,6 +71,7 @@ $( "#button" ).button();
 <!-- ui-dialogs -->
 <div id="add_item_dialog" title="Add New Item">
   <form id="add_item_form" class="dialog_form">
+    <input type="hidden" id="item_id"  />
     <label for="item_type">Type</label>
     <select name="item_type" id="item_type">
       <option value="item">Item</option>
@@ -82,7 +93,7 @@ $( "#button" ).button();
     <select name="geo_type" id="geo_type" multiple>
       <option value="node">node</option>
       <option value="way">way</option>
-      <option value="closed_way">area</option>
+      <option value="closedway">area</option>
       <option value="relation">relation</option>
     </select>
   </form>

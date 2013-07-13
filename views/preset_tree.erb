@@ -14,23 +14,48 @@ end
       autoOpen: false,
       width: 400,
       buttons: [
+        { text: "Delete",
+          "class": "delete_button",
+          click: function(){
+            var itemid = $('form#add_item_form input#item_id').val();
+            var item_node = $('#tag_tree').tree('getNodeById', itemid);
+            $('#tag_tree').tree('removeNode', item_node);
+            $(this).dialog("close");
+          }
+
+         },
         {
           text: "Ok",
           click: function() {
-            //get results
             var item_type = $('form#add_item_form select#item_type').val()
             var name = $('form#add_item_form input#name').val()
             var icon = "presets/"+$('form#add_item_form select#icon_select').val()
             var geo_type = $('form#add_item_form select#geo_type').val()
+            if (geo_type){
+              geo_type = geo_type.join(",")
+            }
             var uuid = Math.random().toString(36).substring(7);
             var new_item = { "name": name, "type": item_type, "icon": icon, "geo_type": geo_type, "id" :uuid }
             if(item_type == "item"){
-             // var new_ele = {"name": "label", "key":null, "text":"Edit "+name, "value":null, "values":null, "default_value":null, "link":null}
-              new_item["item"] = []
+              if  (geo_type == null || geo_type == ""){
+                alert("An Item needs at least one type specified");
+                return false;
+              }
             }
-            //add to tree
-            $('#tag_tree').tree('prependNode', new_item);
-            //close
+
+            //update or add to tree
+            var itemid = $('form#add_item_form input#item_id').val();
+            if (itemid && itemid != ""){
+              //update the node
+              delete new_item["id"]
+              var item_node = $('#tag_tree').tree('getNodeById', itemid);
+              $('#tag_tree').tree('updateNode', item_node, new_item)
+            } else{
+              //add the new node
+              new_item["item"] = []
+              $('#tag_tree').tree('prependNode', new_item);
+            }
+            
             $( this ).dialog( "close" );
           }
         },
@@ -40,7 +65,21 @@ end
             $( this ).dialog( "close" );
           }
         }
-      ]
+      ],
+      open: function(event, ui){
+        var itemid = $('form#add_item_form input#item_id').val();
+        if (itemid && itemid != ""){
+          $("div.ui-dialog button.delete_button").attr("disabled", false)
+        } else{
+          $("div.ui-dialog button.delete_button").attr("disabled", true)
+        }
+      },
+      close: function( event, ui ) {
+        document.getElementById("add_item_form").reset();
+        $('form#add_item_form input#item_id').val('')
+        $('form#add_item_form select#icon_select').select2("val", "empty.png")
+        $("#add_item_dialog").dialog("option", "title", "Add New Item");
+      }
     });
 
     $("#add_preset_element_dialog").dialog({
@@ -120,7 +159,7 @@ end
           icon = "<img src='/icons/styles/standard/empty.png' width='32px' height='32px' />";
         }
         $li.find('.jqtree-title').before('<span class="icon">'+icon+'</span>');
-
+        $li.find('.jqtree-title').after('<span class="itemtoolbar">   <a href="#" onclick="open_item_edit(this);return false;"class="edit settings-button" data-itemid="'+node.id+'"><img src="/icon-cog-small.png" /></a></span>');
       },
       onCanMoveTo: function(moved_node, target_node, position) {
         if (position == "inside" && target_node.type =="item") {
@@ -128,21 +167,12 @@ end
         } else {
           return true;
         }
-      },
-      onCanSelectNode: function(node) {
-        if (node.type == "group") {
-          return false;
-        }
-        else {
-          return true;
-        }
       }
-
 
     }); //tree
 
 
-    $('#tag_tree').bind(
+   $('#tag_tree').bind(
     'tree.select',
       function(event) {
         if (event.node) {
@@ -163,7 +193,7 @@ end
   );  //select tree
 
 
-
+  //item_toolbar_setup()
   //renders the item form elements in a new tree
   function render_item_tree(node){
     $('#item_tree_title').empty();
@@ -205,7 +235,6 @@ end
       selectable: <%= editable %>,
       useContextMenu: false,
       onCanSelectNode: function(node) {
-        //console.log("item: ", node)
         if (node.name == "optional") {
           return false;
         }
@@ -233,11 +262,12 @@ end
    }
    
 
-  } //render item tree
-  //label,space,key,text,combo,multiselect,check,
-   //defaults
-   //TODO display_values
-   //TODO role?
+  }
+
+  //render item tree
+  //TODO defaults
+  //TODO display_values
+  //TODO role
   function render_ele(ele){
     var html = "";
     var ele_html = "";
@@ -245,7 +275,7 @@ end
     var value = typeof ele.value !== 'undefined' ? ele.value : "";
     var text = typeof ele.text !== 'undefined' ? ele.text : "";
     if (ele.name == "link"){
-      ele_html = "<span class='full'>"+ ele.link + "</span>"
+      ele_html = "<span class='full link'>"+ ele.link + "</span>"
     }
     if (ele.name == "label") {
       ele_html = "<span class='full'>"+text+"</span>";
@@ -259,7 +289,6 @@ end
     if (ele.name == "text"){
       ele_html = "<span class='left' title='"+text+"'>"+ele.key+"</span><span class='right'><input type='text' /></span>" ;
     }
-
     if (ele.name == "combo" || ele.name=="multiselect"){
       var multiple = "";
       var delimiter = ",";
@@ -276,7 +305,6 @@ end
       }
       ele_html += "</select></span>";
     }
-
     if (ele.name == "check"){
       ele_html = "<span class='full' title='"+text+"'><input type='checkbox' ";
       if (ele.default_value == "on"){
@@ -290,23 +318,40 @@ end
     return html;
   }
 
-
   $('#add_item').click(function(e){
-    //open jquery modal form
     $( "#add_item_dialog" ).dialog( "open" );
     e.preventDefault();
   });
 
-  function icon_format(icon) {
-    return "<img class='icon' width='32px' height='32px' src='/icons/presets/" + icon.id +"'/>" + icon.text;
-  }
-  $("#icon_select").select2({
-      formatResult: icon_format,
-      formatSelection: icon_format,
-      escapeMarkup: function(m) { return m; }
-  });
 
 }); //jq function
 
-</script>
+function open_item_edit(button){
+  var itemid = button.getAttribute("data-itemid")
+  var item = $('#tag_tree').tree('getNodeById', itemid);
 
+  var geo_type = item.geo_type;
+  var icon = item.icon;
+  if (icon){
+    icon = icon.substring(8);
+  }else{
+    icon = "empty.png"
+  }
+  var name = item.name;
+  var type = item.type;
+  var item_id = item.id;
+  $('form#add_item_form input#item_id').val(item_id)
+  $('form#add_item_form select#item_type').val(type)
+  $('form#add_item_form input#name').val(name)
+  $('form#add_item_form select#icon_select').select2("val", icon)
+  if (type == "item"){
+    $('form#add_item_form select#geo_type').val(geo_type.split(","))
+  }
+
+  $("#add_item_dialog").dialog( "option", "title", "Edit Item" );
+  $("#add_item_dialog").dialog('open')
+
+  return false;
+}
+
+</script>

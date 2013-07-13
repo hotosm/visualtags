@@ -53,6 +53,11 @@ div#tag_tree {
   width: 400px;
 }
 
+div#tag_tree span.itemtoolbar{
+  float:right;
+  height: 40px;
+}
+
 div#item_tree_container {
   position: absolute;
   top: 0px;
@@ -97,6 +102,10 @@ div#item_tree div.jqtree_common span.right{
   margin-right: 1em;
 }
 
+div#item_tree div.jqtree_common span.link{
+  font-size: smaller;
+}
+
 /*dialogs*/
 
 input.ui-button {
@@ -105,6 +114,7 @@ input.ui-button {
 
 div.ui-dialog{
   font-size: smaller;
+  z-index: 500;
 }
 
 form.dialog_form label{
@@ -133,4 +143,47 @@ form.eleform label{
 form.eleform button{
   float: left;
   width: 160px;
+}
+
+div.ui-dialog button.delete_button {
+  margin-right: 150px;
+}
+div.ui-dialog button.delete_button:disabled {
+  background: lightgray;
+  color: gray;
+  border-color: gray;
+}
+
+.settings-button {
+  width: 21px;
+  height: 21px;
+	border-radius: 5px;
+	border: 1px solid #161615;
+	box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, .26), 0px 1px 0px 0px rgba(255, 255, 255, .15);
+	opacity: 0.7;
+	background-color: #fece2f;
+	z-index: 2;
+	display: block;
+	margin: 9px 10px;
+}
+
+.settings-button:hover, .pressed {
+	background-color: transparent;
+	opacity: 1;
+	cursor: pointer;
+	z-index: 2;
+}
+
+.settings-button img {
+	margin: 2px auto 0px auto;
+	display: block;
+	z-index: -1;
+}
+
+.settings-button span {
+	background: transparent url('/icon-cog-small.png') no-repeat top left;
+	width: 19px;
+	height: 18px;
+	display: block;
+	margin: 5px auto 0px auto;
 }
