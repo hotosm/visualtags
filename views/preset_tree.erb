@@ -1,5 +1,9 @@
 <%
-tree_data = @collection.custom_preset
+unless @collection.custom_preset.empty?
+  tree_data = @collection.custom_preset
+else
+  tree_data = "[]"
+end
 -%>
 <script type="text/javascript">
   var data = <%= tree_data %>;

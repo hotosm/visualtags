@@ -2,8 +2,11 @@
 
 <p>
   <a href="/upload">Upload preset to create a new collection</a>
+  <br />
+  Or
+  <br />
+  <a href="/collection/new">Create empty new collection </a>
 </p>
-
 <% @collections.each do | coll | %>
 
   <%= coll.created_at.strftime("%d-%m-%y %I:%M") %>  <%="<a href='/collection/#{coll.id}'>#{coll.name}</a>" %><br />

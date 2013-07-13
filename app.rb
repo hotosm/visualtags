@@ -171,12 +171,31 @@ post '/upload' do
   redirect  "/collection/#{collection.id}"
 end
 
+get '/collection/new' do
+  @collection = Collection.new()
+  erb :collection_new
+end
+
+post '/collection/new' do
+  collection = Collection.new(params[:collection])
+  if collection.save
+    flash[:info] = "Collection created!"
+    redirect "/collection/#{collection.id}"
+  else
+    erb :collection_new
+  end
+end
+
+
 get '/collections' do
   @collections = Collection.find(:all, :order => "created_at desc")
   erb :collections
 end
 
 get '/collection' do
+  redirect '/collections'
+end
+get '/collection/' do
   redirect '/collections'
 end
 

@@ -26,7 +26,7 @@ div#content{
 }
 
 form#collection_form {
-  width: 500px
+  width: 600px
 }
 form#collection_form p{
   margin:1px
@@ -34,10 +34,10 @@ form#collection_form p{
 
 form#collection_form label{
   float: left;
-  width: 115px;
+  width: 195px;
 }
 form#collection_form input{
-  width: 300px;
+  width: 350px;
 }
 
 /*trees*/
