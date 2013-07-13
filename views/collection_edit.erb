@@ -116,9 +116,9 @@ $( "#button" ).button();
   <form id="add_preset_element_form">
     <label for="type_choice">Type</label>
     <select name="type_choice" id="type_choice">
+      <option value="text">Text</option>
       <option value="label">Label</option>
       <option value="key">Key</option>
-      <option value="text">Text</option>
       <option value="check">Check</option>
       <option value="combo">Combo</option>
       <option value="multiselect">Multiselect</option>
@@ -127,14 +127,14 @@ $( "#button" ).button();
       <option value="link">Link</option>
     </select>
    </form>
-  <form id="eleform_label" class="eleform">
+  <form id="eleform_label" class="eleform" style="display:none">
     <label for="label">Label</label><input name="text" type="text" id="text1"></input>
   </form>
   <form id="eleform_key" class="eleform" style="display:none">
     <label for="key">key</label><input name="key" type="text" id="key2"></input> <br />
     <label for="value">value</label><input name="value" type="text" id="value"></input>
   </form>
-  <form id="eleform_text" class="eleform" style="display:none">
+  <form id="eleform_text" class="eleform">
     <label for="key">Key</label><input name="key" type="text" id="key3"></input> <br />
     <label for="text">Text</label><input name="text" type="text" id="text3"></input>
   </form>
