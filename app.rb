@@ -24,22 +24,6 @@ class Collection < ActiveRecord::Base
     return true
   end
 
-  def to_preset_array()
-    parser = XML::Parser.string(self.preset)
-    doc = parser.parse
-    doc.root.namespaces.default_prefix='osm'
-    #items = doc.find('//osm:preset')
-    a = []
-    doc.root.children.each do | child |
-      if child.name == "group" || child.name == "item"
-        a << child
-      end unless child.empty?
-    end
-
-    return a
-  end
-
-
   def validate_xml_preset()
     return Collection.validate_xml_preset(self.preset)
   end
@@ -88,6 +72,110 @@ class Collection < ActiveRecord::Base
     return tags_array
   end
 
+  def xml_preset_to_json
+    xml_array = to_preset_array
+    json_array = []
+    xml_array.each do | xml_leaf |
+      json_array << parse_leaf(xml_leaf)     #xml_leaf is a Group or an Item
+    end
+    json_array.join(",")
+    #preset_json = Oj.dump(json_array)
+
+    #preset_json
+    json_array
+  end
+
+  private
+
+  #converts the uploaded preset to an array of nodes
+  def to_preset_array()
+    parser = XML::Parser.string(self.preset)
+    doc = parser.parse
+    doc.root.namespaces.default_prefix='osm'
+    #items = doc.find('//osm:preset')
+    preset_array = []
+    doc.root.children.each do | child |
+      if child.name == "group" || child.name == "item"
+        preset_array << child
+      end unless child.empty?
+    end
+
+    preset_array
+  end
+
+  # Parses an XML element of either Item or Group
+  def parse_leaf(xml_leaf)
+    if xml_leaf.name == "item" || xml_leaf.name == "group"
+      leaf = {"name" => xml_leaf["name"], "type" => xml_leaf.name, "icon" => xml_leaf["icon"],
+        "geo_type" => xml_leaf["type"], "id" => rand(32**8).to_s(32) }
+      leaf["item"] = parse_item(xml_leaf) if xml_leaf.name == "item"
+    end
+    if xml_leaf.name == "group" && xml_leaf.children?
+      leaf["children"] = []
+      xml_leaf.children.each do | c |
+        if c.name == "item" || c.name == "group"
+          leaf["children"] << parse_child(c)
+        end
+      end
+    end
+
+    leaf
+  end
+
+  #parses an item and extracts the tag / form elements from it
+  def parse_item(item)
+    elements = []
+    item.each_element do | ce |
+      element = {}
+      element = parse_element(ce)
+      if ce.name == "optional"
+        optional_items = []
+        ce.each_element do | opt |
+          optional_items << parse_element(opt)
+        end
+        element["children"] = optional_items
+      end
+      elements << element
+    end
+
+    elements
+  end
+
+  #parses a child of an Item or Group.
+  #if it's a group, the child has children of its own
+  def parse_child(child)
+    if child.name == "item" || child.name == "group"
+      child_hash = {"name" => child["name"], "type" => child.name, "icon" => child["icon"],
+        "geo_type" => child["type"], "id" => rand(32**8).to_s(32) }
+      child_hash["item"] = parse_item(child) if child.name == "item"
+    end
+    if child.name == "group" && child.children?
+      child_hash["children"] = []
+      child.children.each do | c |
+        if c.name == "item" || c.name == "group"
+          child_hash["children"] << parse_child(c)
+        end
+      end
+    end
+
+    child_hash
+  end
+
+  def parse_element(element)
+    values = element["values"] || nil
+    if element.name == "combo" && element.children.length > 0 && values.nil?
+      values = []
+      element.each_element do |list_item |
+        values << list_item["value"]
+      end
+      values = values.join(",")
+    end
+    ele = {"name"=> element.name, "key"=> element["key"], "text" => element["text"], "value"=> element["value"],
+      "values" => values, "default_value"=> element["default"], "link"=> element["href"]}
+    ele.delete_if {|k,v| v == nil}  #remove any empty key values, it reduces JSON size
+
+    ele
+  end
 
 end
 
