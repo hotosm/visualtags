@@ -10,6 +10,7 @@ set :erb, :trim => '-'
 
 #name, filename, orginal_filename, preset(xml), custom_preset(json)
 class Collection < ActiveRecord::Base
+  validates_presence_of :name
   
   #parses the xml file for author, description, version etc
   def parse_metadata
@@ -182,6 +183,9 @@ post '/collection/new' do
     flash[:info] = "Collection created!"
     redirect "/collection/#{collection.id}"
   else
+    flash[:error] = collection.errors.full_messages.join("<br />")
+
+    @collection = Collection.new()
     erb :collection_new
   end
 end
@@ -218,6 +222,8 @@ put '/collection/:id' do
     flash[:info] = "Collection updated!"
     redirect "/collection/#{@collection.id}"
   else
+    flash[:error] = @collection.errors.full_messages.join("<br />")
+    @images = Dir.glob("public/icons/presets/*.png").sort_by { |x| x.downcase }
     erb :collection_edit
   end
 end
@@ -239,5 +245,19 @@ get '/collection/:id/validate' do
   @collection = Collection.find(params[:id])
   @valid = @collection.validate_xml_preset
   erb :collection_validate
+end
+
+get '/collection/:id/clone' do
+  @collection = Collection.find(params[:id])
+  erb :collection_clone
+end
+
+post '/collection/:id/clone' do
+  existing_collection = Collection.find(params[:id])
+  collection = existing_collection.dup
+  collection.name = "Clone of " + collection.name
+  collection.save
+  flash[:info] = "Collection cloned!"
+  redirect  "/collection/#{collection.id}"
 end
 

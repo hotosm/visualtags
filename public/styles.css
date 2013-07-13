@@ -5,6 +5,7 @@ body {
 }
 
 div#flash .info {color:green}
+div#flash .error {color:red}
 
 div.validation_errors {
   margin: 1.5em;
@@ -40,6 +41,9 @@ form#collection_form input{
   width: 350px;
 }
 
+span.clone_link {
+  font-size: smaller;
+}
 /*trees*/
 
 div#tree_container {

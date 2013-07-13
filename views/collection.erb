@@ -17,6 +17,8 @@ Version: <%= @collection.version %> </p>
   <input type="hidden" name="_method" value="delete" />
   <input type="submit" value="Delete Collection" />
 </form>
+<br />
+<span class="clone_link"><a href="/collection/<%= @collection.id %>/clone">Clone Collection</a></span>
 
 <h4>JOSM Preset </h4>
 <div id="tree_container">

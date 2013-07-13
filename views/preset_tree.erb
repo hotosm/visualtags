@@ -1,5 +1,5 @@
 <%
-unless @collection.custom_preset.empty?
+if @collection.custom_preset && !@collection.custom_preset.empty?
   tree_data = @collection.custom_preset
 else
   tree_data = "[]"
