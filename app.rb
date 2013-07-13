@@ -79,10 +79,9 @@ class Collection < ActiveRecord::Base
       json_array << parse_leaf(xml_leaf)     #xml_leaf is a Group or an Item
     end
     json_array.join(",")
-    #preset_json = Oj.dump(json_array)
+    preset_json = Oj.dump(json_array)
 
-    #preset_json
-    json_array
+    preset_json
   end
 
   private
@@ -209,6 +208,7 @@ post '/upload' do
 
   collection = Collection.new(:name => params[:name].to_s, :original_filename => orig_name, :filename => filename, :preset => preset)
   collection.parse_metadata
+  collection.custom_preset = collection.xml_preset_to_json
   collection.save
 
   new_tags = Collection.tags_from_xml(File.read(filename))

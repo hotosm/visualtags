@@ -1,11 +1,5 @@
 <%
-if @collection.custom_preset
-  tree_data = @collection.custom_preset
-else
-  json_array = @collection.xml_preset_to_json
-  tree_data = Oj.dump(json_array)
-end
-
+tree_data = @collection.custom_preset
 -%>
 <script type="text/javascript">
   var data = <%= tree_data %>;
