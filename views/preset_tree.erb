@@ -27,15 +27,15 @@ end
         {
           text: "Ok",
           click: function() {
-            var item_type = $('form#add_item_form select#item_type').val()
-            var name = $('form#add_item_form input#name').val()
-            var icon = "presets/"+$('form#add_item_form select#icon_select').val()
-            var geo_type = $('form#add_item_form select#geo_type').val()
+            var item_type = $('form#add_item_form select#item_type').val();
+            var name = $('form#add_item_form input#name').val();
+            var icon = "presets/"+$('form#add_item_form select#icon_select').val();
+            var geo_type = $('form#add_item_form select#geo_type').val();
             if (geo_type){
-              geo_type = geo_type.join(",")
+              geo_type = geo_type.join(",");
             }
             var uuid = Math.random().toString(36).substring(7);
-            var new_item = { "name": name, "type": item_type, "icon": icon, "geo_type": geo_type, "id" :uuid }
+            var new_item = { "name": name, "type": item_type, "icon": icon, "geo_type": geo_type, "id" :uuid };
             if(item_type == "item"){
               if  (geo_type == null || geo_type == ""){
                 alert("An Item needs at least one type specified");
@@ -47,12 +47,12 @@ end
             var itemid = $('form#add_item_form input#item_id').val();
             if (itemid && itemid != ""){
               //update the node
-              delete new_item["id"]
+              delete new_item["id"];
               var item_node = $('#tag_tree').tree('getNodeById', itemid);
-              $('#tag_tree').tree('updateNode', item_node, new_item)
+              $('#tag_tree').tree('updateNode', item_node, new_item);
             } else{
               //add the new node
-              new_item["item"] = []
+              new_item["item"] = [];
               $('#tag_tree').tree('prependNode', new_item);
             }
             
@@ -69,15 +69,15 @@ end
       open: function(event, ui){
         var itemid = $('form#add_item_form input#item_id').val();
         if (itemid && itemid != ""){
-          $("div.ui-dialog button.delete_button").attr("disabled", false)
+          $("div.ui-dialog button.delete_button").attr("disabled", false);
         } else{
-          $("div.ui-dialog button.delete_button").attr("disabled", true)
+          $("div.ui-dialog button.delete_button").attr("disabled", true);
         }
       },
       close: function( event, ui ) {
         document.getElementById("add_item_form").reset();
-        $('form#add_item_form input#item_id').val('')
-        $('form#add_item_form select#icon_select').select2("val", "empty.png")
+        $('form#add_item_form input#item_id').val('');
+        $('form#add_item_form select#icon_select').select2("val", "empty.png");
         $("#add_item_dialog").dialog("option", "title", "Add New Item");
       }
     });
@@ -106,9 +106,9 @@ end
              });
             
             if (ele_type == "multiselect"){
-              values = values.join(";")
+              values = values.join(";");
             } else{
-              values = values.join(",")
+              values = values.join(",");
             }
 
             if (ele_type != "space" && ele_type != "optional" && ele_type != "label" && ele_type != "link"){
@@ -159,8 +159,10 @@ end
           icon = "<img src='/icons/styles/standard/empty.png' width='32px' height='32px' />";
         }
         $li.find('.jqtree-title').before('<span class="icon">'+icon+'</span>');
-        $li.find('.jqtree-title').after('<span class="itemtoolbar">   <a href="#" onclick="open_item_edit(this);return false;"class="edit settings-button" data-itemid="'+node.id+'"><img src="/icon-cog-small.png" /></a></span>');
-      },
+        <% if editable == "true" %>
+          $li.find('.jqtree-title').after('<span class="itemtoolbar">   <a href="#" onclick="open_item_edit(this);return false;"class="edit settings-button" data-itemid="'+node.id+'"><img src="/icon-cog-small.png" /></a></span>');
+        <% end %>
+    },
       onCanMoveTo: function(moved_node, target_node, position) {
         if (position == "inside" && target_node.type =="item") {
           return false;
@@ -197,7 +199,7 @@ end
   //renders the item form elements in a new tree
   function render_item_tree(node){
     $('#item_tree_title').empty();
-    $('#item_tree').tree('destroy')
+    $('#item_tree').tree('destroy');
 
     $('#item_tree_title').append("<span class='item_title'>"+ node['name']+"  ("+node['geo_type'] +")</span>");
     <% if editable == "true"  -%>
@@ -212,7 +214,7 @@ end
       $('#save_item_tree').click(function(e){
         $('#item_tree').tree('selectNode', null);
         var data = $('#item_tree').tree('toJson');
-        var json_data = JSON.parse(data)
+        var json_data = JSON.parse(data);
 
         $('#tag_tree').tree('updateNode', node,
           {
@@ -226,7 +228,7 @@ end
 
     <% end -%>
     
-    var item_elements =  node["item"]
+    var item_elements =  node["item"];
 
     $('#item_tree').tree({
       data: item_elements,
@@ -255,10 +257,10 @@ end
 
 
     }); //tree
-   var main_tree_height = $("div#tree_container").height()
+   var main_tree_height = $("div#tree_container").height();
    var item_tree_height = $("div#item_tree_container").height();
    if (item_tree_height >  main_tree_height ){
-     $("div#tree_container").height(item_tree_height)
+     $("div#tree_container").height(item_tree_height);
    }
    
 
@@ -293,8 +295,8 @@ end
       var multiple = "";
       var delimiter = ",";
       if (ele.name == "multiselect"){
-        multiple = " multiple "
-        delimiter = ";"
+        multiple = " multiple ";
+        delimiter = ";";
       };
       ele_html = "<span class='left' title='"+text+"'>"+ele.key+"</span>" ;
       ele_html += "<span class='right'><select"+multiple+">";
@@ -327,7 +329,7 @@ end
 }); //jq function
 
 function open_item_edit(button){
-  var itemid = button.getAttribute("data-itemid")
+  var itemid = button.getAttribute("data-itemid");
   var item = $('#tag_tree').tree('getNodeById', itemid);
 
   var geo_type = item.geo_type;
@@ -335,21 +337,21 @@ function open_item_edit(button){
   if (icon){
     icon = icon.substring(8);
   }else{
-    icon = "empty.png"
+    icon = "empty.png";
   }
   var name = item.name;
   var type = item.type;
   var item_id = item.id;
-  $('form#add_item_form input#item_id').val(item_id)
-  $('form#add_item_form select#item_type').val(type)
-  $('form#add_item_form input#name').val(name)
-  $('form#add_item_form select#icon_select').select2("val", icon)
+  $('form#add_item_form input#item_id').val(item_id);
+  $('form#add_item_form select#item_type').val(type);
+  $('form#add_item_form input#name').val(name);
+  $('form#add_item_form select#icon_select').select2("val", icon);
   if (type == "item"){
-    $('form#add_item_form select#geo_type').val(geo_type.split(","))
+    $('form#add_item_form select#geo_type').val(geo_type.split(","));
   }
 
   $("#add_item_dialog").dialog( "option", "title", "Edit Item" );
-  $("#add_item_dialog").dialog('open')
+  $("#add_item_dialog").dialog('open');
 
   return false;
 }
