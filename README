@@ -33,7 +33,7 @@ Very Partial Changelog
 * removal of select options
 * js code refactoring and renaming
 * misc improvements
-
+* renaming collection to preset in text
 
 1.0.0
 * Presets shown using drag and drop tree

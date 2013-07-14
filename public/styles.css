@@ -6,6 +6,9 @@ body {
 h1 {
   margin-top: 0px;
 }
+h1 a {
+  text-decoration: none;
+}
 
 div#flash .info {color:green}
 div#flash .error {color:red}

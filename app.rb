@@ -168,7 +168,7 @@ post '/upload' do
   collection.custom_preset = collection.xml_preset_to_json
   collection.save
 
-  flash[:info] = "Collection uploaded!"
+  flash[:info] = "Preset uploaded!"
   redirect  "/collection/#{collection.id}"
 end
 
@@ -180,7 +180,7 @@ end
 post '/collection/new' do
   collection = Collection.new(params[:collection])
   if collection.save
-    flash[:info] = "Collection created!"
+    flash[:info] = "Preset created!"
     redirect "/collection/#{collection.id}"
   else
     flash[:error] = collection.errors.full_messages.join("<br />")
@@ -219,7 +219,7 @@ end
 put '/collection/:id' do
   @collection = Collection.find(params[:id])
   if @collection.update_attributes(params[:collection])
-    flash[:info] = "Collection updated!"
+    flash[:info] = "Preset updated!"
     redirect "/collection/#{@collection.id}"
   else
     flash[:error] = @collection.errors.full_messages.join("<br />")
@@ -237,7 +237,7 @@ end
 delete '/collection/:id' do
   @collection = Collection.find(params[:id])
   @collection.destroy
-  flash[:info] = "Collection deleted!"
+  flash[:info] = "Preset deleted!"
   redirect "/collections"
 end
 
@@ -257,7 +257,7 @@ post '/collection/:id/clone' do
   collection = existing_collection.dup
   collection.name = "Clone of " + collection.name
   collection.save
-  flash[:info] = "Collection cloned!"
+  flash[:info] = "Preset cloned!"
   redirect  "/collection/#{collection.id}"
 end
 

@@ -239,7 +239,7 @@ end
     $('#tag_tree_title').append("<span class='item_title'>"+ node['name']+"  ("+node['geo_type'] +")</span>");
     <% if editable == "true"  -%>
       $('#tag_tree_title').append("<br /><a id='add_preset_element' href='#'>Add New Tag</a>&nbsp;&nbsp;");
-      $('#tag_tree_title').append("<a id='save_tag_tree' href='#'>Save Changes</a>");
+      $('#tag_tree_title').append("<a id='save_tag_tree' href='#'>Save Changes To Item</a>");
 
       $('#add_preset_element').click(function(e){
         $("#add_tag_dialog").dialog( "open" );

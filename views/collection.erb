@@ -1,4 +1,4 @@
-<h2>Viewing Collection <%=  @collection.id %> </h2>
+<h2>Viewing Preset <%=  @collection.id %> </h2>
 <%= erb(:preset_tree, :layout => false, :locals=>{:editable => "false"}) %>
 
 <h3>Name: <%= @collection.name%></h3>
@@ -11,14 +11,14 @@ Short Desc: <%= @collection.shortdescription %><br />
 Version: <%= @collection.version %> </p>
 
 
-<a href='<%="/collection/#{@collection.id}/edit"%>' >Edit Collection</a>
+<a href='<%="/collection/#{@collection.id}/edit"%>' >Edit Preset</a>
 <form action='<%="/collection/#{@collection.id}"%>' method="post"
       onsubmit="return confirm('Are you sure you want to delete this collection?')" class="delete_form" >
   <input type="hidden" name="_method" value="delete" />
   <input type="submit" value="Delete Collection" />
 </form>
 <br />
-<span class="clone_link"><a href="/collection/<%= @collection.id %>/clone">Clone Collection</a></span>
+<span class="clone_link"><a href="/collection/<%= @collection.id %>/clone">Clone Preset</a></span>
 
 <h4>JOSM Preset </h4>
 <div id="tree_container">
