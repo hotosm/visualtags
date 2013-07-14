@@ -36,8 +36,16 @@ $(function() {
     event.preventDefault();
   });
 
-$( "#button" ).button();
+  $("button#remove_from_select").button().click(function(event){
+    $("form#eleform_combo select option:selected").remove();
+    event.preventDefault();
+  });
+  $("button#remove_from_multi").button().click(function(event){
+    $("form#eleform_multiselect select option:selected").remove();
+    event.preventDefault();
+  });
 
+$( "#button" ).button();
 
   function icon_format(icon) {
     return "<img class='icon' width='32px' height='32px' src='/icons/presets/" + icon.id +"'/>" + icon.text;
@@ -102,6 +110,7 @@ $( "#button" ).button();
 <div id="add_preset_element_dialog" title="Add preset element">
  
   <form id="add_preset_element_form">
+    <input type="hidden" id="tag_id"  />
     <label for="type_choice">Type</label>
     <select name="type_choice" id="type_choice">
       <option value="text">Text</option>
@@ -134,17 +143,20 @@ $( "#button" ).button();
   <form id="eleform_combo" class="eleform" style="display:none">
     <label for="key">Key</label><input name="key" type="text" id="key5"></input> <br />
     <label for="text">Text</label><input name="text" type="text" id="text5"></input> <br />
+    <input type="text" id="add_select"></input>
     <button name="add_to_select" id="add_to_select">Add option &rarr;</button>
-    <input type="text" id="add_select"></input> <br />
-    <br />
+    <br /><br />
+    <button name="remove_from_select" id="remove_from_select" >Remove option</button>
     <select name="select" id="select">
     </select>
   </form>
   <form id="eleform_multiselect" class="eleform" style="display:none">
     <label for="key">Key</label><input name="key" type="text" id="key6"></input> <br />
     <label for="text">Text</label><input name="text" type="text" id="text6"></input> <br />
+    <input type="text" id="add_multi"></input>
     <button name="add_to_multi" id="add_to_multi">Add option &rarr;</button>
-    <input type="text" id="add_multi"></input> <br />
+    <br /><br />
+    <button name="remove_from_multi" id="remove_from_multi" >Remove option</button>
     <select name="select" id="multi" multiple>
     </select>
   </form>

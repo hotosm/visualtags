@@ -137,7 +137,7 @@ class Collection < ActiveRecord::Base
       values = values.join(",")
     end
     ele = {"name"=> element.name, "key"=> element["key"], "text" => element["text"], "value"=> element["value"],
-      "values" => values, "default_value"=> element["default"], "link"=> element["href"]}
+      "values" => values, "default_value"=> element["default"], "link"=> element["href"], "id" => rand(32**8).to_s(32)}
     ele.delete_if {|k,v| v == nil}  #remove any empty key values, it reduces JSON size
 
     ele

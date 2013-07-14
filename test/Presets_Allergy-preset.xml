@@ -18,7 +18,7 @@
 				<combo key="pastry_shop" text="Whether you can buy there torten." values="only,yes,no" delete_if_empty="true" />
 
 				<!-- allergy tags -->
-				<check key="gluten_free" text="gluten free products exsits" value_on="yes" value_off="no" default="off" />
+				<check key="gluten_free" text="gluten free products exsits" value_on="yes" value_off="no" default="on" />
 				<check key="lactose_free" text="lactose free products exsits" value_on="yes" value_off="no"  default="off" />
 
 			</optional>

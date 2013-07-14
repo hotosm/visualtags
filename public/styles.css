@@ -50,12 +50,17 @@ div#tree_container {
   position: relative
 }
 div#tag_tree {
-  width: 400px;
+  width: 360px;
 }
 
 div#tag_tree span.itemtoolbar{
   float:right;
   height: 40px;
+}
+
+div#item_tree span.tagtoolbar{
+  float:right;
+  height: 22px;
 }
 
 div#item_tree_container {
@@ -89,6 +94,7 @@ div#item_tree span.jqtree-title {
 div#item_tree input {width:100px}
 div#item_tree div.jqtree_common{
   padding-bottom: 0.1em;
+  min-height: 23px
 }
 div#item_tree div.jqtree_common span.left{
   float: left;
@@ -154,6 +160,15 @@ div.ui-dialog button.delete_button:disabled {
   border-color: gray;
 }
 
+div.ui-dialog button.delete_tag_button {
+  margin-right: 150px;
+}
+div.ui-dialog button.delete_tag_button:disabled {
+  background: lightgray;
+  color: gray;
+  border-color: gray;
+}
+
 .settings-button {
   width: 21px;
   height: 21px;
@@ -186,4 +201,16 @@ div.ui-dialog button.delete_button:disabled {
 	height: 18px;
 	display: block;
 	margin: 5px auto 0px auto;
+}
+
+.settings-button.tag{
+  width: 15px;
+  height:15px;
+  margin: 6px 6px;
+}
+
+.settings-button.tag img{
+  width: 13px;
+  height:13px;
+  margin: 1px;
 }

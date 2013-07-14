@@ -86,6 +86,15 @@ end
       autoOpen: false,
       width: 400,
       buttons: [
+        { text: "Delete",
+          "class": "delete_tag_button",
+          click: function(){
+            var tagid = $('form#add_preset_element_form input#tag_id').val();
+            var tag_node = $('#item_tree').tree('getNodeById', tagid);
+            $('#item_tree').tree('removeNode', tag_node);
+            $(this).dialog("close");
+          }
+         },
         {
           text: "Ok",
           click: function() {
@@ -97,9 +106,14 @@ end
             var value = $(form_name + " input[name='value']").val();
             var link = $(form_name + " input[name='link']").val();
             var default_value = null;
-            if ($(form_name + " input[name='default_value']").prop('checked')){
-              default_value = $(form_name + " input[name='default_value']").val();
+            if (ele_type == "check"){
+              if ($(form_name + " input[name='default_value']").prop('checked')){
+                default_value = $(form_name + " input[name='default_value']").val();
+              } else{
+                default_value = "off";
+              }
             }
+            
             var options = $(form_name + " select[name='select'] option");
             var values = $.map(options ,function(option) {
               return option.value;
@@ -117,7 +131,7 @@ end
                 return false;
               }
             }
-
+            var uuid = Math.random().toString(36).substring(7);
             var new_preset_ele = {
               "name":ele_type,
               "key": key,
@@ -125,13 +139,22 @@ end
               "value": value,
               "default_value": default_value,
               "values": values,
-              "link": link
+              "link": link,
+              "id": uuid
             };
             for(var k in new_preset_ele) {
               if(!new_preset_ele[k]) delete new_preset_ele[k];
             }
 
-            $('#item_tree').tree('prependNode', new_preset_ele);
+            var tagid = $('form#add_preset_element_form input#tag_id').val();
+            if (tagid && tagid != ""){
+              delete new_preset_ele["id"];
+              var tag_node = $("#item_tree").tree("getNodeById", tagid);
+              $('#item_tree').tree('updateNode', tag_node, new_preset_ele);
+            } else {
+              $('#item_tree').tree('prependNode', new_preset_ele);
+            }
+
             $( this ).dialog( "close" );
           }
         },
@@ -141,7 +164,19 @@ end
             $( this ).dialog( "close" );
           }
         }
-      ]
+      ],
+      open: function(event, ui){
+        var tagid = $('form#add_preset_element_form input#tag_id').val();
+        if ( tagid &&  tagid != ""){
+          $("button.delete_tag_button").attr("disabled", false);
+        } else{
+          $("button.delete_tag_button").attr("disabled", true);
+        }
+      },
+      close: function( event, ui ) {
+        reset_tag_form();
+        $("#add_preset_element_dialog").dialog("option", "title", "Add preset element");
+      }
     });
 
     $('#tag_tree').tree({
@@ -160,7 +195,7 @@ end
         }
         $li.find('.jqtree-title').before('<span class="icon">'+icon+'</span>');
         <% if editable == "true" %>
-          $li.find('.jqtree-title').after('<span class="itemtoolbar">   <a href="#" onclick="open_item_edit(this);return false;"class="edit settings-button" data-itemid="'+node.id+'"><img src="/icon-cog-small.png" /></a></span>');
+          $li.find('.jqtree-title').after('<span class="itemtoolbar"><a href="#" onclick="open_item_edit(this);return false;"class="edit settings-button" data-itemid="'+node.id+'"><img src="/icon-cog-small.png" /></a></span>');
         <% end %>
     },
       onCanMoveTo: function(moved_node, target_node, position) {
@@ -246,6 +281,9 @@ end
       },
       onCreateLi: function(node, $li) {
         $li.find('.jqtree-title').after(render_ele(node));
+        <% if editable == "true" %>
+          $li.find('.jqtree-title').after('<span class="tagtoolbar"><a href="#" onclick="open_tag_edit(this);return false;"class="edit settings-button tag" data-itemid="'+node.id+'"><img src="/icon-cog-small.png" /></a></span>');
+        <% end %>
       },
       onCanMoveTo: function(moved_node, target_node, position) {
         if (position == "inside" && target_node.name !="optional") {
@@ -355,5 +393,57 @@ function open_item_edit(button){
 
   return false;
 }
+
+  function reset_tag_form(){
+    $('form#add_preset_element_form input#tag_id').val('');
+    var forms = $("div#add_preset_element_dialog form");
+    $.each(forms, function(i, form){
+      $(form)[0].reset();
+    });
+    $('div#add_preset_element_dialog form select#multi').find('option').remove().end();
+    $('div#add_preset_element_dialog form select#select').find('option').remove().end();
+    $('form#add_preset_element_form select#type_choice').val("text");
+    $('form#add_preset_element_form select#type_choice').change();
+  }
+
+  function open_tag_edit(button){
+    reset_tag_form()
+    var tagid = button.getAttribute("data-itemid");
+    var tag = $('#item_tree').tree('getNodeById', tagid);
+
+    $('form#add_preset_element_form input#tag_id').val(tagid);
+
+    var form_name = "form#eleform_"+tag.name;
+    $('form#add_preset_element_form select#type_choice').val(tag.name);
+    $('form#add_preset_element_form select#type_choice').change();
+
+    var form_name = "form#eleform_"+tag.name;
+    //console.log(tag)
+    //value,text,link,key,values,check, default_value,
+    $(form_name + " input[name='key']").val(tag.key);
+    $(form_name + " input[name='text']").val(tag.text);
+    $(form_name + " input[name='value']").val(tag.value);
+    $(form_name + " input[name='link']").val(tag.link);
+    if (tag.default_value == "on"){
+      $(form_name + " input[name='default_value']").prop("checked", true);
+    }
+    
+    if (tag.name == "combo" || tag.name=="multiselect"){
+      var delimiter = ",";
+      if (tag.name == "multiselect"){
+        delimiter = ";";
+      };
+      if (tag.values){
+        $.each(tag.values.split(delimiter), function(index, option){
+          $(form_name + " select[name='select']").append($("<option></option>").attr("value", option).text(option));
+        });
+      }
+    }
+    
+    $("#add_preset_element_dialog").dialog( "option", "title", "Edit Item" );
+    $("#add_preset_element_dialog").dialog('open');
+
+    return false;
+  }
 
 </script>
