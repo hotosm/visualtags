@@ -128,6 +128,12 @@ div#tag_tree div.jqtree_common span.link{
 
 /*dialogs*/
 
+span.tips {
+  display:block;
+  font-style: italic;
+  font-weight: lighter;
+}
+
 input.ui-button {
   font-size:smaller;
 }

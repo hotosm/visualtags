@@ -125,22 +125,27 @@ $( "#button" ).button();
     </select>
    </form>
   <form id="eleform_label" class="eleform" style="display:none">
+    <span class="tips"><%= t.tips.label %></span><br />
     <label for="label">Label</label><input name="text" type="text" id="text1"></input>
   </form>
   <form id="eleform_key" class="eleform" style="display:none">
-    <label for="key">key</label><input name="key" type="text" id="key2"></input> <br />
-    <label for="value">value</label><input name="value" type="text" id="value"></input>
+    <span class="tips"><%= t.tips.key %></span><br />
+    <label for="key">Key</label><input name="key" type="text" id="key2"></input> <br />
+    <label for="value">Value</label><input name="value" type="text" id="value"></input>
   </form>
   <form id="eleform_text" class="eleform">
+    <span class="tips"><%= t.tips.text %></span><br />
     <label for="key">Key</label><input name="key" type="text" id="key3"></input> <br />
     <label for="text">Text</label><input name="text" type="text" id="text3"></input>
   </form>
   <form id="eleform_check" class="eleform" style="display:none">
+    <span class="tips"><%= t.tips.check %></span><br />
     <label for="key">Key</label><input name="key" type="text" id="key4"></input> <br />
     <label for="text">Text</label><input name="text" type="text" id="text4"></input> <br />
     <label for="default_value">Default on?</label><input type='checkbox' name="default_value" id="check" value="on"></input>
   </form>
   <form id="eleform_combo" class="eleform" style="display:none">
+    <span class="tips"><%= t.tips.combo %></span><br />
     <label for="key">Key</label><input name="key" type="text" id="key5"></input> <br />
     <label for="text">Text</label><input name="text" type="text" id="text5"></input> <br />
     <input type="text" id="add_select"></input>
@@ -151,6 +156,7 @@ $( "#button" ).button();
     </select>
   </form>
   <form id="eleform_multiselect" class="eleform" style="display:none">
+    <span class="tips"><%= t.tips.multiselect %></span><br />
     <label for="key">Key</label><input name="key" type="text" id="key6"></input> <br />
     <label for="text">Text</label><input name="text" type="text" id="text6"></input> <br />
     <input type="text" id="add_multi"></input>
@@ -161,12 +167,13 @@ $( "#button" ).button();
     </select>
   </form>
   <form id="eleform_space" class="eleform" style="display:none">
-    <span><%= t.space_info %></span>
+    <span class="tips"><%= t.tips.space %></span>
   </form>
   <form id="eleform_optional" class="eleform" style="display:none">
-    <span><%= t.optional_info %></span>
+    <span class="tips"><%= t.tips.optional %></span>
   </form>
    <form id="eleform_link" class="eleform" style="display:none">
+     <span class="tips"><%= t.tips.link %></span><br />
      <label for="link">Link</label><input name="link" type="text" id="link"></input>
   </form>
 
