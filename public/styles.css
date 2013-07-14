@@ -1,7 +1,10 @@
 body {
   background-color: wheat;
   font-family: Verdana, Arial, Helvetica, sans-serif;
-  
+  margin-top: 0px;
+}
+h1 {
+  margin-top: 0px;
 }
 
 div#flash .info {color:green}
