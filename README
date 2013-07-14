@@ -19,12 +19,21 @@ Solution
 An application that will create and edit a JOSM preset visually using a more user friendly interface.
 
 Current Version
-alpha v1.0.1
+1.1.0
 
 Demo
 https://visualtags.herokuapp.com
 
+
+
 Very Partial Changelog
+1.1.0
+* Editing of existing Items and preset element tags
+* removal of elements
+* removal of select options
+* misc improvements
+
+
 1.0.0
 * Presets shown using drag and drop tree
 * Item in a preset drag and droppable
