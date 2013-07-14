@@ -1,4 +1,4 @@
-<h2>Viewing Preset <%=  @collection.id %> </h2>
+<h2><%= t.preset_head @collection.id %> </h2>
 <%= erb(:preset_tree, :layout => false, :locals=>{:editable => "false"}) %>
 
 <h3>Name: <%= @collection.name%></h3>
@@ -11,24 +11,24 @@ Short Desc: <%= @collection.shortdescription %><br />
 Version: <%= @collection.version %> </p>
 
 
-<a href='<%="/collection/#{@collection.id}/edit"%>' >Edit Preset</a>
+  <a href='<%="/collection/#{@collection.id}/edit"%>' ><%= t.edit_preset %></a>
 <form action='<%="/collection/#{@collection.id}"%>' method="post"
-      onsubmit="return confirm('Are you sure you want to delete this collection?')" class="delete_form" >
+      onsubmit="return confirm('<%= t.delete_preset_confirm  %>')" class="delete_form" >
   <input type="hidden" name="_method" value="delete" />
-  <input type="submit" value="Delete Collection" />
+  <input type="submit" value="<%= t.delete_preset %>" />
 </form>
 <br />
-<span class="clone_link"><a href="/collection/<%= @collection.id %>/clone">Clone Preset</a></span>
+<span class="clone_link"><a href="/collection/<%= @collection.id %>/clone"><%= t.clone_preset %></a></span>
 
-<h4>JOSM Preset </h4>
+<h4>JOSM Preset</h4>
 <div id="tree_container">
   <div id="item_tree"></div>
   <div id="tag_tree_container">
-    <div id="tag_tree_title">Preset Tag Details<br />&nbsp;</div>
+    <div id="tag_tree_title"><%= t.tag_tree_title %><br />&nbsp;</div>
     <div id="tag_tree"></div>
   </div>
 </div>
 
 <p>
-  <a href='<%= "/collection/#{@collection.id}.xml" %>' target="_new">Download as XML preset</a> suitable for use in the <a href="http://hot-export.geofabrik.de/">HOT Exports Application.</a>
+  <a href='<%= "/collection/#{@collection.id}.xml" %>' target="_new"><%= t.download_preset %>
 </p>

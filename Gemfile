@@ -7,6 +7,8 @@ gem "sinatra-activerecord"
 gem 'libxml-ruby'
 gem 'sinatra-flash'
 gem 'oj'
+gem 'sinatra-r18n'
+gem 'sinatra-contrib'
 
 group :production do
   gem 'unicorn'

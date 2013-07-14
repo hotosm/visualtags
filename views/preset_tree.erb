@@ -8,6 +8,14 @@ end
 <script type="text/javascript">
   var data = <%= tree_data %>;
 
+  var add_new_tag_text = "<%= t.add_new_tag %>";
+  var add_new_item_text = "<%= t.add_new_item %>";
+  var save_changes_tag = "<%= t.save_changes_tag %>";
+  var edit_item_text = "<%= t.edit_item %>";
+  var edit_tag_text = "<%= t.edit_tag %>";
+  var item_geotype_warning = "<%= t.item_geotype_warning %>";
+  var key_required = "<%= t.key_required %>";
+
   $(function() {
 
     $("#add_item_dialog").dialog({
@@ -38,7 +46,7 @@ end
             var new_item = { "name": name, "type": item_type, "icon": icon, "geo_type": geo_type, "id" :uuid };
             if(item_type == "item"){
               if  (geo_type == null || geo_type == ""){
-                alert("An Item needs at least one type specified");
+                alert(item_geotype_warning);
                 return false;
               }
             }
@@ -78,7 +86,7 @@ end
         document.getElementById("add_item_form").reset();
         $('form#add_item_form input#item_id').val('');
         $('form#add_item_form select#icon_select').select2("val", "empty.png");
-        $("#add_item_dialog").dialog("option", "title", "Add New Item");
+        $("#add_item_dialog").dialog("option", "title", add_new_item_text);
       }
     });
 
@@ -127,7 +135,7 @@ end
 
             if (ele_type != "space" && ele_type != "optional" && ele_type != "label" && ele_type != "link"){
               if  (typeof key === "undefined" || key == ""){
-                alert("key is required");
+                alert(key_required_text);
                 return false;
               }
             }
@@ -175,7 +183,7 @@ end
       },
       close: function( event, ui ) {
         reset_tag_form();
-        $("#add_tag_dialog").dialog("option", "title", "Add Tag Element");
+        $("#add_tag_dialog").dialog("option", "title", add_new_tag_text);
       }
     });
 
@@ -238,8 +246,8 @@ end
 
     $('#tag_tree_title').append("<span class='item_title'>"+ node['name']+"  ("+node['geo_type'] +")</span>");
     <% if editable == "true"  -%>
-      $('#tag_tree_title').append("<br /><a id='add_preset_element' href='#'>Add New Tag</a>&nbsp;&nbsp;");
-      $('#tag_tree_title').append("<a id='save_tag_tree' href='#'>Save Changes To Item</a>");
+      $('#tag_tree_title').append("<br /><a id='add_preset_element' href='#'>"+add_new_tag_text+"</a>&nbsp;&nbsp;");
+      $('#tag_tree_title').append("<a id='save_tag_tree' href='#'>"+save_changes_tag+"</a>");
 
       $('#add_preset_element').click(function(e){
         $("#add_tag_dialog").dialog( "open" );
@@ -388,7 +396,7 @@ function open_item_edit(button){
     $('form#add_item_form select#geo_type').val(geo_type.split(","));
   }
 
-  $("#add_item_dialog").dialog( "option", "title", "Edit Item" );
+  $("#add_item_dialog").dialog( "option", "title", edit_item_text );
   $("#add_item_dialog").dialog('open');
 
   return false;
@@ -440,7 +448,7 @@ function open_item_edit(button){
       }
     }
     
-    $("#add_tag_dialog").dialog( "option", "title", "Edit Tag" );
+    $("#add_tag_dialog").dialog( "option", "title", edit_tag_text );
     $("#add_tag_dialog").dialog('open');
 
     return false;

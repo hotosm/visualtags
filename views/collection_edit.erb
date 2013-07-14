@@ -58,7 +58,7 @@ $( "#button" ).button();
 
 });
 </script>
-<h2>Editing Preset <%=  @collection.id %> </h2>
+<h2><%=  t.edit_head @collection.id %> </h2>
 
 <h3>Name: <%= @collection.name%></h3>
 
@@ -67,17 +67,17 @@ $( "#button" ).button();
 <h4>Preset</h4>
 <div id="tree_container">
   <div id="item_tree_head">
-    <a href="#" id="add_item">Add New Item</a>
+    <a href="#" id="add_item"><%= t.add_new_item %></a>
   </div>
   <div id="item_tree"></div>
   <div id="tag_tree_container">
-    <div id="tag_tree_title">Preset Form Details<br />&nbsp;</div>
+    <div id="tag_tree_title"><%= t.tag_tree_title %><br />&nbsp;</div>
     <div id="tag_tree"></div>
   </div>
 </div>
 
 <!-- ui-dialogs -->
-<div id="add_item_dialog" title="Add New Item">
+<div id="add_item_dialog" title="<%= t.add_new_item %>">
   <form id="add_item_form" class="dialog_form">
     <input type="hidden" id="item_id"  />
     <label for="item_type">Type</label>
@@ -107,7 +107,7 @@ $( "#button" ).button();
   </form>
 </div>
 
-<div id="add_tag_dialog" title="Add Tag Element">
+<div id="add_tag_dialog" title="<%= t.add_new_tag %>">
  
   <form id="add_preset_element_form">
     <input type="hidden" id="tag_id"  />
@@ -144,9 +144,9 @@ $( "#button" ).button();
     <label for="key">Key</label><input name="key" type="text" id="key5"></input> <br />
     <label for="text">Text</label><input name="text" type="text" id="text5"></input> <br />
     <input type="text" id="add_select"></input>
-    <button name="add_to_select" id="add_to_select">Add option &rarr;</button>
+    <button name="add_to_select" id="add_to_select"><%= t.add_option %></button>
     <br /><br />
-    <button name="remove_from_select" id="remove_from_select" >Remove option</button>
+    <button name="remove_from_select" id="remove_from_select" ><%= t.remove_option %></button>
     <select name="select" id="select">
     </select>
   </form>
@@ -154,17 +154,17 @@ $( "#button" ).button();
     <label for="key">Key</label><input name="key" type="text" id="key6"></input> <br />
     <label for="text">Text</label><input name="text" type="text" id="text6"></input> <br />
     <input type="text" id="add_multi"></input>
-    <button name="add_to_multi" id="add_to_multi">Add option &rarr;</button>
+    <button name="add_to_multi" id="add_to_multi"><%= t.add_option %></button>
     <br /><br />
-    <button name="remove_from_multi" id="remove_from_multi" >Remove option</button>
+    <button name="remove_from_multi" id="remove_from_multi" ><%= t.remove_option %></button>
     <select name="select" id="multi" multiple>
     </select>
   </form>
   <form id="eleform_space" class="eleform" style="display:none">
-    <span>Adds a space - an empty line.</span>
+    <span><%= t.space_info %></span>
   </form>
   <form id="eleform_optional" class="eleform" style="display:none">
-    <span>Adds the optional group where you can put tags under.</span>
+    <span><%= t.optional_info %></span>
   </form>
    <form id="eleform_link" class="eleform" style="display:none">
      <label for="link">Link</label><input name="link" type="text" id="link"></input>

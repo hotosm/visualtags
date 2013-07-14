@@ -1,8 +1,8 @@
-<h2>Cloning Preset <%=  @collection.id %> </h2>
+<h2> <%= t.cloning_head @collection.id %> </h2>
 
 <h3>Name: <%= @collection.name%></h3>
 <% if @collection.original_filename %>
-  <p>Original Preset filename: <%= @collection.original_filename %> (<a href="<%= "/collection/#{@collection.id}/validate" %>">Validate this</a>) <br />
+  <p>Original Preset filename: <%= @collection.original_filename %> (<a href="<%= "/collection/#{@collection.id}/validate" %>"><%= t.validate %></a>) <br />
   <% end %>
   Author: <%= @collection.author %> <br />
   Description: <%= @collection.description %><br />
@@ -11,5 +11,5 @@
 
 <form action="/collection/<%=@collection.id%>/clone"  id="clone_preset" method="post">
   <input type="hidden" name="clone" value="true" />
-  <input type="submit" value="Clone Preset" />
+  <input type="submit" value="<%= t.clone_preset %>" />
 </form>

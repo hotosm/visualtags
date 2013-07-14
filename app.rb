@@ -1,12 +1,17 @@
 require 'sinatra'
 require 'sinatra/activerecord'
 require 'sinatra/flash'
+require 'sinatra/r18n'
+require "sinatra/config_file"
 require 'xml/libxml'
 require 'oj'
 require 'builder'
 
 enable :sessions
 set :erb, :trim => '-'
+
+config_file 'config/config.yml'
+R18n::I18n.default = settings.default_locale || "en"
 
 #name, filename, orginal_filename, preset(xml), custom_preset(json)
 class Collection < ActiveRecord::Base
@@ -180,7 +185,7 @@ end
 post '/collection/new' do
   collection = Collection.new(params[:collection])
   if collection.save
-    flash[:info] = "Preset created!"
+    flash[:info] = "#{t.flash.created}"
     redirect "/collection/#{collection.id}"
   else
     flash[:error] = collection.errors.full_messages.join("<br />")
@@ -219,7 +224,7 @@ end
 put '/collection/:id' do
   @collection = Collection.find(params[:id])
   if @collection.update_attributes(params[:collection])
-    flash[:info] = "Preset updated!"
+    flash[:info] = "#{t.flash.updated}"
     redirect "/collection/#{@collection.id}"
   else
     flash[:error] = @collection.errors.full_messages.join("<br />")
@@ -237,7 +242,7 @@ end
 delete '/collection/:id' do
   @collection = Collection.find(params[:id])
   @collection.destroy
-  flash[:info] = "Preset deleted!"
+  flash[:info] = "#{t.flash.deleted}"
   redirect "/collections"
 end
 
@@ -255,9 +260,9 @@ end
 post '/collection/:id/clone' do
   existing_collection = Collection.find(params[:id])
   collection = existing_collection.dup
-  collection.name = "Clone of " + collection.name
+  collection.name =  "#{t.clone_prefix}  #{collection.name}"
   collection.save
-  flash[:info] = "Preset cloned!"
+  flash[:info] = "#{t.flash.cloned}"
   redirect  "/collection/#{collection.id}"
 end
 

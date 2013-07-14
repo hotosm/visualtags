@@ -1,6 +1,6 @@
 <form action='<%=  action %>' id="collection_form" method="post">
   <fieldset>
-    <legend>Edit Preset</legend>
+    <legend><%= t.edit_preset %></legend>
     <input type="hidden" name="_method" value="<%= method %>" />
     <input type="hidden" name="collection[custom_preset]" id="custom_preset" value="" />
 
@@ -19,6 +19,6 @@
     <p><label for="collection[version]">Version:</label>
       <input type="text" name="collection[version]" value="<%= collection.version %>" />
     </p>
-    <input type="submit" id="button" value="Save All Changes" />
+    <input type="submit" id="button" value="<%= t.save_all_changes %>" />
   </fieldset>
 </form>

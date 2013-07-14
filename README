@@ -19,7 +19,7 @@ Solution
 An application that will create and edit a JOSM preset visually using a more user friendly interface.
 
 Current Version
-1.1.0
+1.2.0
 
 Demo
 https://visualtags.herokuapp.com
@@ -27,6 +27,10 @@ https://visualtags.herokuapp.com
 
 
 Very Partial Changelog
+
+1.2.0
+* Internationalisation of strings
+
 1.1.0
 * Editing of existing Items and preset element tags
 * removal of elements
@@ -82,8 +86,8 @@ gem pristine --all
 Develop
 
 Shell
-
 >tux
+on heroku: heroku run tux
 
 Run
 

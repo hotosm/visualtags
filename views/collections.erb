@@ -1,12 +1,13 @@
-<h2>Viewing All <%=@collections.count %> Presets </h2>
+<h2><%= t.presets_head @collections.count%> </h2>
 
 <p>
-  To create a new preset, you can upload an existing XML JOSM preset, create an empty preset from scratch, or choose an existing one and clone it. <br />
-  <a href="/upload">Upload preset to create a new preset</a>
+  <%= t.presets_intro %>
+   <br />
+   <a href="/upload"><%= t.upload %></a>
   <br />
   Or
   <br />
-  <a href="/collection/new">Create empty new preset </a>
+  <a href="/collection/new"> <%= t.create_new %></a>
 </p>
 <% @collections.each do | coll | %>
 
