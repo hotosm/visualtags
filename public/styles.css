@@ -10,6 +10,13 @@ h1 a {
   text-decoration: none;
 }
 
+img.home{
+  display: block;
+  margin-top: 1em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 div#flash .info {color:green}
 div#flash .error {color:red}
 
@@ -26,6 +33,7 @@ div#wrapper {
 }
 div#content{
    padding: 1.5em;
+   background-color: rgb(245, 229, 179);
 }
 
 .delete_form {
