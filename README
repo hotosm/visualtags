@@ -18,6 +18,9 @@ text editing a raw XML file.
 Solution
 An application that will create and edit a JOSM preset visually using a more user friendly interface.
 
+Limitations
+It misses out the more complex JOSM preset XML features such as auto increment, expressions, matches, display values and roles.
+
 Current Version
 1.2.0
 
