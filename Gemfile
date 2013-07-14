@@ -12,10 +12,10 @@ group :production do
   gem 'unicorn'
 end
 
+gem "tux"
 group :development do
   gem "heroku"
   gem "rerun"
-  gem "tux"
   gem "rack-test"
 end
 
