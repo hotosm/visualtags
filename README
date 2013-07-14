@@ -31,6 +31,7 @@ Very Partial Changelog
 * Editing of existing Items and preset element tags
 * removal of elements
 * removal of select options
+* js code refactoring and renaming
 * misc improvements
 
 
@@ -42,6 +43,7 @@ Very Partial Changelog
 * Tags Model deleted
 * Add new empty preset from scratch
 * Clone collection/preset
+* database wipe needed
 
 
 0.2.2

@@ -52,21 +52,21 @@ span.clone_link {
 div#tree_container {
   position: relative
 }
-div#tag_tree {
+div#item_tree {
   width: 360px;
 }
 
-div#tag_tree span.itemtoolbar{
+div#item_tree span.itemtoolbar{
   float:right;
   height: 40px;
 }
 
-div#item_tree span.tagtoolbar{
+div#tag_tree span.tagtoolbar{
   float:right;
   height: 22px;
 }
 
-div#item_tree_container {
+div#tag_tree_container {
   position: absolute;
   top: 0px;
   right: 0px;
@@ -77,16 +77,16 @@ div#item_tree_container {
   border-width: 1px;
 }
 
-div#item_tree_title{
+div#tag_tree_title{
 text-align: center;
 font-weight: bold;
 }
 
-div#item_tree {
+div#tag_tree {
   width: auto;
   margin-left: 7px;
 }
-div#item_tree span.jqtree-title {
+div#tag_tree span.jqtree-title {
   font-style: italic;
   float: left;
   display: block;
@@ -94,24 +94,24 @@ div#item_tree span.jqtree-title {
   font-size: smaller;
 }
 
-div#item_tree input {width:100px}
-div#item_tree div.jqtree_common{
+div#tag_tree input {width:100px}
+div#tag_tree div.jqtree_common{
   padding-bottom: 0.1em;
   min-height: 23px
 }
-div#item_tree div.jqtree_common span.left{
+div#tag_tree div.jqtree_common span.left{
   float: left;
   width: 200px;
 }
-div#item_tree div.jqtree_common span.left input{
+div#tag_tree div.jqtree_common span.left input{
   width: 20px;
 }
 
-div#item_tree div.jqtree_common span.right{
+div#tag_tree div.jqtree_common span.right{
   margin-right: 1em;
 }
 
-div#item_tree div.jqtree_common span.link{
+div#tag_tree div.jqtree_common span.link{
   font-size: smaller;
 }
 

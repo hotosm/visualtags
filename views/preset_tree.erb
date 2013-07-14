@@ -18,8 +18,8 @@ end
           "class": "delete_button",
           click: function(){
             var itemid = $('form#add_item_form input#item_id').val();
-            var item_node = $('#tag_tree').tree('getNodeById', itemid);
-            $('#tag_tree').tree('removeNode', item_node);
+            var item_node = $('#item_tree').tree('getNodeById', itemid);
+            $('#item_tree').tree('removeNode', item_node);
             $(this).dialog("close");
           }
 
@@ -48,12 +48,12 @@ end
             if (itemid && itemid != ""){
               //update the node
               delete new_item["id"];
-              var item_node = $('#tag_tree').tree('getNodeById', itemid);
-              $('#tag_tree').tree('updateNode', item_node, new_item);
+              var item_node = $('#item_tree').tree('getNodeById', itemid);
+              $('#item_tree').tree('updateNode', item_node, new_item);
             } else{
               //add the new node
               new_item["item"] = [];
-              $('#tag_tree').tree('prependNode', new_item);
+              $('#item_tree').tree('prependNode', new_item);
             }
             
             $( this ).dialog( "close" );
@@ -82,7 +82,7 @@ end
       }
     });
 
-    $("#add_preset_element_dialog").dialog({
+    $("#add_tag_dialog").dialog({
       autoOpen: false,
       width: 400,
       buttons: [
@@ -90,8 +90,8 @@ end
           "class": "delete_tag_button",
           click: function(){
             var tagid = $('form#add_preset_element_form input#tag_id').val();
-            var tag_node = $('#item_tree').tree('getNodeById', tagid);
-            $('#item_tree').tree('removeNode', tag_node);
+            var tag_node = $('#tag_tree').tree('getNodeById', tagid);
+            $('#tag_tree').tree('removeNode', tag_node);
             $(this).dialog("close");
           }
          },
@@ -149,10 +149,10 @@ end
             var tagid = $('form#add_preset_element_form input#tag_id').val();
             if (tagid && tagid != ""){
               delete new_preset_ele["id"];
-              var tag_node = $("#item_tree").tree("getNodeById", tagid);
-              $('#item_tree').tree('updateNode', tag_node, new_preset_ele);
+              var tag_node = $("#tag_tree").tree("getNodeById", tagid);
+              $('#tag_tree').tree('updateNode', tag_node, new_preset_ele);
             } else {
-              $('#item_tree').tree('prependNode', new_preset_ele);
+              $('#tag_tree').tree('prependNode', new_preset_ele);
             }
 
             $( this ).dialog( "close" );
@@ -175,11 +175,11 @@ end
       },
       close: function( event, ui ) {
         reset_tag_form();
-        $("#add_preset_element_dialog").dialog("option", "title", "Add preset element");
+        $("#add_tag_dialog").dialog("option", "title", "Add Tag Element");
       }
     });
 
-    $('#tag_tree').tree({
+    $('#item_tree').tree({
       data: data,
       autoOpen: 0,
       dragAndDrop: <%= editable %>,
@@ -209,7 +209,7 @@ end
     }); //tree
 
 
-   $('#tag_tree').bind(
+   $('#item_tree').bind(
     'tree.select',
       function(event) {
         if (event.node) {
@@ -219,7 +219,7 @@ end
             $("#tag_info").empty()
             return false;
           }
-          render_item_tree(node);
+          render_tag_tree(node);
 
         }
         else {
@@ -232,26 +232,26 @@ end
 
   //item_toolbar_setup()
   //renders the item form elements in a new tree
-  function render_item_tree(node){
-    $('#item_tree_title').empty();
-    $('#item_tree').tree('destroy');
+  function render_tag_tree(node){
+    $('#tag_tree_title').empty();
+    $('#tag_tree').tree('destroy');
 
-    $('#item_tree_title').append("<span class='item_title'>"+ node['name']+"  ("+node['geo_type'] +")</span>");
+    $('#tag_tree_title').append("<span class='item_title'>"+ node['name']+"  ("+node['geo_type'] +")</span>");
     <% if editable == "true"  -%>
-      $('#item_tree_title').append("<br /><a id='add_preset_element' href='#'>Add new element</a>&nbsp;&nbsp;");
-      $('#item_tree_title').append("<a id='save_item_tree' href='#'>Save Changes</a>");
+      $('#tag_tree_title').append("<br /><a id='add_preset_element' href='#'>Add New Tag</a>&nbsp;&nbsp;");
+      $('#tag_tree_title').append("<a id='save_tag_tree' href='#'>Save Changes</a>");
 
       $('#add_preset_element').click(function(e){
-        $("#add_preset_element_dialog").dialog( "open" );
+        $("#add_tag_dialog").dialog( "open" );
         e.preventDefault();
       });
 
-      $('#save_item_tree').click(function(e){
-        $('#item_tree').tree('selectNode', null);
-        var data = $('#item_tree').tree('toJson');
+      $('#save_tag_tree').click(function(e){
+        $('#tag_tree').tree('selectNode', null);
+        var data = $('#tag_tree').tree('toJson');
         var json_data = JSON.parse(data);
 
-        $('#tag_tree').tree('updateNode', node,
+        $('#item_tree').tree('updateNode', node,
           {
             item: json_data
           }
@@ -265,7 +265,7 @@ end
     
     var item_elements =  node["item"];
 
-    $('#item_tree').tree({
+    $('#tag_tree').tree({
       data: item_elements,
       autoOpen: 0,
       dragAndDrop: <%= editable %>,
@@ -296,9 +296,9 @@ end
 
     }); //tree
    var main_tree_height = $("div#tree_container").height();
-   var item_tree_height = $("div#item_tree_container").height();
-   if (item_tree_height >  main_tree_height ){
-     $("div#tree_container").height(item_tree_height);
+   var tag_tree_height = $("div#tag_tree_container").height();
+   if (tag_tree_height >  main_tree_height ){
+     $("div#tree_container").height(tag_tree_height);
    }
    
 
@@ -368,7 +368,7 @@ end
 
 function open_item_edit(button){
   var itemid = button.getAttribute("data-itemid");
-  var item = $('#tag_tree').tree('getNodeById', itemid);
+  var item = $('#item_tree').tree('getNodeById', itemid);
 
   var geo_type = item.geo_type;
   var icon = item.icon;
@@ -396,12 +396,12 @@ function open_item_edit(button){
 
   function reset_tag_form(){
     $('form#add_preset_element_form input#tag_id').val('');
-    var forms = $("div#add_preset_element_dialog form");
+    var forms = $("div#add_tag_dialog form");
     $.each(forms, function(i, form){
       $(form)[0].reset();
     });
-    $('div#add_preset_element_dialog form select#multi').find('option').remove().end();
-    $('div#add_preset_element_dialog form select#select').find('option').remove().end();
+    $('div#add_tag_dialog form select#multi').find('option').remove().end();
+    $('div#add_tag_dialog form select#select').find('option').remove().end();
     $('form#add_preset_element_form select#type_choice').val("text");
     $('form#add_preset_element_form select#type_choice').change();
   }
@@ -409,7 +409,7 @@ function open_item_edit(button){
   function open_tag_edit(button){
     reset_tag_form()
     var tagid = button.getAttribute("data-itemid");
-    var tag = $('#item_tree').tree('getNodeById', tagid);
+    var tag = $('#tag_tree').tree('getNodeById', tagid);
 
     $('form#add_preset_element_form input#tag_id').val(tagid);
 
@@ -440,8 +440,8 @@ function open_item_edit(button){
       }
     }
     
-    $("#add_preset_element_dialog").dialog( "option", "title", "Edit Item" );
-    $("#add_preset_element_dialog").dialog('open');
+    $("#add_tag_dialog").dialog( "option", "title", "Edit Tag" );
+    $("#add_tag_dialog").dialog('open');
 
     return false;
   }

@@ -2,14 +2,14 @@
 <script type="text/javascript">
 $(function() {
   $('#collection_form').submit(function(){
-    var custom_preset = $('#tag_tree').tree('toJson');
+    var custom_preset = $('#item_tree').tree('toJson');
     $('input#custom_preset').val(custom_preset)
     //return false
   });
 
-  $('div#add_preset_element_dialog #type_choice').change(function(){
+  $('div#add_tag_dialog #type_choice').change(function(){
     $(".eleform").hide()
-    var choice_val = $('div#add_preset_element_dialog #type_choice').val()
+    var choice_val = $('div#add_tag_dialog #type_choice').val()
     var show_form = "#eleform_"+choice_val;
     $(show_form).show()
   });
@@ -66,13 +66,13 @@ $( "#button" ).button();
 
 <h4>Preset</h4>
 <div id="tree_container">
-  <div id="tag_tree_head">
+  <div id="item_tree_head">
     <a href="#" id="add_item">Add New Item</a>
   </div>
-  <div id="tag_tree"></div>
-  <div id="item_tree_container">
-    <div id="item_tree_title">Preset Form Details<br />&nbsp;</div>
-    <div id="item_tree"></div>
+  <div id="item_tree"></div>
+  <div id="tag_tree_container">
+    <div id="tag_tree_title">Preset Form Details<br />&nbsp;</div>
+    <div id="tag_tree"></div>
   </div>
 </div>
 
@@ -107,7 +107,7 @@ $( "#button" ).button();
   </form>
 </div>
 
-<div id="add_preset_element_dialog" title="Add preset element">
+<div id="add_tag_dialog" title="Add Tag Element">
  
   <form id="add_preset_element_form">
     <input type="hidden" id="tag_id"  />
