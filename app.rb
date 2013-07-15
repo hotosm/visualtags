@@ -212,7 +212,7 @@ get '/collection/:id.xml' do
   @collection = Collection.find(params[:id])
   @custom_preset = Oj.load(@collection.custom_preset)
 
-  #attachment  #<-- comment for inline render
+  attachment  #<-- comment for inline render
   builder :preset
 end
 
