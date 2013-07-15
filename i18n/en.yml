@@ -14,7 +14,7 @@ tag_tree_title: Preset Tag Details
 download_preset: Download as XML preset</a> suitable for use in the <a href="http://hot-export.geofabrik.de/">HOT Exports Application.</a>
 new_preset_head: Create a new preset
 cloning_head: Cloning Preset %1
-validate: Validate this
+validate_this: Validate this
 edit_head: Editing Preset %1
 add_new_item: Add New Item
 tag_tree_title: Preset Form Details

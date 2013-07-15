@@ -2,7 +2,7 @@
 
 <h3>Name: <%= @collection.name%></h3>
 <% if @collection.original_filename %>
-  <p>Original Preset filename: <%= @collection.original_filename %> (<a href="<%= "/collection/#{@collection.id}/validate" %>"><%= t.validate %></a>) <br />
+  <p>Original Preset filename: <%= @collection.original_filename %> (<a href="<%= "/collection/#{@collection.id}/validate" %>"><%= t.validate_this %></a>) <br />
   <% end %>
   Author: <%= @collection.author %> <br />
   Description: <%= @collection.description %><br />

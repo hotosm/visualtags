@@ -21,13 +21,21 @@ An application that will create and edit a JOSM preset visually using a more use
 Limitations
 It misses out the more complex JOSM preset XML features such as auto increment, expressions, matches, display values and roles.
 
+User Guide & more information
+See docs in docs directory
+
 Current Version
 1.2.0
 
 Demo
 https://visualtags.herokuapp.com
 
-
+TODO
+* better tests
+* touch screen
+* UI / design
+* extract js into separate file
+* libraryify xml parsing code
 
 Very Partial Changelog
 
@@ -78,7 +86,6 @@ Ruby 1.9.2
 Postgres database
 
 Installing gems 
-gem install nokogiri -v '1.6.0'
 gem install sinatra-activerecord -v '1.2.2'
 bundle install
 
