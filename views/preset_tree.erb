@@ -381,7 +381,8 @@ function open_item_edit(button){
   var geo_type = item.geo_type;
   var icon = item.icon;
   if (icon){
-    icon = icon.substring(8);
+    var tokens = icon.split("/")
+    icon = tokens[tokens.length -1]
   }else{
     icon = "empty.png";
   }
@@ -393,8 +394,12 @@ function open_item_edit(button){
   $('form#add_item_form input#name').val(name);
   $('form#add_item_form select#icon_select').select2("val", icon);
   if (type == "item"){
-    $('form#add_item_form select#geo_type').val(geo_type.split(","));
-  }
+      if (geo_type){
+        $('form#add_item_form select#geo_type').val(geo_type.split(","));
+      } else {
+        $('form#add_item_form select#geo_type').val('');
+      }
+    }
 
   $("#add_item_dialog").dialog( "option", "title", edit_item_text );
   $("#add_item_dialog").dialog('open');

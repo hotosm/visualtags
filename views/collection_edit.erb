@@ -48,7 +48,11 @@ $(function() {
 $( "#button" ).button();
 
   function icon_format(icon) {
-    return "<img class='icon' width='32px' height='32px' src='/icons/presets/" + icon.id +"'/>" + icon.text;
+    if (icon){
+      return "<img class='icon' width='32px' height='32px' src='/icons/presets/" + icon.id +"'/>" + icon.text;
+    } else{
+      return "<img class='icon' width='32px' height='32px' src='/icons/presets/empty.png'/> Empty";
+    }
   }
   $("#icon_select").select2({
       formatResult: icon_format,
