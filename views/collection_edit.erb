@@ -103,9 +103,9 @@ $( "#button" ).button();
     <br />
     <label for="geo_type">Geo Type (Item only)</label>
     <select name="geo_type" id="geo_type" multiple>
-      <option value="node">node</option>
-      <option value="way">way</option>
-      <option value="closedway">area</option>
+      <option value="node">node (point)</option>
+      <option value="way">way (line)</option>
+      <option value="closedway">area (polygon)</option>
       <option value="relation">relation</option>
     </select>
   </form>
@@ -140,18 +140,18 @@ $( "#button" ).button();
   <form id="eleform_text" class="eleform">
     <span class="tips"><%= t.tips.text %></span><br />
     <label for="key">Key</label><input name="key" type="text" id="key3"></input> <br />
-    <label for="text">Text</label><input name="text" type="text" id="text3"></input>
+    <label for="text">Text label</label><input name="text" type="text" id="text3"></input>
   </form>
   <form id="eleform_check" class="eleform" style="display:none">
     <span class="tips"><%= t.tips.check %></span><br />
     <label for="key">Key</label><input name="key" type="text" id="key4"></input> <br />
-    <label for="text">Text</label><input name="text" type="text" id="text4"></input> <br />
+    <label for="text">Text label</label><input name="text" type="text" id="text4"></input> <br />
     <label for="default_value">Default on?</label><input type='checkbox' name="default_value" id="check" value="on"></input>
   </form>
   <form id="eleform_combo" class="eleform" style="display:none">
     <span class="tips"><%= t.tips.combo %></span><br />
     <label for="key">Key</label><input name="key" type="text" id="key5"></input> <br />
-    <label for="text">Text</label><input name="text" type="text" id="text5"></input> <br />
+    <label for="text">Text label</label><input name="text" type="text" id="text5"></input> <br />
     <input type="text" id="add_select"></input>
     <button name="add_to_select" id="add_to_select"><%= t.add_option %></button>
     <br /><br />
@@ -162,7 +162,7 @@ $( "#button" ).button();
   <form id="eleform_multiselect" class="eleform" style="display:none">
     <span class="tips"><%= t.tips.multiselect %></span><br />
     <label for="key">Key</label><input name="key" type="text" id="key6"></input> <br />
-    <label for="text">Text</label><input name="text" type="text" id="text6"></input> <br />
+    <label for="text">Text label</label><input name="text" type="text" id="text6"></input> <br />
     <input type="text" id="add_multi"></input>
     <button name="add_to_multi" id="add_to_multi"><%= t.add_option %></button>
     <br /><br />
