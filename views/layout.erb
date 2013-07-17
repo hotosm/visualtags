@@ -5,10 +5,10 @@
     <script type="text/javascript" src="/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="/jquery-ui-1.10.3.custom.min.js"></script>
     <link rel="stylesheet" href="/css/sunny/jquery-ui-1.10.3.custom.min.css" />
-    
+
     <script type="text/javascript" src="/tree.jquery.dev.js"></script>
     <link rel="stylesheet" href="/jqtree.css" />
-    
+
     <script type="text/javascript" src="/select2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/styles.css" />
 
@@ -18,19 +18,27 @@
   </head>
   <body>
     <div id="wrapper">
-      <div id="content">
-        <div id="header">
-          <h1>
-            <a href="/"><%= t.title %></a>
-          </h1>
+
+      <div id="header" style="background-image: url(/red-header.png);">
+        <div class="logo">
+        <h1><%= t.title %></h1>
         </div>
-        <%= styled_flash %>
-        <%= yield %>
-        <div id="footer">
-          <hr />
-          <div class="tiny"><%= t.title %> - v1.2.0</div>
+        <div class="nav">
+          <a href="/"><%= t.nav.home %></a>&emsp;
+          <a href="/collections"><%= t.nav.presets %></a>&emsp;
+          <a href="/upload"><%= t.nav.upload %></a>
         </div>
       </div>
+
+      <div id="content">
+        <%= styled_flash %>
+        <%= yield %>
+      </div>
+
+      <div id="footer">
+        <div class="tiny"><a href="http://hot.openstreetmap.org/" target="_blank"><img alt="HOT logo" src="/hot-sml-logo.png" title="Humanitarian OpenStreetMap Team" /></a>Copyright© 2013 Humanitarian OpenStreetMap Team &emsp;<%= t.title %> - v1.2.0</div>
+      </div>
+
     </div>
   </body>
 </html>

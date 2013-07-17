@@ -62,4 +62,7 @@ tips:
   combo: Combo box, with multiple choices. Text is the optional label to be displayed for the key.
   multiselect: Combo box, with multiple seletable choices. Text is the optional label to be displayed for the key.
   link: URL link (often pointing to OSM wiki page) for more information about the item.
-
+nav:
+  home: Home
+  presets: Presets
+  upload: Upload

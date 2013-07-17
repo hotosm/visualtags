@@ -1,8 +1,9 @@
 body {
-  background-color: wheat;
   font-family: Verdana, Arial, Helvetica, sans-serif;
   margin-top: 0px;
+  background: url("/gradient.jpg") repeat-x scroll 0 0 #e5e6e8;
 }
+
 h1 {
   margin-top: 0px;
 }
@@ -25,15 +26,66 @@ div.validation_errors {
   font-style: italic;
 }
 
-#footer .tiny {font-size:xx-small; color:gray}
+
+#footer {
+background-color: #eee;
+min-width: 940px;
+padding: 30px 0;
+text-shadow: 0 1px 0 #fff;
+border-top: 1px solid #e5e5e5;
+-webkit-box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.025);
+-moz-box-shadow: inset 0 5px
+
+}
+
+#footer .tiny {
+  margin-left:26px;
+  font-size:xx-small; color:gray
+}
 
 div#wrapper {
- margin: 0 auto;
- width: 1000px;
+  background: none repeat scroll 0 0 white;
+  border-left: 1px solid #999999;
+  border-right: 1px solid #999999;
+  margin: 0 auto;
+  width: 1000px;
+}
+#header{
+  padding: 0px 40px;
+  height: 75px;
+}
+#header h1 {
+  margin: 0px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  text-shadow: #000 1px 1px 1px;
+  font-size: 26px;
+  color: #fff;
+}
+
+#header div.logo {
+width: 300px;
+float: left;
+padding: 10px 0px 40px 0px;
+}
+
+#header div.nav {
+  font-size: smaller;
+  float: right;
+  text-align: right;
+  padding-top: 20px;
+}
+#header div.nav a {
+  color: #fff;
+  text-decoration: none;
+}
+
+#header div.nav a:hover {
+text-decoration: underline;
 }
 div#content{
    padding: 1.5em;
-   background-color: rgb(245, 229, 179);
+  
 }
 
 .delete_form {
@@ -89,6 +141,7 @@ div#tag_tree_container {
   background-color: rgb(253, 206, 119);
   border-style: solid;
   border-width: 1px;
+  max-width: 580px;
 }
 
 div#tag_tree_title{
