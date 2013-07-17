@@ -19,6 +19,9 @@ Version: <%= @collection.version %> </p>
 </form>
 <br />
 <span class="clone_link"><a href="/collection/<%= @collection.id %>/clone"><%= t.clone_preset %></a></span>
+<% unless @collection.custom_preset.empty? -%>
+  <span class="exportsupload_link"><a href="/collection/<%= @collection.id %>/export_upload"><%= t.exportupload_link %></a></span>
+<% end -%>
 
 <h4>JOSM Preset</h4>
 <div id="tree_container">
@@ -30,5 +33,9 @@ Version: <%= @collection.version %> </p>
 </div>
 
 <p>
-  <a href='<%= "/collection/#{@collection.id}.xml" %>' target="_new"><%= t.download_preset %>
+  <% unless @collection.custom_preset.empty? -%>
+    <a href='<%= "/collection/#{@collection.id}.xml" %>' target="_new"><%= t.download_preset %>
+  <% else %>
+    <br />
+  <% end -%>
 </p>

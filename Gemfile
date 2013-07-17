@@ -9,6 +9,7 @@ gem 'sinatra-flash'
 gem 'oj'
 gem 'sinatra-r18n'
 gem 'sinatra-contrib'
+gem 'rest-client'
 
 group :production do
   gem 'unicorn'

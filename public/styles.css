@@ -58,6 +58,9 @@ form#collection_form input{
 span.clone_link {
   font-size: smaller;
 }
+span.exportsupload_link {
+ font-size: smaller;
+ }
 /*trees*/
 
 div#tree_container {

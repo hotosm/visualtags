@@ -6,6 +6,7 @@ require "sinatra/config_file"
 require 'xml/libxml'
 require 'oj'
 require 'builder'
+require 'rest_client'
 
 enable :sessions
 set :erb, :trim => '-'
@@ -163,7 +164,7 @@ post '/upload' do
   unless params[:name] && params[:file] && (tmpfile = params[:file][:tempfile]) && (orig_name = params[:file][:filename]) && File.extname(orig_name) == ".xml"
     redirect  '/upload'
   end
-  filename  = File.join(Dir.pwd,"public/uploads", orig_name)
+  filename  = File.join(Dir.pwd,"tmp", orig_name)
   preset = tmpfile.read
   File.open(filename, "wb") { |f| f.write(preset) }
   FileUtils.chmod(0644, filename)
@@ -264,5 +265,45 @@ post '/collection/:id/clone' do
   collection.save
   flash[:info] = "#{t.flash.cloned}"
   redirect  "/collection/#{collection.id}"
+end
+
+post '/data' do
+p "poo"
+p params.inspect
+tmpfile = params[:uploadfile][:tempfile]
+p tmpfile.read
+
+end
+
+get '/collection/:id/export_upload' do
+  @collection = Collection.find(params[:id])
+  erb :collection_export_upload
+end
+
+post '/collection/:id/export_upload' do
+  @collection = Collection.find(params[:id])
+  request = Rack::MockRequest.new(Sinatra::Application)
+  
+  xml_body = request.get("/collection/#{@collection.id.to_s}.xml").body
+  p xml_body
+  xml_file = File.join(Dir.pwd,"tmp", "#{@collection.id.to_s}_#{Process.pid}.xml")
+  File.open(xml_file, "wb") { |f| f.write(xml_body) }
+  
+  begin
+    response = RestClient.post("http://localhost:4567/data", 
+   #response = RestClient.post(settings.hot_export_upload_url, 
+              :uploadfile => File.new(xml_file, 'rb'),
+              :utf8 => "&#x2713",
+              :upload => {
+                :name => @collection.name,
+                :uptype => "preset"
+              }
+              )
+  rescue => e
+  
+    redirect settings.hot_export_upload_url
+  end
+
+  redirect settings.hot_export_upload_url
 end
 

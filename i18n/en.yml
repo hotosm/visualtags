@@ -13,6 +13,10 @@ delete_preset_confirm: Are you sure you want to delete this collection?
 tag_tree_title: Preset Tag Details
 download_preset: Download as XML preset</a> suitable for use in the <a href="http://hot-export.geofabrik.de/">HOT Exports Application.</a>
 new_preset_head: Create a new preset
+exportupload_head: Upload the preset to the HOT Exports Application
+exportupload_description: This will upload the generated XML preset file to <a href='%1'>%1</a> for use in the HOT Exports application. When complete, the page will redirect to the HOT Exports application.
+exportupload_button: Export and Upload
+exportupload_link: Export to HOT Exports 
 cloning_head: Cloning Preset %1
 validate_this: Validate this
 edit_head: Editing Preset %1
