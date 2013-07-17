@@ -290,7 +290,7 @@ post '/collection/:id/export_upload' do
   File.open(xml_file, "wb") { |f| f.write(xml_body) }
   
   begin
-    response = RestClient.post("http://localhost:4567/data", 
+    response = RestClient.post("http://visualtags.herokuapp.com/data", 
    #response = RestClient.post(settings.hot_export_upload_url, 
               :uploadfile => File.new(xml_file, 'rb'),
               :utf8 => "&#x2713",
