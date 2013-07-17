@@ -267,13 +267,6 @@ post '/collection/:id/clone' do
   redirect  "/collection/#{collection.id}"
 end
 
-post '/data' do
-p "poo"
-p params.inspect
-tmpfile = params[:uploadfile][:tempfile]
-p tmpfile.read
-
-end
 
 get '/collection/:id/export_upload' do
   @collection = Collection.find(params[:id])
@@ -285,13 +278,11 @@ post '/collection/:id/export_upload' do
   request = Rack::MockRequest.new(Sinatra::Application)
   
   xml_body = request.get("/collection/#{@collection.id.to_s}.xml").body
-  p xml_body
   xml_file = File.join(Dir.pwd,"tmp", "#{@collection.id.to_s}_#{Process.pid}.xml")
   File.open(xml_file, "wb") { |f| f.write(xml_body) }
   
   begin
-    response = RestClient.post("http://visualtags.herokuapp.com/data", 
-   #response = RestClient.post(settings.hot_export_upload_url, 
+    response = RestClient.post(settings.hot_export_upload_url, 
               :uploadfile => File.new(xml_file, 'rb'),
               :utf8 => "&#x2713",
               :upload => {
