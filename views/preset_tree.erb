@@ -100,6 +100,8 @@ end
             var tagid = $('form#add_preset_element_form input#tag_id').val();
             var tag_node = $('#tag_tree').tree('getNodeById', tagid);
             $('#tag_tree').tree('removeNode', tag_node);
+            $('#save_tag_tree').click()
+
             $(this).dialog("close");
           }
          },
@@ -163,6 +165,7 @@ end
               $('#tag_tree').tree('prependNode', new_preset_ele);
             }
 
+            $('#save_tag_tree').click()
             $( this ).dialog( "close" );
           }
         },
@@ -237,7 +240,7 @@ end
       }//function(event)
   );  //select tree
 
-
+  
   //item_toolbar_setup()
   //renders the item form elements in a new tree
   function render_tag_tree(node){
@@ -247,7 +250,7 @@ end
     $('#tag_tree_title').append("<span class='item_title'>"+ node['name']+"  ("+node['geo_type'] +")</span>");
     <% if editable == "true"  -%>
       $('#tag_tree_title').append("<br /><a id='add_preset_element' href='#'>"+add_new_tag_text+"</a>&nbsp;&nbsp;");
-      $('#tag_tree_title').append("<a id='save_tag_tree' href='#'>"+save_changes_tag+"</a>");
+      $('#tag_tree_title').append("<a id='save_tag_tree' href='#' style='display:none'>"+save_changes_tag+"</a>");
 
       $('#add_preset_element').click(function(e){
         $("#add_tag_dialog").dialog( "open" );
