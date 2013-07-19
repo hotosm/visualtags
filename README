@@ -24,8 +24,6 @@ It misses out the more complex JOSM preset XML features such as auto increment, 
 User Guide & more information
 See docs in docs directory
 
-Current Version
-1.2.0
 
 Demo
 https://visualtags.herokuapp.com
@@ -38,6 +36,11 @@ TODO
 * libraryify xml parsing code
 
 Very Partial Changelog
+
+1.2.1
+* Themeing similar to other HOT tools
+* Upload to HOT Exports tool
+* Removal of need to save an items tag after change
 
 1.2.0
 * Internationalisation of strings
