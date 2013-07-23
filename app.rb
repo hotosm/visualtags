@@ -6,7 +6,6 @@ require "sinatra/config_file"
 require 'xml/libxml'
 require 'oj'
 require 'builder'
-require 'rest_client'
 
 enable :sessions
 set :erb, :trim => '-'
