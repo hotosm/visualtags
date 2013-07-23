@@ -113,6 +113,19 @@ span.clone_link {
 span.exportsupload_link {
  font-size: smaller;
  }
+ 
+form#export_upload {
+  width: 600px
+  }
+  
+form#export_upload label{
+  float:left;
+  width:195px
+}
+form#export_upload input{
+  width: 350px;
+ }
+ 
 /*trees*/
 
 div#tree_container {

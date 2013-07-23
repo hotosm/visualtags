@@ -274,27 +274,53 @@ get '/collection/:id/export_upload' do
 end
 
 post '/collection/:id/export_upload' do
+  require 'mechanize'
   @collection = Collection.find(params[:id])
-  request = Rack::MockRequest.new(Sinatra::Application)
   
+  if @collection.custom_preset.empty?
+    flash[:error] = "The preset has no items. Please add some items and tags to it"
+    redirect "/collection/#{@collection.id}/export_upload"
+    return true
+  end
+  
+  if params[:email].empty? || params[:password].empty?
+    flash[:error] = "Username and password required"
+    redirect "/collection/#{@collection.id}/export_upload"
+    return true
+  end
+  
+  #render the preset and save it as temporary file
+  request = Rack::MockRequest.new(Sinatra::Application)
   xml_body = request.get("/collection/#{@collection.id.to_s}.xml").body
   xml_file = File.join(Dir.pwd,"tmp", "#{@collection.id.to_s}_#{Process.pid}.xml")
   File.open(xml_file, "wb") { |f| f.write(xml_body) }
   
-  begin
-    response = RestClient.post(settings.hot_export_upload_url, 
-              :uploadfile => File.new(xml_file, 'rb'),
-              :utf8 => "&#x2713",
-              :upload => {
-                :name => @collection.name,
-                :uptype => "preset"
-              }
-              )
-  rescue => e
+  #get mechanizing
+  agent = Mechanize.new
+  #login first
+  login_page = agent.get(settings.hot_export["login_url"])
+  login_form = login_page.form
+  login_form["user[email]"] = params[:email]
+  login_form["user[password]"] = params[:password]
+  logged_in_page = agent.submit(login_form)
   
-    redirect settings.hot_export_upload_url
+  if logged_in_page.form && logged_in_page.form.fields_with(:type => "email").length > 0
+    flash[:error] = "Username and password not correct"
+    redirect "/collection/#{@collection.id}/export_upload"
+    return true
   end
+  
+  #upload
+  upload_page = agent.get(settings.hot_export["upload_url"])
+  upload_form = upload_page.form
+  upload_form["upload[name]"] = @collection.name
+  upload_form["upload[uptype]"] = "preset"
+  upload_form.file_uploads.first.file_name = xml_file
+  uploaded = agent.submit(upload_form)
+  
+  #logout probably wise, eh
+  logged_out = agent.delete(settings.hot_export["logout_url"])
 
-  redirect settings.hot_export_upload_url
+  redirect settings.hot_export["after_upload_url"]
 end
 

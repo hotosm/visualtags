@@ -20,7 +20,7 @@ Version: <%= @collection.version %> </p>
 <br />
 <span class="clone_link"><a href="/collection/<%= @collection.id %>/clone"><%= t.clone_preset %></a></span>
 <% unless @collection.custom_preset.empty? -%>
-  <span class="exportsupload_link"><a href="/collection/<%= @collection.id %>/export_upload"><%= t.exportupload_link %></a></span>
+  <span class="exportsupload_link"><a href="/collection/<%= @collection.id %>/export_upload"><%= t.export.link %></a></span>
 <% end -%>
 
 <h4>JOSM Preset</h4>
