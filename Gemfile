@@ -12,10 +12,6 @@ gem 'sinatra-contrib'
 gem 'mechanize'
 gem 'nokogiri', '1.5.10'
 
-group :production do
-  gem 'unicorn'
-end
-
 gem "tux"
 group :development do
   gem "rerun"
