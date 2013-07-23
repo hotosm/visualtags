@@ -1,6 +1,1 @@
 default_locale: en
-hot_export:
-  login_url: http://hot-export.geofabrik.de/users/sign_in
-  logout_url: http://hot-export.geofabrik.de/users/sign_out
-  upload_url: http://hot-export.geofabrik.de/uploads/new
-  after_upload_url: http://hot-export.geofabrik.de/uploads/presets
