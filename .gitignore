@@ -2,3 +2,4 @@
 tmp/*
 nbproject
 public/uploads/*
+db/*.db
