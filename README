@@ -37,6 +37,10 @@ TODO
 
 Very Partial Changelog
 
+1.2.2
+* Use Mechanize to upload preset to HOT Exports application
+* requires user to give the HOT Exports login credentials for the export to succeed
+
 1.2.1
 * Themeing similar to other HOT tools
 * Upload to HOT Exports tool
