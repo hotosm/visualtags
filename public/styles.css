@@ -115,15 +115,15 @@ span.exportsupload_link {
  }
  
 form#export_upload {
-  width: 600px
+  width: 650px
   }
   
 form#export_upload label{
   float:left;
-  width:195px
+  width:300px
 }
 form#export_upload input{
-  width: 350px;
+  width: 250px;
  }
  
 /*trees*/
