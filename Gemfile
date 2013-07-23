@@ -18,7 +18,6 @@ end
 
 gem "tux"
 group :development do
-  gem "heroku"
   gem "rerun"
   gem "rack-test"
 end
