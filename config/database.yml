@@ -2,3 +2,7 @@ development:
     adapter: mysql
     database: visualtags_development
     host: localhost
+
+production:
+    adapter: sqlite3
+    database: visualtags.sqlite3.db
