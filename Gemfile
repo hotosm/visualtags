@@ -11,7 +11,7 @@ gem 'sinatra-r18n'
 gem 'sinatra-contrib'
 gem 'nokogiri', '1.5.10'
 gem 'mechanize'
-
+gem 'rest-client'
 
 group :production do
   gem 'unicorn'
