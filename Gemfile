@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 gem 'sinatra', '1.3.2'
 
-gem "pg"
+gem "mysql"
 gem "activerecord"
 gem "sinatra-activerecord"
 gem 'libxml-ruby'
@@ -18,7 +18,6 @@ end
 
 gem "tux"
 group :development do
-  gem "heroku"
   gem "rerun"
   gem "rack-test"
 end
