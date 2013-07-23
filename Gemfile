@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 gem 'sinatra', '1.3.2'
 
-gem "mysql2"
+gem "sqlite3"
 gem "activerecord"
 gem "sinatra-activerecord", '0.1.3'
 gem 'libxml-ruby'
