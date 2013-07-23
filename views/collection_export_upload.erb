@@ -5,7 +5,7 @@ $(function() {
 </script>
 
 <h2> <%= t.export.head @collection.id %> </h2>
-<p><%= t.export.description "http://hot-export.geofabrik.de/uploads/new" %></p>
+<p><%= t.export.description settings.hot_export["upload_url"] %></p>
 <h3>Name: <%= @collection.name%></h3>
 
   Author: <%= @collection.author %> <br />

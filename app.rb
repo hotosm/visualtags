@@ -273,7 +273,6 @@ get '/collection/:id/export_upload' do
   erb :collection_export_upload
 end
 
-
 post '/collection/:id/export_upload' do
   require 'mechanize'
   @collection = Collection.find(params[:id])
@@ -299,7 +298,7 @@ post '/collection/:id/export_upload' do
   #get mechanizing
   agent = Mechanize.new
   #login first
-  login_page = agent.get("http://hot-export.geofabrik.de/users/sign_in")
+  login_page = agent.get(settings.hot_export["login_url"])
   login_form = login_page.form
   login_form["user[email]"] = params[:email]
   login_form["user[password]"] = params[:password]
@@ -312,7 +311,7 @@ post '/collection/:id/export_upload' do
   end
   
   #upload
-  upload_page = agent.get("http://hot-export.geofabrik.de/uploads/new")
+  upload_page = agent.get(settings.hot_export["upload_url"])
   upload_form = upload_page.form
   upload_form["upload[name]"] = @collection.name
   upload_form["upload[uptype]"] = "preset"
@@ -320,8 +319,8 @@ post '/collection/:id/export_upload' do
   uploaded = agent.submit(upload_form)
   
   #logout probably wise, eh
-  logged_out = agent.delete("http://hot-export.geofabrik.de/users/sign_out")
+  logged_out = agent.delete(settings.hot_export["logout_url"])
 
-  redirect "http://hot-export.geofabrik.de/uploads/presets"
+  redirect settings.hot_export["after_upload_url"]
 end
 
