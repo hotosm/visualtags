@@ -9,7 +9,9 @@ gem 'sinatra-flash'
 gem 'oj'
 gem 'sinatra-r18n'
 gem 'sinatra-contrib'
+gem 'nokogiri', '1.5.10'
 gem 'mechanize'
+
 
 group :production do
   gem 'unicorn'
