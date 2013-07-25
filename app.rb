@@ -6,6 +6,11 @@ require "sinatra/config_file"
 require 'xml/libxml'
 require 'oj'
 require 'builder'
+ 
+ActiveRecord::Base.establish_connection(
+  :adapter => "sqlite3", 
+  :database => "db/visualtags.sqlite3.db")
+
 
 enable :sessions
 set :erb, :trim => '-'

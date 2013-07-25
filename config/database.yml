@@ -4,4 +4,6 @@ development:
   username: <%= ENV['PG_USER'] %>
   password: <%= ENV['PG_PASS'] %>
   host: localhost
-  
+production:
+    adapter: sqlite3
+    database: visualtags.sqlite3.db

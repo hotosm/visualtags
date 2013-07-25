@@ -26,7 +26,7 @@ See docs in docs directory
 
 
 Demo
-https://visualtags.herokuapp.com
+http://visualtags.geothings.net
 
 TODO
 * better tests
@@ -36,6 +36,11 @@ TODO
 * libraryify xml parsing code
 
 Very Partial Changelog
+
+2.0.0
+* major version as change of DB, platform etc
+* Move away from Heroku, unicorn etc due to strange bug with Heroku
+* Switch from postgres to sqlite3
 
 1.2.2
 * Use Mechanize to upload preset to HOT Exports application
@@ -82,15 +87,17 @@ Very Partial Changelog
 * Output as a simplified XML preset which will work with the HOT Exports application.
 * Tags grouped according to the geometry types. 
 * Output groups into preset Items
-* Drag and Drop nested tree using groups and icons from presers
+* Drag and Drop nested tree using groups and icons from presets
 * Presets can be invalid JOSM presets, but work fine in the HOT Export tool
 * Look at http://www.sjjb.co.uk/mapicons/  for cc0 icons
 
 
 Install
 
-Ruby 1.9.2
-Postgres database
+Ruby 1.8.7
+sqlite3 database
+
+Also works with 1.9.2 and postgres - (see heroku_bug branch for Heroku set up)
 
 Installing gems 
 gem install sinatra-activerecord -v '1.2.2'
