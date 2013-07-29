@@ -29,13 +29,17 @@ Demo
 https://visualtags.herokuapp.com
 
 TODO
-* better tests
+* integration tests
 * touch screen
 * UI / design
 * extract js into separate file
 * libraryify xml parsing code
 
 Very Partial Changelog
+
+1.2.2
+* Add not found handling for presets
+* Add model tests
 
 
 1.2.1

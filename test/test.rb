@@ -1,30 +1,47 @@
 require File.expand_path '../../app.rb', __FILE__
 require 'test/unit'
 require 'rack/test'
-
+require 'oj'
+set :environment, :test
 ENV['RACK_ENV'] = 'test'
 
-
-class TagTest < Test::Unit::TestCase
-
-  def test_can_create_a_tag
-    t = Tag.new(:key => "horse")
-    assert_not_nil t
-  end
-    
-end
-
 class CollectionTest < Test::Unit::TestCase
+ def setup
+    xml = File.read("test/simple-test.xml")
+    @collection = Collection.new(:name => "test") 
+    @collection.preset = xml
+ end
 
-  def test_can_parse_xml
-    xml = File.read("Presets_Allergy-preset.xml")
-    #xml = "<?xml version='1.0' encoding='UTF-8'?><presets xmlns='http://josm.openstreetmap.de/tagging-preset-1.0'><groups><group><item type='node'><text key='name'></text></item></group></groups></presets>"
-    tags = Collection.tags_from_xml(xml)
-    puts tags
-    tags.each do |tag|
-      puts tag.key
-    end
-    assert_not_nil tags
+
+  def test_can_parse_xml_to_json
+    preset_json = @collection.xml_preset_to_json
+    json = Oj.load(preset_json)
+    assert_not_nil preset_json
+    assert_equal(json[0]["name"], "Testing")
+    assert_equal(json[0]["children"][0]["name"], "Baker")
+  end
+
+  def test_can_parse_metadata
+    assert_nil @collection.author
+    @collection.parse_metadata
+    assert_equal @collection.author, "Tim Waters"
+  end
+
+  def test_can_validate_valid
+    results = @collection.validate_xml_preset
+    assert_equal TrueClass, results.class
+    assert results # and that it passes
+  end
+
+  def test_can_validate_invalid
+    xml = File.read("test/invalid_josm.xml")
+    invalid = Collection.new(:name => "invalid")
+    invalid.preset = xml
+    results = invalid.validate_xml_preset 
+    
+    assert_equal String, results.class
+    assert_equal "Error: Element", results[0..13]
+    assert results.include?"group"
   end
 
 end
