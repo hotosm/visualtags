@@ -150,6 +150,15 @@ class Collection < ActiveRecord::Base
 
 end
 
+def find_collection
+  begin
+    collection = Collection.find(params[:id]) 
+  rescue ActiveRecord::RecordNotFound
+    halt erb :not_found
+  end
+end
+
+
 get '/' do
   erb :home
 end
@@ -209,7 +218,7 @@ get '/collection/' do
 end
 
 get '/collection/:id.xml' do
-  @collection = Collection.find(params[:id])
+  @collection = find_collection
   @custom_preset = Oj.load(@collection.custom_preset)
 
   attachment  #<-- comment for inline render
@@ -217,12 +226,12 @@ get '/collection/:id.xml' do
 end
 
 get '/collection/:id' do
-  @collection = Collection.find(params[:id])
+  @collection = find_collection 
   erb :collection
 end
 
 put '/collection/:id' do
-  @collection = Collection.find(params[:id])
+  @collection = find_collection 
   if @collection.update_attributes(params[:collection])
     flash[:info] = "#{t.flash.updated}"
     redirect "/collection/#{@collection.id}"
@@ -234,31 +243,31 @@ put '/collection/:id' do
 end
 
 get '/collection/:id/edit' do
-  @collection = Collection.find(params[:id])
+  @collection = find_collection
   @images = Dir.glob("public/icons/presets/*.png").sort_by { |x| x.downcase }
   erb :collection_edit
 end
 
 delete '/collection/:id' do
-  @collection = Collection.find(params[:id])
+  @collection = find_collection
   @collection.destroy
   flash[:info] = "#{t.flash.deleted}"
   redirect "/collections"
 end
 
 get '/collection/:id/validate' do
-  @collection = Collection.find(params[:id])
+  @collection = find_collection
   @valid = @collection.validate_xml_preset
   erb :collection_validate
 end
 
 get '/collection/:id/clone' do
-  @collection = Collection.find(params[:id])
+  @collection = find_collection
   erb :collection_clone
 end
 
 post '/collection/:id/clone' do
-  existing_collection = Collection.find(params[:id])
+  existing_collection = find_collection
   collection = existing_collection.dup
   collection.name =  "#{t.clone_prefix}  #{collection.name}"
   collection.save
@@ -268,13 +277,13 @@ end
 
 
 get '/collection/:id/export_upload' do
-  @collection = Collection.find(params[:id])
+  @collection = find_collection
   erb :collection_export_upload
 end
 
 post '/collection/:id/export_upload' do
   require 'mechanize'
-  @collection = Collection.find(params[:id])
+  @collection = find_collection
   
   if @collection.custom_preset.empty?
     flash[:error] = "The preset has no items. Please add some items and tags to it"
