@@ -37,6 +37,7 @@ TODO
 
 Very Partial Changelog
 
+
 1.2.1
 * Themeing similar to other HOT tools
 * Upload to HOT Exports tool
@@ -87,6 +88,10 @@ Install
 
 Ruby 1.9.2
 Postgres database
+The application should work with Heroku no problem.
+
+Ruby 1.8.6
+If you are on Ruby 1.8.6 and want to use that, with sqlite3 database - have a look at the 1.8.6 branch.
 
 Installing gems 
 gem install sinatra-activerecord -v '1.2.2'
