@@ -11,7 +11,7 @@ delete_preset: Delete Preset
 clone_preset: Clone Preset
 delete_preset_confirm: Are you sure you want to delete this collection?
 tag_tree_title: Preset Tag Details
-download_preset: Download as XML preset</a> suitable for use in the <a href="http://hot-export.geofabrik.de/">HOT Exports Application.</a>
+download_preset: Download as XML preset</a> suitable for use in the <a href="http://export.hotosm.org">HOT Exports Application.</a>
 new_preset_head: Create a new preset
 cloning_head: Cloning Preset %1
 validate_this: Validate this
