@@ -88,6 +88,43 @@ div#content{
   
 }
 
+
+.vt_pagination {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: smaller;
+  margin-top: 1em;
+  padding: .3em; }
+.vt_pagination a, .vt_pagination span {
+  padding: .2em .5em; }
+.vt_pagination span.disabled {
+  color: #AAA; }
+.vt_pagination span.current {
+  font-weight: bold;
+  color: #00CC00; }
+.vt_pagination a {
+  border: 1px solid #DDDDDD;
+  color: #002200;
+  text-decoration: none; }
+.vt_pagination a:hover, .vt_pagination a:focus {
+  border-color: #003366;
+  background: #e3e3d4;
+  color: #00CC00; }
+.vt_pagination .page_info {
+  color: #aaa;
+  padding-top: .8em; }
+.vt_pagination .prev_page, .vt_pagination .next_page {
+  border-width: 2px; }
+.vt_pagination .prev_page {
+  margin-right: 1em; }
+.vt_pagination .next_page {
+  margin-left: 1em; }
+
+.vt_pagination .per_page_select {
+  text-transform: none;
+  font-weight: normal;
+  font-size: smaller;
+}
+
 .delete_form {
   display: inline;
 }

@@ -10,14 +10,15 @@ gem 'oj'
 gem 'sinatra-r18n'
 gem 'sinatra-contrib'
 gem 'mechanize'
+gem "will_paginate", "~> 3.0.4"
 
 group :production do
   gem 'unicorn'
 end
 
 gem "tux"
+
 group :development do
-  gem "heroku"
   gem "rerun"
   gem "rack-test"
 end

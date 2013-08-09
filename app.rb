@@ -6,6 +6,8 @@ require "sinatra/config_file"
 require 'xml/libxml'
 require 'oj'
 require 'builder'
+require 'will_paginate'
+require 'will_paginate/active_record'
 
 enable :sessions
 set :erb, :trim => '-'
@@ -16,6 +18,7 @@ R18n::I18n.default = settings.default_locale || "en"
 #name, filename, orginal_filename, preset(xml), custom_preset(json)
 class Collection < ActiveRecord::Base
   validates_presence_of :name
+  self.per_page = 40
   
   #parses the xml file for author, description, version etc
   def parse_metadata
@@ -206,7 +209,7 @@ end
 
 
 get '/collections' do
-  @collections = Collection.find(:all, :order => "created_at desc")
+  @collections = Collection.paginate(:page => params[:page]).order('created_at desc')
   erb :collections
 end
 
