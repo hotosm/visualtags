@@ -2,6 +2,7 @@
 <script type="text/javascript">
 $(function() {
   $('#collection_form').submit(function(){
+    $('#save_tag_tree').click();
     var custom_preset = $('#item_tree').tree('toJson');
     $('input#custom_preset').val(custom_preset)
     //return false

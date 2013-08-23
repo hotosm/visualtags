@@ -244,6 +244,11 @@ end
   //item_toolbar_setup()
   //renders the item form elements in a new tree
   function render_tag_tree(node){
+    var item_json =  $('#tag_tree').tree('toJson');
+    if (item_json){
+      $('#save_tag_tree').click();
+    }  
+      
     $('#tag_tree_title').empty();
     $('#tag_tree').tree('destroy');
 
