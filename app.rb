@@ -198,7 +198,7 @@ post '/collection/new' do
   collection = Collection.new(params[:collection])
   if collection.save
     flash[:info] = "#{t.flash.created}"
-    redirect "/collection/#{collection.id}"
+    redirect "/collection/#{collection.id}/edit"
   else
     flash[:error] = collection.errors.full_messages.join("<br />")
 

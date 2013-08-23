@@ -67,7 +67,7 @@ class HomepageTest < Test::Unit::TestCase
     follow_redirect!
     assert last_response.ok?
     collection_id = Collection.last.id
-    assert_equal "http://example.org/collection/"+collection_id.to_s, last_request.url
+    assert_equal "http://example.org/collection/"+collection_id.to_s+"/edit", last_request.url
   end
   
 end
