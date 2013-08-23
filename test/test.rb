@@ -55,4 +55,19 @@ class HomepageTest < Test::Unit::TestCase
     get '/'
     assert last_response.ok?
   end
+  
+  def test_new
+    get '/collection/new'
+    assert last_response.ok?
+    assert last_response.body.include?('collection_form')
+  end
+  
+  def test_create
+    post '/collection/new', :collection => {:name => "test create name", :custom_preset => ""}
+    follow_redirect!
+    assert last_response.ok?
+    collection_id = Collection.last.id
+    assert_equal "http://example.org/collection/"+collection_id.to_s, last_request.url
+  end
+  
 end
