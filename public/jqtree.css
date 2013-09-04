@@ -119,7 +119,7 @@ ul.jqtree-tree span.jqtree-border {
 }
 
 ul.jqtree-tree .jqtree-element {
-    width: 100%; /* todo: why is this in here? */
+    width: 100%; 
     *width: auto; /* ie7 fix; issue 41 */
     position: relative;
 }

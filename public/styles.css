@@ -180,6 +180,7 @@ div#item_tree span.itemtoolbar{
 div#tag_tree span.tagtoolbar{
   float:right;
   height: 22px;
+  width: 47px;
 }
 
 div#tag_tree_container {
@@ -296,47 +297,43 @@ div.ui-dialog button.delete_tag_button:disabled {
 }
 
 .settings-button {
+  float: left;
   width: 21px;
   height: 21px;
-	border-radius: 5px;
-	border: 1px solid #161615;
-	box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, .26), 0px 1px 0px 0px rgba(255, 255, 255, .15);
-	opacity: 0.7;
-	background-color: #fece2f;
-	z-index: 2;
-	display: block;
-	margin: 9px 10px;
+  border-radius: 5px;
+  border: 1px solid #161615;
+  box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, .26), 0px 1px 0px 0px rgba(255, 255, 255, .15);
+  opacity: 0.7;
+  background-color: #fece2f;
+  z-index: 2;
+  display: block;
+  margin: 9px 10px;
 }
 
 .settings-button:hover, .pressed {
-	background-color: transparent;
-	opacity: 1;
-	cursor: pointer;
-	z-index: 2;
+  background-color: transparent;
+  opacity: 1;
+  cursor: pointer;
+  z-index: 2;
 }
 
 .settings-button img {
-	margin: 2px auto 0px auto;
-	display: block;
-	z-index: -1;
+  margin: 2px auto 0px auto;
+  display: block;
+  z-index: -1;
 }
 
-.settings-button span {
-	background: transparent url('/icon-cog-small.png') no-repeat top left;
-	width: 19px;
-	height: 18px;
-	display: block;
-	margin: 5px auto 0px auto;
-}
 
 .settings-button.tag{
   width: 15px;
   height:15px;
-  margin: 6px 6px;
+  margin: 6px 3px;
 }
 
 .settings-button.tag img{
   width: 13px;
   height:13px;
-  margin: 1px;
+  margin-left: 1px;
+  margin-top: 1px;
+  margin-bottom: 0px;
 }

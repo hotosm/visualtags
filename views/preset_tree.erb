@@ -294,7 +294,7 @@ end
       onCreateLi: function(node, $li) {
         $li.find('.jqtree-title').after(render_ele(node));
         if (editable){
-          $li.find('.jqtree-title').after('<span class="tagtoolbar"><a href="#" onclick="open_tag_edit(this);return false;"class="edit settings-button tag" data-itemid="'+node.id+'"><img src="/icon-cog-small.png" /></a></span>');
+          $li.find('.jqtree-title').after('<span class="tagtoolbar"><a href="#" onclick="open_tag_edit(this);return false;"class="edit settings-button tag" data-itemid="'+node.id+'"><img src="/icon-cog-small.png" title="Edit" alt="Edit" /></a><a href="#" onclick="delete_tag(this);return false;"class="delete settings-button tag" data-itemid="'+node.id+'"><img src="/icon-delete-small-red.png"  alt="Delete" title="Delete"/></a></span>');
         }
       },
       onCanMoveTo: function(moved_node, target_node, position) {
@@ -460,6 +460,16 @@ function open_item_edit(button){
     $("#add_tag_dialog").dialog( "option", "title", edit_tag_text );
     $("#add_tag_dialog").dialog('open');
 
+    return false;
+  }
+  
+  function delete_tag(button){
+    reset_tag_form()
+    var tagid = button.getAttribute("data-itemid");
+    var tag = $('#tag_tree').tree('getNodeById', tagid);
+    $('#tag_tree').tree('removeNode', tag);
+    $('#save_tag_tree').click();
+    
     return false;
   }
 
