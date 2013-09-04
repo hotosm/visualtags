@@ -7,6 +7,7 @@ end
 -%>
 <script type="text/javascript">
   var data = <%= tree_data %>;
+  var editable = <%= editable %>;
 
   var add_new_tag_text = "<%= t.add_new_tag %>";
   var add_new_item_text = "<%= t.add_new_item %>";
@@ -193,7 +194,7 @@ end
     $('#item_tree').tree({
       data: data,
       autoOpen: 0,
-      dragAndDrop: <%= editable %>,
+      dragAndDrop: editable,
       selectable: true,
       useContextMenu: false,
       onCreateLi: function(node, $li) {
@@ -205,9 +206,9 @@ end
           icon = "<img src='/icons/styles/standard/empty.png' width='32px' height='32px' />";
         }
         $li.find('.jqtree-title').before('<span class="icon">'+icon+'</span>');
-        <% if editable == "true" %>
+        if (editable){
           $li.find('.jqtree-title').after('<span class="itemtoolbar"><a href="#" onclick="open_item_edit(this);return false;"class="edit settings-button" data-itemid="'+node.id+'"><img src="/icon-cog-small.png" /></a></span>');
-        <% end %>
+        }
     },
       onCanMoveTo: function(moved_node, target_node, position) {
         if (position == "inside" && target_node.type =="item") {
@@ -253,7 +254,7 @@ end
     $('#tag_tree').tree('destroy');
 
     $('#tag_tree_title').append("<span class='item_title'>"+ node['name']+"  ("+node['geo_type'] +")</span>");
-    <% if editable == "true"  -%>
+    if(editable){
       $('#tag_tree_title').append("<br /><a id='add_preset_element' href='#'>"+add_new_tag_text+"</a>&nbsp;&nbsp;");
       $('#tag_tree_title').append("<a id='save_tag_tree' href='#' style='display:none'>"+save_changes_tag+"</a>");
 
@@ -277,24 +278,24 @@ end
         return false;
       });
 
-    <% end -%>
+   }//editable
     
     var item_elements =  node["item"];
 
     $('#tag_tree').tree({
       data: item_elements,
       autoOpen: 0,
-      dragAndDrop: <%= editable %>,
-      selectable: <%= editable %>,
+      dragAndDrop: editable,
+      selectable: editable,
       useContextMenu: false,
       onCanSelectNode: function(node) {
         return false;
       },
       onCreateLi: function(node, $li) {
         $li.find('.jqtree-title').after(render_ele(node));
-        <% if editable == "true" %>
+        if (editable){
           $li.find('.jqtree-title').after('<span class="tagtoolbar"><a href="#" onclick="open_tag_edit(this);return false;"class="edit settings-button tag" data-itemid="'+node.id+'"><img src="/icon-cog-small.png" /></a></span>');
-        <% end %>
+        }
       },
       onCanMoveTo: function(moved_node, target_node, position) {
         if (position == "inside" && target_node.name !="optional") {
