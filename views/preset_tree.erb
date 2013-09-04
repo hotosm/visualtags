@@ -288,12 +288,7 @@ end
       selectable: <%= editable %>,
       useContextMenu: false,
       onCanSelectNode: function(node) {
-        if (node.name == "optional") {
-          return false;
-        }
-        else {
-          return true;
-        }
+        return false;
       },
       onCreateLi: function(node, $li) {
         $li.find('.jqtree-title').after(render_ele(node));
