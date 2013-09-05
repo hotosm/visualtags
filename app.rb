@@ -163,6 +163,7 @@ end
 
 
 get '/' do
+  @default_presets = Collection.where(:default => true)
   erb :home
 end
 
@@ -247,15 +248,25 @@ end
 
 get '/collection/:id/edit' do
   @collection = find_collection
-  @images = Dir.glob("public/icons/presets/*.png").sort_by { |x| x.downcase }
-  erb :collection_edit
+  if @collection.default
+    flash[:error] = "#{t.flash.no_edit_preset}"
+    redirect "/collection/#{@collection.id}"
+  else
+    @images = Dir.glob("public/icons/presets/*.png").sort_by { |x| x.downcase }
+    erb :collection_edit
+  end
 end
 
 delete '/collection/:id' do
   @collection = find_collection
-  @collection.destroy
-  flash[:info] = "#{t.flash.deleted}"
-  redirect "/collections"
+   if @collection.default
+    flash[:error] = "#{t.flash.no_delete_preset}"
+    redirect "/collection/#{@collection.id}"
+  else
+    @collection.destroy
+    flash[:info] = "#{t.flash.deleted}"
+    redirect "/collections"
+  end
 end
 
 get '/collection/:id/validate' do

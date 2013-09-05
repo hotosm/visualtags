@@ -29,13 +29,22 @@ Demo
 https://visualtags.herokuapp.com
 
 TODO
-* integration tests
 * touch screen
 * UI / design
 * extract js into separate file
 * libraryify xml parsing code
 
 Very Partial Changelog
+
+1.2.4
+* Note: migration needed
+* Add default presets - collections needs to be set to default = true in the console for them to show up. Defaults cannot be deleted nor edited, but can be cloned.
+* Add delete icon next to edit icon for tags
+* Remove selection from tag, as it wasn't doing anything
+* Creating a preset goes straight to the edit page now.
+
+1.2.3
+* Pagination of presets
 
 1.2.2
 * Add not found handling for presets

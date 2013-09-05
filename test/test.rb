@@ -50,6 +50,18 @@ end
 class HomepageTest < Test::Unit::TestCase
   include Rack::Test::Methods
   def app() Sinatra::Application end
+  
+   def setup
+    xml = File.read("test/simple-test.xml")
+    @collection = Collection.new(:name => "test") 
+    @collection.preset = xml
+    @collection.save
+   end
+ 
+   def teardown
+    @collection.destroy
+   end
+  
 
   def test_homepage
     get '/'
@@ -68,6 +80,23 @@ class HomepageTest < Test::Unit::TestCase
     assert last_response.ok?
     collection_id = Collection.last.id
     assert_equal "http://example.org/collection/"+collection_id.to_s+"/edit", last_request.url
+    Collection.last.destroy
   end
+  
+  def test_edit
+    get "/collection/#{@collection.id}/edit"
+    assert last_response.ok?
+    assert last_response.body.include?('collection_form')
+  end
+  
+  def test_edit_default
+    @collection.default = true
+    @collection.save
+    get "/collection/#{@collection.id}/edit"
+    follow_redirect!
+    assert_equal "http://example.org/collection/"+@collection.id.to_s, last_request.url
+    assert last_response.body.include?("flash error")
+  end
+  
   
 end

@@ -43,11 +43,15 @@ home:
   can_upload: Upload a new preset
   can_new: Create empty new preset
   can_list: View existing presets
+  defaults_title: Choose a Default Preset
+  defaults_text: Get started with choosing one of the default presets.
 flash:
   created: Preset created!
   updated: Preset updated!
   deleted: Preset deleted!
   cloned: Preset cloned!
+  no_delete_preset: Sorry you cannot delete a default preset. Please contact an admin.
+  no_edit_preset: Sorry you cannot edit a default preset. Please contact an admin.
 tips:
   space: Adds a space - an empty line.
   optional: Adds the optional group where you can put tags under.

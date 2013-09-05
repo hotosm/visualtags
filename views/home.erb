@@ -10,6 +10,20 @@
 <p>
   <%= t.home.you_can %>
 </p>
+<% if @default_presets.size > 0 %>
+    <h2><%= t.home.defaults_title %></h2>
+    <p>
+        <%= t.home.defaults_text %>
+    </p>
+    <% @default_presets.each do | coll | %>
+        <img src="/star-icon.png" width="15px" height="15px" alt="Default star" title="Default Preset" />
+        &ensp;
+        <%="<a href='/collection/#{coll.id}'>#{coll.name}</a>" %> <br />
+    <% end %>
+    
+<% end %>
+
+
 <h2><%= t.home.can_upload %></h2>
 <a href="/upload"><%= t.home.can_upload %></a>
 

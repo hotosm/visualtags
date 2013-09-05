@@ -10,16 +10,20 @@ Description: <%= @collection.description %><br />
 Short Desc: <%= @collection.shortdescription %><br />
 Version: <%= @collection.version %> </p>
 
-
+<% unless @collection.default -%>
   <a href='<%="/collection/#{@collection.id}/edit"%>' ><%= t.edit_preset %></a>
-<form action='<%="/collection/#{@collection.id}"%>' method="post"
-      onsubmit="return confirm('<%= t.delete_preset_confirm  %>')" class="delete_form" >
-  <input type="hidden" name="_method" value="delete" />
-  <input type="submit" value="<%= t.delete_preset %>" />
-</form>
-<br />
+  <form action='<%="/collection/#{@collection.id}"%>' method="post"
+        onsubmit="return confirm('<%= t.delete_preset_confirm  %>')" class="delete_form" >
+    <input type="hidden" name="_method" value="delete" />
+    <input type="submit" value="<%= t.delete_preset %>" />
+  </form>
+  <br />
+<% else -%>
+    <img src="/star-icon.png" width="15px" height="15px" alt="Default star" title="Default Preset" /> This is a default preset. <br />
+<% end %>
+
 <span class="clone_link"><a href="/collection/<%= @collection.id %>/clone"><%= t.clone_preset %></a></span>
-<% unless @collection.custom_preset.empty? -%>
+<% unless @collection.custom_preset && @collection.custom_preset.empty? -%>
   <span class="exportsupload_link"><a href="/collection/<%= @collection.id %>/export_upload"><%= t.export.link %></a></span>
 <% end -%>
 
@@ -33,7 +37,7 @@ Version: <%= @collection.version %> </p>
 </div>
 
 <p>
-  <% unless @collection.custom_preset.empty? -%>
+  <% unless @collection.custom_preset && @collection.custom_preset.empty? -%>
     <a href='<%= "/collection/#{@collection.id}.xml" %>' target="_new"><%= t.download_preset %>
   <% else %>
     <br />

@@ -10,8 +10,11 @@
   <a href="/collection/new"> <%= t.create_new %></a>
 </p>
 <% @collections.each do | coll | %>
-
-  <%= coll.created_at.strftime("%d-%m-%y %I:%M") %>  <%="<a href='/collection/#{coll.id}'>#{coll.name}</a>" %><br />
+  <%= coll.created_at.strftime("%d-%m-%y %I:%M") %>  
+    <% if coll.default %>
+      <img src="/star-icon.png" width="15px" height="15px" alt="Default star" title="Default Preset" />
+    <% end %>
+  <%="<a href='/collection/#{coll.id}'>#{coll.name}</a>" %><br />
 
 <% end  %>
 
