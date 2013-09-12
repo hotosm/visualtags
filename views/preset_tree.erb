@@ -240,7 +240,27 @@ end
         }
       }//function(event)
   );  //select tree
-
+  
+  
+  function select_first(node){
+    $('#item_tree').tree('selectNode', node);
+  }
+  
+  var keep_going = true;
+  function select_first_item(children){
+    $.each(children, function(i, child){
+      if (child.type == "item"){
+        keep_going = false;
+        select_first(child)
+      }else if (child.type == "group"){
+        select_first_item(child.children);
+      }
+      return keep_going;
+    });
+  }
+  
+  item_tree = $('#item_tree').tree('getTree');
+  select_first_item(item_tree.children);
   
   //item_toolbar_setup()
   //renders the item form elements in a new tree
