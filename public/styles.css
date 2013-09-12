@@ -307,7 +307,7 @@ div.ui-dialog button.delete_tag_button:disabled {
   background-color: #fece2f;
   z-index: 2;
   display: block;
-  margin: 9px 10px;
+  margin: 9px 2px;
 }
 
 .settings-button:hover, .pressed {

@@ -23,16 +23,6 @@ end
       autoOpen: false,
       width: 400,
       buttons: [
-        { text: "Delete",
-          "class": "delete_button",
-          click: function(){
-            var itemid = $('form#add_item_form input#item_id').val();
-            var item_node = $('#item_tree').tree('getNodeById', itemid);
-            $('#item_tree').tree('removeNode', item_node);
-            $(this).dialog("close");
-          }
-
-         },
         {
           text: "Ok",
           click: function() {
@@ -95,17 +85,6 @@ end
       autoOpen: false,
       width: 400,
       buttons: [
-        { text: "Delete",
-          "class": "delete_tag_button",
-          click: function(){
-            var tagid = $('form#add_preset_element_form input#tag_id').val();
-            var tag_node = $('#tag_tree').tree('getNodeById', tagid);
-            $('#tag_tree').tree('removeNode', tag_node);
-            $('#save_tag_tree').click()
-
-            $(this).dialog("close");
-          }
-         },
         {
           text: "Ok",
           click: function() {
@@ -207,8 +186,10 @@ end
         }
         $li.find('.jqtree-title').before('<span class="icon">'+icon+'</span>');
         if (editable){
-          $li.find('.jqtree-title').after('<span class="itemtoolbar"><a href="#" onclick="open_item_edit(this);return false;"class="edit settings-button" data-itemid="'+node.id+'"><img src="/icon-cog-small.png" /></a></span>');
-        }
+          $li.find('.jqtree-title').after('<span class="itemtoolbar"><a href="#" onclick="open_item_edit(this);return false;"class="edit settings-button" data-itemid="'+node.id+'"><img src="/icon-cog-small.png" alt="Edit" title="Edit" /></a><a href="#" onclick="delete_item(this);return false;" class="delete settings-button item" data-itemid="'+node.id+'"><img src="/icon-delete-small-red.png"  alt="Delete" title="Delete"/></a></span>');
+         
+         }
+
     },
       onCanMoveTo: function(moved_node, target_node, position) {
         if (position == "inside" && target_node.type =="item") {
@@ -442,6 +423,18 @@ function open_item_edit(button){
     $('form#add_preset_element_form select#type_choice').val("text");
     $('form#add_preset_element_form select#type_choice').change();
   }
+  
+  function reset_item_form(){
+    var itemid = $('form#add_item_form input#item_id').val('');
+    var forms = $("div#add_item_dialog form");
+    $.each(forms, function(i, form){
+      $(form)[0].reset();
+    });
+    $('div#add_item_dialog form select#multi').find('option').remove().end();
+    $('div#add_item_dialog form select#select').find('option').remove().end();
+    $('form#add_item_form select#item_type').val("item");
+    $('form#add_item_form select#item_type').change();
+    }
 
   function open_tag_edit(button){
     reset_tag_form()
@@ -489,8 +482,17 @@ function open_item_edit(button){
     var tag = $('#tag_tree').tree('getNodeById', tagid);
     $('#tag_tree').tree('removeNode', tag);
     $('#save_tag_tree').click();
-    
+    $("div#add_tag_dialog").dialog("close");
     return false;
   }
+  
+  function delete_item(button){
+    reset_item_form()
+    var itemid = button.getAttribute("data-itemid");
+    var item = $("#item_tree").tree('getNodeById', itemid);
+    $('#item_tree').tree('removeNode', item);
+    $("div#add_item_dialog").dialog("close");
+    return false;
+}
 
 </script>
