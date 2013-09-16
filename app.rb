@@ -19,6 +19,14 @@ R18n::I18n.default = settings.default_locale || "en"
 class Collection < ActiveRecord::Base
   validates_presence_of :name
   self.per_page = 40
+
+  def copy(name)
+    collection = self.dup
+    collection.name = name 
+    collection.default = false
+    
+    collection
+  end
   
   #parses the xml file for author, description, version etc
   def parse_metadata
@@ -282,8 +290,7 @@ end
 
 post '/collection/:id/clone' do
   existing_collection = find_collection
-  collection = existing_collection.dup
-  collection.name =  "#{t.clone_prefix}  #{collection.name}"
+  collection = existing_collection.copy("#{t.clone_prefix} #{existing_collection.name}")
   collection.save
   flash[:info] = "#{t.flash.cloned}"
   redirect  "/collection/#{collection.id}"

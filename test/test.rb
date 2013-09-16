@@ -1,9 +1,9 @@
+ENV['RACK_ENV'] = 'test'
 require File.expand_path '../../app.rb', __FILE__
 require 'test/unit'
 require 'rack/test'
 require 'oj'
 set :environment, :test
-ENV['RACK_ENV'] = 'test'
 
 class CollectionTest < Test::Unit::TestCase
  def setup
@@ -43,6 +43,23 @@ class CollectionTest < Test::Unit::TestCase
     assert_equal "Error: Element", results[0..13]
     assert results.include?"group"
   end
+  
+  def test_copy
+    @collection.save
+    cloned = @collection.copy("copy of  #{@collection.name}")
+    cloned.save
+    assert_not_equal cloned.id, @collection.id
+    assert cloned.name.include? "copy of "
+  end
+  
+  def test_copy_default
+    @collection.default = true
+    @collection.save
+    cloned = @collection.copy("copy of  #{@collection.name}")
+    cloned.save
+
+    assert_not_equal @collection.default, cloned.default
+  end
 
 end
 
@@ -80,7 +97,6 @@ class HomepageTest < Test::Unit::TestCase
     assert last_response.ok?
     collection_id = Collection.last.id
     assert_equal "http://example.org/collection/"+collection_id.to_s+"/edit", last_request.url
-    Collection.last.destroy
   end
   
   def test_edit
@@ -97,6 +113,26 @@ class HomepageTest < Test::Unit::TestCase
     assert_equal "http://example.org/collection/"+@collection.id.to_s, last_request.url
     assert last_response.body.include?("flash error")
   end
+  
+  def test_post_clone
+    post "/collection/#{@collection.id}/clone"
+    follow_redirect!
+    new_collection = Collection.last
+    assert_equal "http://example.org/collection/"+new_collection.id.to_s, last_request.url
+    assert new_collection.name.include?("Copy of ")
+  end
+  
+  def test_post_clone_default
+    @collection.default = true
+    @collection.save
+    post "/collection/#{@collection.id}/clone"
+    follow_redirect!
+    new_collection = Collection.last
+    assert_equal "http://example.org/collection/"+new_collection.id.to_s, last_request.url
+    assert new_collection.name.include?("Copy of ")
+    assert_not_equal new_collection.default, @collection.default
+  end
+  
   
   
 end
