@@ -18,14 +18,17 @@ validate_this: Validate this
 edit_head: Editing Preset %1
 add_new_item: Add New Item
 tag_tree_title: Preset Form Details
-add_new_tag: Add Tag Element
+add_new_tag: Add New Tag
+add_new_item_and_tag: Add New Item and New Tag
+add_new_tag_header: Add A New Tag For This Item
+add_first_tag_header: Add Your First Tag For This Item
 add_option: Add option &rarr;
 remove_option: Remove option
 save_changes_tag: Save Changes To Item
 edit_item: Edit Item
 edit_tag: Edit Tag
 item_geotype_warning: An Item needs at least one type specified
-key_required: key is required
+key_required: Sorry a key is required for this tag.
 save_all_changes: Save All Changes
 clone_prefix: Copy of
 validate:

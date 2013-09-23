@@ -8,9 +8,9 @@ $(function() {
     //return false
   });
 
-  $('div#add_tag_dialog #type_choice').change(function(){
+  $('div#add_edit_dialog #type_choice').change(function(){
     $(".eleform").hide()
-    var choice_val = $('div#add_tag_dialog #type_choice').val()
+    var choice_val = $('div#add_edit_dialog #type_choice').val()
     var show_form = "#eleform_"+choice_val;
     $(show_form).show()
   });
@@ -61,6 +61,7 @@ $( "#button" ).button();
       escapeMarkup: function(m) { return m; }
   });
 
+
 });
 </script>
 <h2><%=  t.edit_head @collection.id %> </h2>
@@ -72,7 +73,7 @@ $( "#button" ).button();
 <h4>Preset</h4>
 <div id="tree_container">
   <div id="item_tree_head">
-    <a href="#" id="add_item"><%= t.add_new_item %></a>
+    <a href="#" id="add_item"><img title="Add New Item" alt="add item icon" class="settings-button add-button" src="/icon-add-small.png" /><%= t.add_new_item %></a>
   </div>
   <div id="item_tree"></div>
   <div id="tag_tree_container">
@@ -82,105 +83,117 @@ $( "#button" ).button();
 </div>
 
 <!-- ui-dialogs -->
-<div id="add_item_dialog" title="<%= t.add_new_item %>">
-  <form id="add_item_form" class="dialog_form">
-    <input type="hidden" id="item_id"  />
-    <label for="item_type">Type</label>
-    <select name="item_type" id="item_type">
-      <option value="item">Item</option>
-      <option value="group">Group</option>
-    </select>
-    <br />
-    <label for="name">Name</label> <input type="text" id="name" name="name"></input>
-    <br />
-    <label for="icon">Icon</label>
-    <select name="icon" id="icon_select" style="width:200px">
-      <option value="empty.png" >Empty</option>
-      <% @images.each do | image| %>
-        <%= image.split('/').last %> <br />
-        <option value="<%= image.split('/').last %>" ><%= image.split('/').last %></option>
-      <% end %>
-    </select>
-    <br />
-    <label for="geo_type">Geo Type (Item only)</label>
-    <select name="geo_type" id="geo_type" multiple>
-      <option value="node">node (point)</option>
-      <option value="way">way (line)</option>
-      <option value="closedway">area (polygon)</option>
-      <option value="relation">relation</option>
-    </select>
-  </form>
-</div>
 
-<div id="add_tag_dialog" title="<%= t.add_new_tag %>">
- 
-  <form id="add_preset_element_form">
-    <input type="hidden" id="tag_id"  />
-    <label for="type_choice">Type</label>
-    <select name="type_choice" id="type_choice">
-      <option value="text">Text</option>
-      <option value="label">Label</option>
-      <option value="key">Key</option>
-      <option value="check">Check</option>
-      <option value="combo">Combo</option>
-      <option value="multiselect">Multiselect</option>
-      <option value="space">Space</option>
-      <option value="optional">Optional Group</option>
-      <option value="link">Link</option>
-    </select>
-   </form>
-  <form id="eleform_label" class="eleform" style="display:none">
-    <span class="tips"><%= t.tips.label %></span><br />
-    <label for="label">Label</label><input name="text" type="text" id="text1"></input>
-  </form>
-  <form id="eleform_key" class="eleform" style="display:none">
-    <span class="tips"><%= t.tips.key %></span><br />
-    <label for="key">Key</label><input name="key" type="text" id="key2"></input> <br />
-    <label for="value">Value</label><input name="value" type="text" id="value"></input>
-  </form>
-  <form id="eleform_text" class="eleform">
-    <span class="tips"><%= t.tips.text %></span><br />
-    <label for="key">Key</label><input name="key" type="text" id="key3"></input> <br />
-    <label for="text">Text label</label><input name="text" type="text" id="text3"></input>
-  </form>
-  <form id="eleform_check" class="eleform" style="display:none">
-    <span class="tips"><%= t.tips.check %></span><br />
-    <label for="key">Key</label><input name="key" type="text" id="key4"></input> <br />
-    <label for="text">Text label</label><input name="text" type="text" id="text4"></input> <br />
-    <label for="default_value">Default on?</label><input type='checkbox' name="default_value" id="check" value="on"></input>
-  </form>
-  <form id="eleform_combo" class="eleform" style="display:none">
-    <span class="tips"><%= t.tips.combo %></span><br />
-    <label for="key">Key</label><input name="key" type="text" id="key5"></input> <br />
-    <label for="text">Text label</label><input name="text" type="text" id="text5"></input> <br />
-    <input type="text" id="add_select"></input>
-    <button name="add_to_select" id="add_to_select"><%= t.add_option %></button>
-    <br /><br />
-    <button name="remove_from_select" id="remove_from_select" ><%= t.remove_option %></button>
-    <select name="select" id="select">
-    </select>
-  </form>
-  <form id="eleform_multiselect" class="eleform" style="display:none">
-    <span class="tips"><%= t.tips.multiselect %></span><br />
-    <label for="key">Key</label><input name="key" type="text" id="key6"></input> <br />
-    <label for="text">Text label</label><input name="text" type="text" id="text6"></input> <br />
-    <input type="text" id="add_multi"></input>
-    <button name="add_to_multi" id="add_to_multi"><%= t.add_option %></button>
-    <br /><br />
-    <button name="remove_from_multi" id="remove_from_multi" ><%= t.remove_option %></button>
-    <select name="select" id="multi" multiple>
-    </select>
-  </form>
-  <form id="eleform_space" class="eleform" style="display:none">
-    <span class="tips"><%= t.tips.space %></span>
-  </form>
-  <form id="eleform_optional" class="eleform" style="display:none">
-    <span class="tips"><%= t.tips.optional %></span>
-  </form>
-   <form id="eleform_link" class="eleform" style="display:none">
-     <span class="tips"><%= t.tips.link %></span><br />
-     <label for="link">Link</label><input name="link" type="text" id="link"></input>
-  </form>
 
+<div id="add_edit_dialog" title="<%= t.add_new_item_and_tag %>">
+  <div id="item_section">
+
+    <form id="add_item_form" class="dialog_form">
+      <fieldset>
+        <legend>Add New Item</legend>
+        <input type="hidden" id="item_id"  />
+        <label for="item_type">Type</label>
+        <select name="item_type" id="item_type">
+          <option value="item">Item</option>
+          <option value="group">Group</option>
+        </select>
+        <br />
+        <label for="name">Name</label> <input type="text" id="name" name="name"></input>
+        <br />
+        <label for="icon">Icon</label>
+        <select name="icon" id="icon_select" style="width:200px">
+          <option value="empty.png" >Empty</option>
+          <% @images.each do | image| %>
+            <%= image.split('/').last %> <br />
+            <option value="<%= image.split('/').last %>" ><%= image.split('/').last %></option>
+          <% end %>
+        </select>
+        <br />
+        <label for="geo_type">Geo Type (Item only)</label>
+        <select name="geo_type" id="geo_type" multiple>
+          <option value="node">node (point)</option>
+          <option value="way">way (line)</option>
+          <option value="closedway">area (polygon)</option>
+          <option value="relation">relation</option>
+        </select>
+      </fieldset>
+    </form>
+
+  </div>
+
+  <div id="tag_section">
+
+    <div id="add_tag_header"><%= t.add_tag_header -%></div>
+
+    <form id="add_preset_element_form">
+      <input type="hidden" id="tag_id"  />
+      <label for="type_choice">Type</label>
+      <select name="type_choice" id="type_choice">
+        <option value="text">Text</option>
+        <option value="label">Label</option>
+        <option value="key">Key</option>
+        <option value="check">Check</option>
+        <option value="combo">Combo</option>
+        <option value="multiselect">Multiselect</option>
+        <option value="space">Space</option>
+        <option value="optional">Optional Group</option>
+        <option value="link">Link</option>
+      </select>
+    </form>
+
+    <form id="eleform_label" class="eleform" style="display:none">
+      <span class="tips"><%= t.tips.label %></span><br />
+      <label for="label">Label</label><input name="text" type="text" id="text1"></input>
+    </form>
+    <form id="eleform_key" class="eleform" style="display:none">
+      <span class="tips"><%= t.tips.key %></span><br />
+      <label for="key">Key</label><input name="key" type="text" id="key2"></input> <br />
+      <label for="value">Value</label><input name="value" type="text" id="value"></input>
+    </form>
+    <form id="eleform_text" class="eleform">
+      <span class="tips"><%= t.tips.text %></span><br />
+      <label for="key">Key</label><input name="key" type="text" id="key3"></input> <br />
+      <label for="text">Text label</label><input name="text" type="text" id="text3"></input>
+    </form>
+    <form id="eleform_check" class="eleform" style="display:none">
+      <span class="tips"><%= t.tips.check %></span><br />
+      <label for="key">Key</label><input name="key" type="text" id="key4"></input> <br />
+      <label for="text">Text label</label><input name="text" type="text" id="text4"></input> <br />
+      <label for="default_value">Default on?</label><input type='checkbox' name="default_value" id="check" value="on"></input>
+    </form>
+    <form id="eleform_combo" class="eleform" style="display:none">
+      <span class="tips"><%= t.tips.combo %></span><br />
+      <label for="key">Key</label><input name="key" type="text" id="key5"></input> <br />
+      <label for="text">Text label</label><input name="text" type="text" id="text5"></input> <br />
+      <input type="text" id="add_select"></input>
+      <button name="add_to_select" id="add_to_select"><%= t.add_option %></button>
+      <br /><br />
+      <button name="remove_from_select" id="remove_from_select" ><%= t.remove_option %></button>
+      <select name="select" id="select">
+      </select>
+    </form>
+    <form id="eleform_multiselect" class="eleform" style="display:none">
+      <span class="tips"><%= t.tips.multiselect %></span><br />
+      <label for="key">Key</label><input name="key" type="text" id="key6"></input> <br />
+      <label for="text">Text label</label><input name="text" type="text" id="text6"></input> <br />
+      <input type="text" id="add_multi"></input>
+      <button name="add_to_multi" id="add_to_multi"><%= t.add_option %></button>
+      <br /><br />
+      <button name="remove_from_multi" id="remove_from_multi" ><%= t.remove_option %></button>
+      <select name="select" id="multi" multiple>
+      </select>
+    </form>
+    <form id="eleform_space" class="eleform" style="display:none">
+      <span class="tips"><%= t.tips.space %></span>
+    </form>
+    <form id="eleform_optional" class="eleform" style="display:none">
+      <span class="tips"><%= t.tips.optional %></span>
+    </form>
+    <form id="eleform_link" class="eleform" style="display:none">
+      <span class="tips"><%= t.tips.link %></span><br />
+      <label for="link">Link</label><input name="link" type="text" id="link"></input>
+    </form>
+
+  </div>
 </div>
 <!-- end ui-dialogs -->

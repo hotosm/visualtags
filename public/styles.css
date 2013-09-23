@@ -165,6 +165,11 @@ width: 250px;
  
 /*trees*/
 
+ul.jqtree_common {
+  padding-top: 1em;
+  padding-bottom: 2em;
+}
+
 div#tree_container {
   position: relative
 }
@@ -296,6 +301,29 @@ div.ui-dialog button.delete_tag_button:disabled {
   border-color: gray;
 }
 
+div#add_edit_dialog{
+  padding-left: 0.3em;
+  padding-bottom: 0em;
+  padding-right: 0.3em;
+}
+
+div#add_edit_dialog div#add_tag_header{ 
+  text-align: center;
+  font-weight: bold;
+  padding:4px
+}
+
+div#add_edit_dialog div#tag_section {
+  background-color: rgb(253, 206, 119);
+  padding: 5px;
+}
+
+div#add_edit_dialog div#item_section{
+  padding: 2px;
+  margin-bottom: 5px;
+  background-color: #BEE0F5;
+}
+
 .settings-button {
   float: left;
   width: 21px;
@@ -309,6 +337,18 @@ div.ui-dialog button.delete_tag_button:disabled {
   display: block;
   margin: 9px 2px;
 }
+
+.add-button {
+  margin: 0px 6px;
+  background-color: transparent ;
+}
+
+.add_tag_head {
+  float: left;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
 
 .settings-button:hover, .pressed {
   background-color: transparent;
