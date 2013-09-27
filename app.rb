@@ -161,6 +161,11 @@ class Collection < ActiveRecord::Base
 
 end
 
+def localized_erb(template)
+  return erb :"#{template}.#{r18n.locale.code}" if File.exists? "views/#{template}.#{r18n.locale.code}.erb"
+  return erb template
+end
+
 def find_collection
   begin
     collection = Collection.find(params[:id]) 
@@ -172,7 +177,7 @@ end
 
 get '/' do
   @default_presets = Collection.where(:default => true)
-  erb :home
+  localized_erb :home
 end
 
 get '/upload' do

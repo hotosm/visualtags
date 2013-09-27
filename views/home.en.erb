@@ -1,0 +1,35 @@
+EN
+<h2><%= t.home.title %></h2>
+<p>
+  <%= t.home.about %><br />
+  <img class="home" src="/josm_preset.png" width="500" height="197" alt="JOSM Preset and Complex XML Code." title="JOSM Preset and Complex XML Code."/>
+</p>
+<p>
+  <%= t.home.solution %><br />
+  <img class="home" src="/preset_builder.png" width="532" height="302" alt="Visual tags chooser and josm preset builder" title="Easier to make presets using the Visual tags chooser."/>
+</p>
+<p>
+  <%= t.home.you_can %>
+</p>
+<% if @default_presets.size > 0 %>
+    <h2><%= t.home.defaults_title %></h2>
+    <p>
+        <%= t.home.defaults_text %>
+    </p>
+    <% @default_presets.each do | coll | %>
+        <img src="/star-icon.png" width="15px" height="15px" alt="Default star" title="Default Preset" />
+        &ensp;
+        <%="<a href='/collection/#{coll.id}'>#{coll.name}</a>" %> <br />
+    <% end %>
+    
+<% end %>
+
+
+<h2><%= t.home.can_upload %></h2>
+<a href="/upload"><%= t.home.can_upload %></a>
+
+<h2><%= t.home.can_new %></h2>
+<a href="/collection/new"><%= t.home.can_new %></a>
+
+<h2><%= t.home.can_list %></h2>
+<a href="/collections"><%= t.home.can_list %></a>

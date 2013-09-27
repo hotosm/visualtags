@@ -26,6 +26,12 @@ It misses out the more complex JOSM preset XML features such as auto increment, 
 User Guide & more information
 See docs in docs directory
 
+Internationalisation
+
+Strings in i18n/code.yml (e.g i18n/en.yml)
+Partials can be localized - for example home.en.erb
+Ensure you use the localized_erb method instead of the usual erb method
+
 
 Live
 http://visualtags.hotosm.org
@@ -37,6 +43,11 @@ TODO
 * libraryify xml parsing code
 
 Very Partial Changelog
+
+1.2.6
+* UI new uses just the one dialog window
+* Colour hinting and minor usability tweaks, including add button
+* Add functionality for using localised partials
 
 1.2.5
 * Add delete icon to item
