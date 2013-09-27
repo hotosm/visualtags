@@ -1,4 +1,3 @@
-EN
 <h2><%= t.home.title %></h2>
 <p>
   <%= t.home.about %><br />
@@ -11,17 +10,40 @@ EN
 <p>
   <%= t.home.you_can %>
 </p>
+
 <% if @default_presets.size > 0 %>
-    <h2><%= t.home.defaults_title %></h2>
-    <p>
-        <%= t.home.defaults_text %>
-    </p>
+  <h2><%= t.home.defaults_title %></h2>
+  <p>
+    Decide whether to <a href="/upload">upload a new preset file</a>,
+    <a href="/collection/new" >create a new preset file from scratch</a>,
+    or <a href="/collections">view existing files</a>.
+    <br /></p>
+  <p>
+    <span style="color:red">It is recommended that new users use the <a href="/collection/3">HOT HDM</a> default preset.</span>
+    <br />
     <% @default_presets.each do | coll | %>
-        <img src="/star-icon.png" width="15px" height="15px" alt="Default star" title="Default Preset" />
-        &ensp;
-        <%="<a href='/collection/#{coll.id}'>#{coll.name}</a>" %> <br />
+      <img src="/star-icon.png" width="15px" height="15px" alt="Default star" title="Default Preset" />
+      &ensp;
+      <%="<a href='/collection/#{coll.id}'>#{coll.name}</a>" %> <br />
     <% end %>
-    
+  </p>
+  <p>
+    To use this preset file without making any changes, click on “Export to HOT Exports”.
+    You will be asked to log in to the HOT Export Tool site. Click “Export and Upload”. <br/>
+    NOTE: Users can also download and save the preset file by clicking on “Download as XML preset” at the
+    bottom of the page. <br/>After the file has uploaded, it will be listed in the “Preset Files” table in the HOT Exports Tool site.
+    Click on “New Job” to start a new export and click here for instructions. <br/> To add more information to
+    <a href="/collections">existing preset</a> files, click on the file in the Visual
+    Tag Chooser application. Select “Copy Preset” and save as a new version. Highlight the category (for example,
+    “Places” or “Utilities” ) and add additional information to the category. <br/>
+    TIP: Make sure to click on the arrow next the category to view sub-categories. <br/>
+    Users can also add names, authors and descriptions to the preset file by filling in the form at the top of the page when editing.
+    <br/>For advanced users: To edit existing preset files,
+    first copy the file (“Copy Preset”) and then click on “Edit Preset”. You can then make edits to the file
+    including adding new data categories.
+  </p>
+
+
 <% end %>
 
 
